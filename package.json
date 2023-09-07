@@ -1,0 +1,10 @@
+{
+  "name": "my-money-challenge",
+  "version": "1.0.0",
+  "description": "MyMoney is a challenge requested during a hiring process",
+  "main": "index.js",
+  "repository": "git@github.com:khaled-badenjki/my-money-challenge.git",
+  "author": "khaled-badenjki <m.k.badenjki2@gmail.com>",
+  "license": "UNLICENSED",
+  "private": true
+}
