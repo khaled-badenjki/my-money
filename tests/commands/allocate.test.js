@@ -21,4 +21,31 @@ describe('commands/allocate', () => {
 
     expect(loggerStub.calledWith(sinon.match(/ALLOCATE/))).to.be.true
   })
+
+  it('should parse the input values in correct order', () => {
+    const params = {
+      equity: '6000',
+      debt: '3000',
+      gold: '1000'
+    }
+    process.argv = ['node', 'index.js', 'allocate', 
+      params.equity, 
+      params.debt, 
+      params.gold
+    ]
+
+    program.parse(process.argv)
+
+    expect(program.args).to.deep.equal([
+      params.equity, 
+      params.debt, 
+      params.gold
+    ])
+
+    expect(loggerStub.calledWith(
+      `ALLOCATE EQUITY:${params.equity}, ` +
+      `DEBT:${params.debt}, ` +
+      `GOLD:${params.gold}`
+    )).to.be.true
+  })
 })
