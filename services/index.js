@@ -1,5 +1,7 @@
 const account = require('./account')
+const operation = require('./operation')
 
 module.exports = {
-  accountService: account
+  accountService: account,
+  operationService: operation
 }

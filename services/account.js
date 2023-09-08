@@ -1,5 +1,5 @@
-const setDesiredAllocationPercentage = async () => {
-
+const setDesiredAllocationPercentage = () => {
+  
 }
 
 module.exports = {
