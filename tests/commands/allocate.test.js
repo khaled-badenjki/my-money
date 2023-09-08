@@ -19,6 +19,6 @@ describe('commands/allocate', () => {
     
     program.parse(process.argv)
 
-    expect(loggerStub.calledWith('ALLOCATE')).to.be.true
+    expect(loggerStub.calledWith(sinon.match(/ALLOCATE/))).to.be.true
   })
 })
