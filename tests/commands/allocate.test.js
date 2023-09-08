@@ -15,7 +15,7 @@ describe('commands/allocate', () => {
   })
 
   it('should log ALLOCATE as info', () => {
-    process.argv = ['node', 'index.js', 'allocate']
+    process.argv = ['node', 'index.js', 'allocate', '6000', '3000', '1000']
     
     program.parse(process.argv)
 
@@ -28,7 +28,7 @@ describe('commands/allocate', () => {
       debt: '3000',
       gold: '1000'
     }
-    process.argv = ['node', 'index.js', 'allocate', 
+    process.argv = ['node', 'index.js', 'allocate',
       params.equity, 
       params.debt, 
       params.gold
@@ -37,6 +37,7 @@ describe('commands/allocate', () => {
     program.parse(process.argv)
 
     expect(program.args).to.deep.equal([
+      'allocate',
       params.equity, 
       params.debt, 
       params.gold
