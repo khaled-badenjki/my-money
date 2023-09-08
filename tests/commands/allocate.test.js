@@ -1,23 +1,24 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
 const program = require('../../commands')
+const logger = require('../../logger')
 
 describe('commands/allocate', () => {
-  let consoleLogStub
+  let loggerStub
 
   before(() => {
-    consoleLogStub = sinon.stub(console, 'log')
+    loggerStub = sinon.stub(logger, 'info')
   })
 
   after(() => {
-    consoleLogStub.restore()
+    loggerStub.restore()
   })
 
-  it('should log ALLOCATE to the console', () => {
+  it('should log ALLOCATE as info', () => {
     process.argv = ['node', 'index.js', 'allocate']
     
     program.parse(process.argv)
 
-    expect(consoleLogStub.calledWith('ALLOCATE')).to.be.true
+    expect(loggerStub.calledWith('ALLOCATE')).to.be.true
   })
 })
