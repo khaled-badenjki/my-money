@@ -14,7 +14,14 @@ const calculatePercentages = amounts => {
     amount => _convertFloatToPercentage(amount / sum)
   )
 
-  return percentages
+  return _normalizePercentages(percentages)
+}
+
+const _normalizePercentages = percentages => {
+  const sum = percentages.reduce((sum, amount) => sum + amount, 0)
+
+  return sum === 100 ? percentages 
+    : [percentages.slice(0, -1), percentages.slice(-1)[0] + (100 - sum)].flat()
 }
 
 const _convertFloatToPercentage = float => Math.floor(float * 100)
