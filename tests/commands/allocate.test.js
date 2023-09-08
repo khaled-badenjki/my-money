@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const { expect } = require('chai')
 const program = require('../../commands')
 const logger = require('../../logger')
-const { accountService } = require('../../services')
+const { accountService, operationService } = require('../../services')
 
 describe('commands/allocate', () => {
   let loggerStub
@@ -70,5 +70,33 @@ describe('commands/allocate', () => {
       debt: params.debt, 
       gold: params.gold
     })).to.be.true
+
+    accountServiceStub.restore()
+  })
+
+  it('should call the operation service with the correct params', () => {
+    const params = {
+      equity: '6000',
+      debt: '3000',
+      gold: '1000'
+    },
+
+    operationServiceStub = sinon
+      .stub(operationService, 'createAllocations')
+      .resolves()
+
+    program.parse(['node', 'index.js', 'allocate',
+      params.equity, 
+      params.debt, 
+      params.gold
+    ])
+
+    expect(operationServiceStub.calledWith({
+      equity: params.equity, 
+      debt: params.debt, 
+      gold: params.gold
+    })).to.be.true
+
+    operationServiceStub.restore()
   })
 })
