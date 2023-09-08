@@ -1,8 +1,14 @@
 const { Command } = require('commander')
 const logger = require('../logger')
+const { accountService } = require('../services')
 
-const _handleAllocate = (equity, debt, gold) => {
+const _handleAllocate = async (equity, debt, gold) => {
   logger.info(`ALLOCATE EQUITY:${equity}, DEBT:${debt}, GOLD:${gold}`)
+  await accountService.setDesiredAllocationPercentage({
+    equity,
+    debt,
+    gold
+  })
 }
 
 const allocate = new Command('allocate')

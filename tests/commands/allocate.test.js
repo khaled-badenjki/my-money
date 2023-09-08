@@ -65,10 +65,10 @@ describe('commands/allocate', () => {
       params.gold
     ])
 
-    expect(accountServiceStub.calledWith(
-      params.equity, 
-      params.debt, 
-      params.gold
-    )).to.be.true
+    expect(accountServiceStub.calledWith({
+      equity: params.equity, 
+      debt: params.debt, 
+      gold: params.gold
+    })).to.be.true
   })
 })
