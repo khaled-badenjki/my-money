@@ -15,10 +15,10 @@ module.exports = {
         allowNull: false
       },
       monthlyInvestment: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       desiredAllocationPercentage: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

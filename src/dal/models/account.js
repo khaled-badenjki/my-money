@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Account.init({
     name: DataTypes.STRING,
-    monthlyInvestment: DataTypes.NUMBER,
-    desiredAllocationPercentage: DataTypes.NUMBER
+    monthlyInvestment: DataTypes.INTEGER,
+    desiredAllocationPercentage: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Account',

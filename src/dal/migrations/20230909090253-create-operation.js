@@ -20,7 +20,7 @@ module.exports = {
         onDelete: 'SET NULL'
       },
       amount: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       type: {
         type: Sequelize.STRING

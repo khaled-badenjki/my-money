@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Operation.init({
-    amount: DataTypes.NUMBER,
+    amount: DataTypes.INTEGER,
     type: DataTypes.STRING,
     date: DataTypes.DATE
   }, {
