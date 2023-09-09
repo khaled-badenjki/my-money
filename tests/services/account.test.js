@@ -1,7 +1,7 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
-const calculator = require('../../helpers/calculator')
-const { accountService } = require('../../services')
+const calculator = require('../../src/helpers/calculator')
+const { accountService } = require('../../src/services')
 
 
 describe('Account Service', () => {

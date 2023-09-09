@@ -1,8 +1,8 @@
 const path = require('path');
 
 module.exports = {
-  'config': path.resolve('dal', 'config.js'),
-  'models-path': path.resolve('dal', 'models'),
-  'seeders-path': path.resolve('dal', 'seeders'),
-  'migrations-path': path.resolve('dal', 'migrations')
+  'config': path.resolve('src/dal', 'config.js'),
+  'models-path': path.resolve('src/dal', 'models'),
+  'seeders-path': path.resolve('src/dal', 'seeders'),
+  'migrations-path': path.resolve('src/dal', 'migrations')
 };

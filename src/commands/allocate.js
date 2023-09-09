@@ -1,5 +1,5 @@
 const { Command } = require('commander')
-const logger = require('../logger')
+const logger = require('../helpers/logger')
 const { accountService, operationService } = require('../services')
 
 const _handleAllocate = async (equity, debt, gold) => {
