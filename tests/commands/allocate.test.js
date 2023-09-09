@@ -6,13 +6,23 @@ const { accountService, operationService } = require('../../src/services')
 
 describe('commands/allocate', () => {
   let loggerStub
+  let accountServiceStub
+  let operationServiceStub
 
   before(() => {
     loggerStub = sinon.stub(logger, 'info')
+    accountServiceStub = sinon
+      .stub(accountService, 'setDesiredAllocationPercentage')
+      .resolves()
+    operationServiceStub = sinon
+      .stub(operationService, 'createAllocations')
+      .resolves()
   })
 
   after(() => {
     loggerStub.restore()
+    accountServiceStub.restore()
+    operationServiceStub.restore()
   })
 
   it('should log ALLOCATE as info', () => {
@@ -55,10 +65,6 @@ describe('commands/allocate', () => {
       gold: '1000'
     }
 
-    const accountServiceStub = sinon
-      .stub(accountService, 'setDesiredAllocationPercentage')
-      .resolves()
-
     program.parse(['node', 'index.js', 'allocate',
       params.equity, 
       params.debt, 
@@ -70,8 +76,6 @@ describe('commands/allocate', () => {
       debt: params.debt, 
       gold: params.gold
     })).to.be.true
-
-    accountServiceStub.restore()
   })
 
   it('should call the operation service with the correct params', () => {
@@ -79,11 +83,7 @@ describe('commands/allocate', () => {
       equity: '6000',
       debt: '3000',
       gold: '1000'
-    },
-
-    operationServiceStub = sinon
-      .stub(operationService, 'createAllocations')
-      .resolves()
+    }
 
     program.parse(['node', 'index.js', 'allocate',
       params.equity, 
@@ -96,7 +96,5 @@ describe('commands/allocate', () => {
       debt: params.debt, 
       gold: params.gold
     })).to.be.true
-
-    operationServiceStub.restore()
   })
 })
