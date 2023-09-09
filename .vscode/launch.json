@@ -13,6 +13,16 @@
       ],
       "program": "${workspaceFolder}/index.js",
       "args": ["allocate", "6000", "3000", "1000"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Tests",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "args": ["--timeout", "999999", "--colors", "${workspaceFolder}/tests/**/*.js"]
     }
   ]
 }
