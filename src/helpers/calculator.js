@@ -8,7 +8,7 @@
  * @returns {Array} - Array of percentages
  */
 const calculatePercentages = amounts => {
-  const sum = amounts.reduce((sum, amount) => sum + amount, 0)
+  const sum = amounts.reduce((sum, amount) => sum + floor(amount), 0)
   
   const percentages = amounts.map(
     amount => _convertFloatToPercentage(amount / sum)
