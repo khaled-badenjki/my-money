@@ -29,6 +29,15 @@ describe('commands/allocate', () => {
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
 
     })
+
+    it.only('should throw an error if the arguments are not numbers', () => {
+      program.parse(['node', 'index.js', 'allocate', 'a', 'b', 'c'])
+  
+      processExitStub.callsFake((code) => {
+        expect(code).to.equal(1) // Check that the exit code is 1
+      })
+      expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
+    })
   })
   
   describe('interaction', () => {
