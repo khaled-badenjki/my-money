@@ -13,4 +13,10 @@ describe('Calculator', () => {
         .to.eql([33, 33, 34])
     })
   })
+
+  describe('floor', () => {
+    it('should floor the number', () => {
+      expect(calculator.floor(1.5)).to.eql(1)
+    })
+  })
 })
