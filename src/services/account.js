@@ -12,10 +12,10 @@ const setDesiredAllocationPercentage = accounts => {
   const amounts = Object.values(accounts)
   const percentages = calculator.calculatePercentages(amounts)
 
-  db.Account.bulkCreate(
+  return db.Account.bulkCreate(
     Object.keys(accounts).map((type, index) => ({
       name: type,
-      percentage: percentages[index]
+      desiredAllocationPercentage: percentages[index]
     }))
   )
 }

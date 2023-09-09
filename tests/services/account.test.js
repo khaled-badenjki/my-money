@@ -35,9 +35,9 @@ describe('Account Service', () => {
       }
       accountService.setDesiredAllocationPercentage(accounts)
       expect(accountBulkCreateStub.calledWith([
-        { name: 'equity', percentage: 60 },
-        { name: 'debt', percentage: 20 },
-        { name: 'gold', percentage: 20 }
+        { name: 'equity', desiredAllocationPercentage: 60 },
+        { name: 'debt', desiredAllocationPercentage: 20 },
+        { name: 'gold', desiredAllocationPercentage: 20 }
       ])).to.be.true
     })
   })
