@@ -8,7 +8,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.js --help",
     "dev": "nodemon index.js",
     "test": "mocha 'tests/**/*.js' --exit",
     "lint": "eslint . --ext .js",
