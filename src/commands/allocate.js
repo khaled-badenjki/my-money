@@ -1,5 +1,5 @@
 const { Command } = require('commander')
-const logger = require('../helpers/logger')
+const { logger, logCommand } = require('../helpers/logger')
 const { accountService, operationService } = require('../services')
 
 const allocate = new Command('allocate')
@@ -23,7 +23,7 @@ const _handleAllocate = async (allocateInput, command) => {
     return
   }
 
-  _logCommand(command)
+  logCommand(command)
 
   accountService.setDesiredAllocationPercentage(allocateInput)
   operationService.createAllocations(allocateInput)
@@ -37,8 +37,5 @@ const _validateAllocateInput = allocateInput => {
   }
   return true
 }
-
-const _logCommand = command => 
-  logger.info(`called ${command.name()}`)
 
 module.exports = allocate

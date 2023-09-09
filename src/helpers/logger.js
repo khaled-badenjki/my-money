@@ -18,4 +18,10 @@ if (process.env.NODE_ENV !== 'production') {
   }))
 }
 
-module.exports = logger
+const logCommand = command => 
+  logger.info(`called ${command.name()}`)
+
+module.exports = {
+  logger,
+  logCommand
+}

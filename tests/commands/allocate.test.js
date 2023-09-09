@@ -1,7 +1,7 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
 const program = require('../../src/commands')
-const logger = require('../../src/helpers/logger')
+const { logger } = require('../../src/helpers/logger')
 const { accountService, operationService } = require('../../src/services')
 
 describe('commands/allocate', () => {
