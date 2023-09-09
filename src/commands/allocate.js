@@ -33,7 +33,8 @@ const _handleAllocate = async (allocateInput, command) => {
 const _validateAllocateInput = allocateInput => {
   const exists = _validateExists(allocateInput)
   const isNumber = _validateIsNumber(allocateInput)
-  return exists && isNumber
+  const isPositive = _validateIsPositive(allocateInput)
+  return exists && isNumber && isPositive
 }
 
 const _validateExists = allocateInput => {
@@ -47,6 +48,14 @@ const _validateExists = allocateInput => {
 const _validateIsNumber = allocateInput => {
   const { equity, debt, gold } = allocateInput
   if (isNaN(equity) || isNaN(debt) || isNaN(gold)) {
+    return false
+  }
+  return true
+}
+
+const _validateIsPositive = allocateInput => {
+  const { equity, debt, gold } = allocateInput
+  if (equity < 0 || debt < 0 || gold < 0) {
     return false
   }
   return true
