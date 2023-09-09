@@ -39,5 +39,19 @@ describe('Account Service', () => {
       accountService.setDesiredAllocationPercentage(accounts)
       expect(accountBulkCreateStub.called).to.be.true
     })
+
+    it('should call account model bulk create correct arguments', async () => {
+      const accounts = {
+        equity: 6000,
+        debt: 2000,
+        gold: 2000
+      }
+      accountService.setDesiredAllocationPercentage(accounts)
+      expect(accountBulkCreateStub.calledWith([
+        { name: 'equity', percentage: 60 },
+        { name: 'debt', percentage: 20 },
+        { name: 'gold', percentage: 20 }
+      ])).to.be.true
+    })
   })
 })
