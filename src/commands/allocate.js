@@ -20,6 +20,7 @@ const allocate = new Command('allocate')
  */
 const _handleAllocate = async (allocateInput, command) => {
   if (!_validateAllocateInput(allocateInput)) {
+    logger.error('Invalid input')
     return
   }
 
@@ -30,9 +31,22 @@ const _handleAllocate = async (allocateInput, command) => {
 }
 
 const _validateAllocateInput = allocateInput => {
+  const exists = _validateExists(allocateInput)
+  const isNumber = _validateIsNumber(allocateInput)
+  return exists && isNumber
+}
+
+const _validateExists = allocateInput => {
   const { equity, debt, gold } = allocateInput
   if (!equity || !debt || !gold) {
-    logger.error('Invalid input')
+    return false
+  }
+  return true
+}
+
+const _validateIsNumber = allocateInput => {
+  const { equity, debt, gold } = allocateInput
+  if (isNaN(equity) || isNaN(debt) || isNaN(gold)) {
     return false
   }
   return true

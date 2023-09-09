@@ -30,7 +30,7 @@ describe('commands/allocate', () => {
 
     })
 
-    it.only('should throw an error if the arguments are not numbers', () => {
+    it('should throw an error if the arguments are not numbers', () => {
       program.parse(['node', 'index.js', 'allocate', 'a', 'b', 'c'])
   
       processExitStub.callsFake((code) => {
