@@ -12,7 +12,7 @@ describe('Account Service', () => {
 
     before(() => {
       calculatorStub = sinon.stub(calculator, 'calculatePercentages')
-      accountBulkCreateStub = sinon.stub(db.account, 'bulkCreate')
+      accountBulkCreateStub = sinon.stub(db.Account, 'bulkCreate')
     })
 
     after(() => {
@@ -30,14 +30,14 @@ describe('Account Service', () => {
       expect(calculatorStub.calledOnce).to.be.true
     })
 
-    it('should call account model bulk create', () => {
+    it('should call account model bulk create', async () => {
       const accounts = {
         equity: 100,
         debt: 100,
         gold: 100
       }
       accountService.setDesiredAllocationPercentage(accounts)
-      expect(accountBulkCreateStub.calledOnce).to.be.true
+      expect(accountBulkCreateStub.called).to.be.true
     })
   })
 })

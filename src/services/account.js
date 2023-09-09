@@ -1,4 +1,5 @@
 const calculator = require('../helpers/calculator')
+const db = require('../dal/models')
 
 /**
  * @param {object} accounts - accounts object where key is the 
@@ -10,6 +11,8 @@ const calculator = require('../helpers/calculator')
 const setDesiredAllocationPercentage = accounts => {
   const amounts = Object.values(accounts)
   calculator.calculatePercentages(amounts)
+
+  db.Account.bulkCreate(amounts)
 }
 
 module.exports = {

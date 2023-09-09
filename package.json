@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "commander": "^11.0.0",
+    "pg": "^8.11.3",
     "sequelize": "^6.33.0",
     "winston": "^3.10.0"
   },
