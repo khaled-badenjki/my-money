@@ -9,13 +9,13 @@ describe('commands/allocate', () => {
     let loggerStub
     let processExitStub
   
-    before(() => {
+    beforeEach(() => {
       loggerStub = sinon.stub(logger, 'error')
       processExitStub = sinon.stub(process, 'exit')
 
     })
   
-    after(() => {
+    afterEach(() => {
       loggerStub.restore()
       processExitStub.restore()
     })
@@ -24,7 +24,7 @@ describe('commands/allocate', () => {
       program.parse(['node', 'index.js', 'allocate'])
   
       processExitStub.callsFake((code) => {
-        expect(code).to.equal(1) // Check that the exit code is 1
+        expect(code).to.equal(1)
       })
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
 
@@ -34,7 +34,16 @@ describe('commands/allocate', () => {
       program.parse(['node', 'index.js', 'allocate', 'a', 'b', 'c'])
   
       processExitStub.callsFake((code) => {
-        expect(code).to.equal(1) // Check that the exit code is 1
+        expect(code).to.equal(1)
+      })
+      expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
+    })
+
+    it('should throw an error if the arguments are not positive', () => {
+      program.parse(['node', 'index.js', 'allocate', '-1', '-2', '-3'])
+  
+      processExitStub.callsFake((code) => {
+        expect(code).to.equal(1)
       })
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
@@ -45,7 +54,7 @@ describe('commands/allocate', () => {
     let accountServiceStub
     let operationServiceStub
   
-    before(() => {
+    beforeEach(() => {
       loggerStub = sinon.stub(logger, 'info')
       accountServiceStub = sinon
         .stub(accountService, 'setDesiredAllocationPercentage')
@@ -55,7 +64,7 @@ describe('commands/allocate', () => {
         .resolves()
     })
   
-    after(() => {
+    afterEach(() => {
       loggerStub.restore()
       accountServiceStub.restore()
       operationServiceStub.restore()
