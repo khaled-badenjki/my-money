@@ -17,6 +17,8 @@ const calculatePercentages = amounts => {
   return _normalizePercentages(percentages)
 }
 
+const floor = number => Math.floor(number)
+
 const _normalizePercentages = percentages => {
   const sum = percentages.reduce((sum, amount) => sum + amount, 0)
 
@@ -27,5 +29,6 @@ const _normalizePercentages = percentages => {
 const _convertFloatToPercentage = float => Math.floor(float * 100)
 
 module.exports = {
-  calculatePercentages
+  calculatePercentages,
+  floor
 }
