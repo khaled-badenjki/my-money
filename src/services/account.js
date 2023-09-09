@@ -10,7 +10,7 @@ const db = require('../dal/models')
  */
 const setDesiredAllocationPercentage = accounts => {
   const amounts = Object.values(accounts)
-  calculator.calculatePercentages(amounts)
+  const percentages = calculator.calculatePercentages(amounts)
 
   db.Account.bulkCreate(amounts)
 }

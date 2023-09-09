@@ -12,6 +12,11 @@ describe('Calculator', () => {
       expect(calculator.calculatePercentages([3000, 3000, 3000]))
         .to.eql([33, 33, 34])
     })
+
+    it('should automatically convert numeric string to number', () => {
+      expect(calculator.calculatePercentages(['6000', '3000', '1000']))
+        .to.eql([60, 30, 10])
+    })
   })
 
   describe('floor', () => {
