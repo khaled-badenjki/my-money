@@ -1,5 +1,7 @@
 const db = require('../dal/models')
 
+const ALLOCATION_DATE = new Date(2023, 0, 15)
+
 /**
  * @param {Array} accounts array of objects
  * with "name" and "amount" properties
@@ -12,7 +14,7 @@ const createAllocations = accounts => {
       type: 'allocation',
       amount: account.amount,
       accountId: account.accountId,
-      date: new Date()
+      date: ALLOCATION_DATE
     }))
   )
 }
