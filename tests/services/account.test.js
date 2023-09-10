@@ -39,7 +39,7 @@ describe('Account Service', () => {
       expect(accountBulkCreateStub.called).to.be.true
     })
 
-    it('should call account model bulk create correct arguments', async () => {
+    it('should call account bulk create with correct arguments', async () => {
       
       accountService.createManyWithPercentage(accounts)
       
@@ -48,6 +48,50 @@ describe('Account Service', () => {
           name: account.name,
           desiredAllocationPercentage: percentages[index]
         }))
+      )).to.be.true
+    })
+  })
+
+  describe('setSip()', () => {
+    before(() => {
+      sinon.stub(db.Account, 'update').resolves()
+    })
+
+    after(() => {
+      db.Account.update.restore()
+    })
+
+    it('should call account model update with correct arguments', async () => {
+      const accountSip = [
+        {
+          name: 'equity',
+          sip: 6000
+        },
+        {
+          name: 'debt',
+          sip: 2000
+        },
+        {
+          name: 'gold',
+          sip: 2000
+        }
+      ]
+
+      await accountService.setSip(accountSip)
+
+      expect(db.Account.update.calledWith(
+        { sip: 6000 },
+        { where: { name: 'equity' } }
+      )).to.be.true
+
+      expect(db.Account.update.calledWith(
+        { sip: 2000 },
+        { where: { name: 'debt' } }
+      )).to.be.true
+
+      expect(db.Account.update.calledWith(
+        { sip: 2000 },
+        { where: { name: 'gold' } }
       )).to.be.true
     })
   })
