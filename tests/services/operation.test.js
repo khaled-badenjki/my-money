@@ -65,5 +65,30 @@ describe('Operation Service', () => {
       ])).to.be.true
     })
 
+    it('should store allocation date as 15th of January 2023', async () => {
+
+      await operationService.createAllocations(accounts)
+
+      expect(operationBulkCreateStub.calledWith([
+        {
+          type: 'allocation',
+          amount: 6000,
+          accountId: 1,
+          date: new Date(2023, 0, 15)
+        },
+        {
+          type: 'allocation',
+          amount: 2000,
+          accountId: 2,
+          date: new Date(2023, 0, 15)
+        },
+        {
+          type: 'allocation',
+          amount: 2000,
+          accountId: 3,
+          date: new Date(2023, 0, 15)
+        }
+      ])).to.be.true
+    })
   })
 })
