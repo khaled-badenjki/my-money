@@ -24,7 +24,7 @@ const _validateIsPositive = arr => {
 }
 
 const _validateIsPercentage = arr => {
-  return arr.some(amount => amount > 100 || amount < -100) ? false : true
+  return arr.some(amount => amount.endsWith('%')) ? true : false
 }
 
 module.exports = {
