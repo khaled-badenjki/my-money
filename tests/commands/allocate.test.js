@@ -94,11 +94,21 @@ describe('commands/allocate', () => {
         params.gold
       ])
   
-      expect(accountServiceStub.calledWith({
-        equity: params.equity, 
-        debt: params.debt, 
-        gold: params.gold
-      })).to.be.true
+      console.log(accountServiceStub.getCall(0))
+      expect(accountServiceStub.calledWith([
+        {
+          name: 'equity',
+          amount: params.equity
+        },
+        {
+          name: 'debt',
+          amount: params.debt
+        },
+        {
+          name: 'gold',
+          amount: params.gold
+        }
+      ])).to.be.true
     })
   
     it('should call operation service with the correct params', async () => {
