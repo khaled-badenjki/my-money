@@ -6,6 +6,7 @@ const db = require('../../src/dal/models')
 
 describe('Operation Service', () => {
   describe('createAllocations()', () => {
+    const ALLOCATION_DATE = '2023-01-15'
     const accounts = [
       {
         accountId: 1,
@@ -48,19 +49,19 @@ describe('Operation Service', () => {
           type: 'allocation',
           amount: 6000,
           accountId: 1,
-          date: sinon.match.date
+          date: ALLOCATION_DATE
         },
         {
           type: 'allocation',
           amount: 2000,
           accountId: 2,
-          date: sinon.match.date
+          date: ALLOCATION_DATE
         },
         {
           type: 'allocation',
           amount: 2000,
           accountId: 3,
-          date: sinon.match.date
+          date: ALLOCATION_DATE
         }
       ])).to.be.true
     })
@@ -74,19 +75,19 @@ describe('Operation Service', () => {
           type: 'allocation',
           amount: 6000,
           accountId: 1,
-          date: new Date(2023, 0, 15)
+          date: ALLOCATION_DATE
         },
         {
           type: 'allocation',
           amount: 2000,
           accountId: 2,
-          date: new Date(2023, 0, 15)
+          date: ALLOCATION_DATE
         },
         {
           type: 'allocation',
           amount: 2000,
           accountId: 3,
-          date: new Date(2023, 0, 15)
+          date: ALLOCATION_DATE
         }
       ])).to.be.true
     })
