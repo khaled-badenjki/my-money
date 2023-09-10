@@ -52,10 +52,9 @@ describe('commands/sip', () => {
       accountServiceStub.restore()
     })
 
-    it('should log SIP as info', () => {
-      const loggerStub = sinon.stub(logger, 'info')
+    it('should log sip as info', () => {
       program.parse(['node', 'index.js', 'sip', '1000', '1000', '1000'])
-      expect(loggerStub.calledWith(sinon.match(/SIP/))).to.be.true
+      expect(loggerStub.calledWith(sinon.match(/sip/))).to.be.true
       loggerStub.restore()
     })
   })

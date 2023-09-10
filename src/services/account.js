@@ -20,6 +20,11 @@ const createManyWithPercentage = async accounts => {
   )
 }
 
+const setSip = async () => {
+
+}
+
 module.exports = {
-  createManyWithPercentage
+  createManyWithPercentage,
+  setSip
 }

@@ -1,6 +1,7 @@
 const { Command } = require('commander')
 const { logError, logCommand } = require('../helpers/logger')
 const { validateSipInput } = require('../helpers/validator')
+const { accountService } = require('../services')
 
 const sip = new Command('sip')
   .description('receives investment amount on a monthly basis for each fund.')
@@ -24,6 +25,8 @@ const _handleSip = async (sipInput, command) => {
   }
 
   logCommand(command)
+
+  await accountService.setSip(sipInput)
 }
 
 module.exports = sip
