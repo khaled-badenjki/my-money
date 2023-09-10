@@ -18,9 +18,18 @@ describe('Operation Service', () => {
 
     it('should call the operation model bulk create', () => {
       const accounts = {
-        equity: 100,
-        debt: 100,
-        gold: 100
+        equity: {
+          id: 1,
+          amount: 6000
+        },
+        debt: {
+          id: 2,
+          amount: 2000
+        },
+        gold: {
+          id: 3,
+          amount: 2000
+        }
       }
       operationService.createAllocations(accounts)
       expect(operationBulkCreateStub.called).to.be.true
@@ -28,9 +37,18 @@ describe('Operation Service', () => {
 
     it('should call operation model bulk create with correct arguments', () => {
       const accounts = {
-        equity: 6000,
-        debt: 2000,
-        gold: 2000
+        equity: {
+          id: 1,
+          amount: 6000
+        },
+        debt: {
+          id: 2,
+          amount: 2000
+        },
+        gold: {
+          id: 3,
+          amount: 2000
+        }
       }
 
       operationService.createAllocations(accounts)
@@ -40,19 +58,19 @@ describe('Operation Service', () => {
           type: 'allocation',
           amount: 6000,
           accountId: 1,
-          date: new Date()
+          date: sinon.match.date
         },
         {
           type: 'allocation',
           amount: 2000,
           accountId: 2,
-          date: new Date()
+          date: sinon.match.date
         },
         {
           type: 'allocation',
           amount: 2000,
           accountId: 3,
-          date: new Date()
+          date: sinon.match.date
         }
       ]
 
