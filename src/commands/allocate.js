@@ -2,6 +2,7 @@ const { Command } = require('commander')
 const { logError, logCommand } = require('../helpers/logger')
 const { validateAllocateInput } = require('../helpers/validator')
 const { accountService, operationService } = require('../services')
+const calculator = require('../helpers/calculator')
 const db = require('../dal/models')
 
 const INPUT_ORDER = [ 'equity', 'debt', 'gold' ]
@@ -49,7 +50,7 @@ const _appendAccountIds = (accounts, accountAmounts) =>
 
 const _serializeAllocateInput = arr => arr.map((amount, index) => ({
   name: INPUT_ORDER[index],
-  amount
+  amount: calculator.floor(amount)
 }))
 
 module.exports = allocate
