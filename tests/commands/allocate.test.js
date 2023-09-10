@@ -51,6 +51,27 @@ describe('commands/allocate', () => {
   })
   
   describe('interaction', () => {
+    const params = [
+      {
+        name: 'equity',
+        amount: 6000
+      },
+      {
+        name: 'debt',
+        amount: 3000
+      },
+      {
+        name: 'gold',
+        amount: 1000
+      }
+    ]
+    const callAllocate = () => program
+      .parseAsync(['node', 'index.js', 'allocate',
+        params[0].amount,
+        params[1].amount,
+        params[2].amount
+      ])
+
     let loggerStub
     let accountServiceStub
     let operationServiceStub
@@ -82,59 +103,27 @@ describe('commands/allocate', () => {
     })
   
     it ('should call account service with the correct params', async () => {
-      const params = {
-        equity: '6000',
-        debt: '3000',
-        gold: '1000'
-      }
+      await callAllocate()
   
-      await program.parseAsync(['node', 'index.js', 'allocate',
-        params.equity, 
-        params.debt, 
-        params.gold
-      ])
-  
-      expect(accountServiceStub.calledWith([
-        {
-          name: 'equity',
-          amount: params.equity
-        },
-        {
-          name: 'debt',
-          amount: params.debt
-        },
-        {
-          name: 'gold',
-          amount: params.gold
-        }
-      ])).to.be.true
+      expect(accountServiceStub.calledWith(params)).to.be.true
     })
   
     it('should call operation service with the correct params', async () => {
-      const params = {
-        equity: '6000',
-        debt: '3000',
-        gold: '1000'
-      }
-  
-      await program.parseAsync(['node', 'index.js', 'allocate',
-        params.equity, 
-        params.debt, 
-        params.gold
-      ])
-  
-      expect(operationServiceStub.calledWith([
+      await callAllocate()
+
+      const log = operationServiceStub.args[0][0]
+      expect(operationServiceStub.calledWithMatch([
         {
-          name: 'equity',
-          id: 1
+          accountId: 1,
+          amount: params[0].amount
         },
         {
-          name: 'debt',
-          id: 2
+          accountId: 2,
+          amount: params[1].amount
         },
         {
-          name: 'gold',
-          id: 3
+          accountId: 3,
+          amount: params[2].amount
         }
       ])).to.be.true
     })
@@ -142,8 +131,7 @@ describe('commands/allocate', () => {
     it('should close the database connection', async () => {
       const dbCloseStub = sinon.stub(db.sequelize, 'close')
 
-      await program.parseAsync(['node', 'index.js', 'allocate', 
-        '6000', '3000', '1000'])
+      await callAllocate()
 
       expect(dbCloseStub.calledOnce).to.be.true
       dbCloseStub.restore()

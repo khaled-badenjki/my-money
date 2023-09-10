@@ -15,11 +15,10 @@ const allocate = new Command('allocate')
 
 
 /**
- * @param {Object} allocateInput 
- * @param {String} allocateInput.equity
- * @param {String} allocateInput.debt
- * @param {String} allocateInput.gold
- * @returns 
+ * Handles the allocate command
+ * @param {Array} allocateInput
+ * @param {Object} command
+ * @returns void
  */
 const _handleAllocate = async (allocateInput, command) => {
   if (!_validateAllocateInput(allocateInput)) {
@@ -27,23 +26,31 @@ const _handleAllocate = async (allocateInput, command) => {
     return
   }
 
-  const accountsData = allocateInput.map((amount, index) => ({
-    name: INPUT_ORDER[index],
-    amount
-  }))
-
   logCommand(command)
 
-  const accounts = await accountService.createManyWithPercentage(accountsData)
+  const accountAmounts = _serializeAllocateInput(allocateInput)
 
-  const accountsDataWithId = accounts.map(accountsData => ({
-    id: accounts.find(account => account.name === accountsData.name).id,
-    name: accountsData.name
-  }))
+  const accounts = await accountService.createManyWithPercentage(accountAmounts)
 
-  await operationService.createAllocations(accountsDataWithId)
+  const accountOperations = _appendAccountIds(accounts, accountAmounts)
+
+  await operationService.createAllocations(accountOperations)
+
   await db.sequelize.close()
 }
+
+const _appendAccountIds = (accounts, accountAmounts) => 
+  accountAmounts.map(accountAmount => ({
+    amount: accountAmount.amount,
+    accountId: accounts.find(account => account.name === accountAmount.name).id
+  })
+)
+
+const _serializeAllocateInput = arr => arr.map((amount, index) => ({
+  name: INPUT_ORDER[index],
+  amount
+}))
+
 
 const _validateAllocateInput = arr => {
   return _validateExists(arr) && 
