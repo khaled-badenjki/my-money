@@ -23,7 +23,7 @@ const createManyWithPercentage = async accounts => {
 const setSip = async (accuontSip) => {
   return Promise.all(
     accuontSip.map(account => db.Account.update(
-      { sip: account.sip },
+      { monthlyInvestment: account.sip },
       { where: { name: account.name } }
     ))
   )
