@@ -2,6 +2,7 @@ const sinon = require('sinon')
 const { expect } = require('chai')
 const { logger } = require('../../src/helpers/logger')
 const program = require('../../src/commands')
+const { operationService } = require('../../src/services')
 
 describe('commands/change', () => {
   const callChange = args => 
@@ -36,6 +37,15 @@ describe('commands/change', () => {
     it('should fail if percentages are out of range', () => {
       callChange(['101%', '20%', '30%', 'APRIL'])
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
+    })
+  })
+
+  describe('interaction', () => {
+    it('should call the operationService.createChanges', () => {
+      sinon.stub(operationService, 'createChanges')
+
+      callChange(['10%', '20%', '30%', 'APRIL'])
+      expect(operationService.createChanges.calledOnce).to.be.true
     })
   })
 })
