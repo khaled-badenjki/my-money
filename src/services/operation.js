@@ -1,6 +1,6 @@
 const db = require('../dal/models')
 
-const ALLOCATION_DATE = new Date(2023, 0, 15)
+const ALLOCATION_DATE = '2023-01-15'
 
 /**
  * @param {Array} accounts array of objects
