@@ -20,7 +20,7 @@ Then run docker compose with this command
     docker-compose run app node index.js --help
 
 And you are ready to go :rocket:
-> when dealing with long commands like this, I like to create an alis to make my life easier. So i encourage you to create an alias called `mm` (for MyMoney):
+> when dealing with long commands like this ⬆️, I like to create an alis to make my life easier. So i encourage you to create an alias called `mm` (for MyMoney):
 > `alias mm='docker-compose run app node index.js'`
 > Now you can interact with the tool like this
 > `mm --help`
