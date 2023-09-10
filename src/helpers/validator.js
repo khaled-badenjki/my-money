@@ -6,6 +6,11 @@ const validateAllocateInput = arr => {
 
 const validateSipInput = validateAllocateInput
 
+const validateChangeInput = arr => {
+  return _validateExists(arr) && 
+    _validateIsPercentage(arr)
+}
+
 const _validateExists = arr => {
   return arr.some(amount => !amount) ? false : true
 }
@@ -18,7 +23,12 @@ const _validateIsPositive = arr => {
   return arr.some(amount => amount < 0) ? false : true
 }
 
+const _validateIsPercentage = arr => {
+  return arr.some(amount => amount > 100 || amount < -100) ? false : true
+}
+
 module.exports = {
   validateAllocateInput,
-  validateSipInput
+  validateSipInput,
+  validateChangeInput
 }
