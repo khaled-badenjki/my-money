@@ -120,6 +120,26 @@ describe('commands/allocate', () => {
       ])).to.be.true
     })
 
+    it('should floor the amount down if it has decimal places', async () => {
+      await program.parseAsync(['node', 'index.js', 
+        'allocate', '1000.5', '1000.5', '1000.5'])
+
+      expect(accountServiceStub.calledWith([
+        {
+          name: 'equity',
+          amount: 1000
+        },
+        {
+          name: 'debt',
+          amount: 1000
+        },
+        {
+          name: 'gold',
+          amount: 1000
+        }
+      ])).to.be.true
+    })
+
     it('should close the database connection', async () => {
       const dbCloseStub = sinon.stub(db.sequelize, 'close')
 
