@@ -17,20 +17,20 @@ describe('Operation Service', () => {
     })
 
     it('should call the operation model bulk create', () => {
-      const accounts = {
-        equity: {
-          id: 1,
+      const accounts = [
+        {
+          accountId: 1,
           amount: 6000
         },
-        debt: {
-          id: 2,
+        {
+          accountId: 2,
           amount: 2000
         },
-        gold: {
-          id: 3,
+        {
+          accountId: 3,
           amount: 2000
         }
-      }
+      ]
       operationService.createAllocations(accounts)
       expect(operationBulkCreateStub.called).to.be.true
     })
