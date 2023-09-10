@@ -24,9 +24,6 @@ describe('commands/allocate', () => {
     it('should throw an error if no arguments are passed', () => {
       program.parse(['node', 'index.js', 'allocate'])
   
-      processExitStub.callsFake((code) => {
-        expect(code).to.equal(1)
-      })
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
 
     })
@@ -34,18 +31,13 @@ describe('commands/allocate', () => {
     it('should throw an error if the arguments are not numbers', () => {
       program.parse(['node', 'index.js', 'allocate', 'a', 'b', 'c'])
   
-      processExitStub.callsFake((code) => {
-        expect(code).to.equal(1)
-      })
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
 
     it('should throw an error if the arguments are not positive', () => {
       program.parse(['node', 'index.js', 'allocate', '-1', '-2', '-3'])
   
-      processExitStub.callsFake((code) => {
-        expect(code).to.equal(1)
-      })
+
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
   })
