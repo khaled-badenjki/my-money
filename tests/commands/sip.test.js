@@ -76,5 +76,24 @@ describe('commands/sip', () => {
         }
       ])).to.be.true
     })
+
+    it('should floor the sip down if it has decimal places', async () => {
+      program.parseAsync(['node', 'index.js', 'sip', 1000.5, 1000.5, 1000.5])
+
+      expect(accountServiceStub.calledWith([
+        {
+          name: 'equity',
+          sip: 1000
+        },
+        {
+          name: 'debt',
+          sip: 1000
+        },
+        {
+          name: 'gold',
+          sip: 1000
+        }
+      ])).to.be.true
+    })
   })
 })

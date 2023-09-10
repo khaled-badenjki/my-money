@@ -42,8 +42,6 @@ describe('Operation Service', () => {
       
       await operationService.createAllocations(accounts)
 
-      const expectedOperations = 
-
       expect(operationBulkCreateStub.calledWith([
         {
           type: 'allocation',
