@@ -125,20 +125,20 @@ describe('commands/allocate', () => {
       ])
   
       const log = operationServiceStub.getCall(0)
-      expect(operationServiceStub.calledWith({
-        equity: {
-          id: 1,
-          amount: params.equity
+      expect(operationServiceStub.calledWith([
+        {
+          name: 'equity',
+          id: 1
         },
-        debt: {
-          id: 2,
-          amount: params.debt
+        {
+          name: 'debt',
+          amount: 2
         },
-        gold: {
-          id: 3,
-          amount: params.gold
+        {
+          name: 'gold',
+          amount: 3
         }
-      })).to.be.true
+      ])).to.be.true
     })
 
     it('should close the database connection', async () => {
