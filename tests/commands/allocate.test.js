@@ -58,7 +58,11 @@ describe('commands/allocate', () => {
       loggerStub = sinon.stub(logger, 'info')
       accountServiceStub = sinon
         .stub(accountService, 'setDesiredAllocationPercentage')
-        .resolves()
+        .resolves([
+          { id: 1, name: 'equity', desiredAllocationPercentage: 60 },
+          { id: 2, name: 'debt', desiredAllocationPercentage: 20 },
+          { id: 3, name: 'gold', desiredAllocationPercentage: 20 }
+        ])
       operationServiceStub = sinon
         .stub(operationService, 'createAllocations')
         .resolves()
@@ -76,14 +80,14 @@ describe('commands/allocate', () => {
       expect(loggerStub.calledWith(sinon.match(/allocate/))).to.be.true
     })
   
-    it ('should call the account service with the correct params', () => {
+    it ('should call account service with the correct params', async () => {
       const params = {
         equity: '6000',
         debt: '3000',
         gold: '1000'
       }
   
-      program.parse(['node', 'index.js', 'allocate',
+      await program.parseAsync(['node', 'index.js', 'allocate',
         params.equity, 
         params.debt, 
         params.gold
@@ -96,23 +100,33 @@ describe('commands/allocate', () => {
       })).to.be.true
     })
   
-    it('should call the operation service with the correct params', () => {
+    it('should call operation service with the correct params', async () => {
       const params = {
         equity: '6000',
         debt: '3000',
         gold: '1000'
       }
   
-      program.parse(['node', 'index.js', 'allocate',
+      await program.parseAsync(['node', 'index.js', 'allocate',
         params.equity, 
         params.debt, 
         params.gold
       ])
   
+      const log = operationServiceStub.getCall(0)
       expect(operationServiceStub.calledWith({
-        equity: params.equity, 
-        debt: params.debt, 
-        gold: params.gold
+        equity: {
+          id: 1,
+          amount: params.equity
+        },
+        debt: {
+          id: 2,
+          amount: params.debt
+        },
+        gold: {
+          id: 3,
+          amount: params.gold
+        }
       })).to.be.true
     })
   })

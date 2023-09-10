@@ -26,8 +26,25 @@ const _handleAllocate = async (allocateInput, command) => {
 
   logCommand(command)
 
-  accountService.setDesiredAllocationPercentage(allocateInput)
-  operationService.createAllocations(allocateInput)
+  const accounts = await accountService
+    .setDesiredAllocationPercentage(allocateInput)
+
+  const x = {
+    equity: {
+      id: accounts.find(account => account.name === 'equity').id,
+      amount: allocateInput.equity
+    },
+    debt: {
+      id: accounts.find(account => account.name === 'debt').id,
+      amount: allocateInput.debt
+    },
+    gold: {
+      id: accounts.find(account => account.name === 'gold').id,
+      amount: allocateInput.gold
+    }
+  }
+  await operationService.createAllocations(x)
+  
 }
 
 const _validateAllocateInput = allocateInput => {
