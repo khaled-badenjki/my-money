@@ -22,6 +22,8 @@ describe('Account Service', () => {
       }
     ]
 
+    const percentages = [ 60, 20, 20 ]
+
     let accountBulkCreateStub
 
     before(() => {
@@ -41,11 +43,12 @@ describe('Account Service', () => {
       
       accountService.createManyWithPercentage(accounts)
       
-      expect(accountBulkCreateStub.calledWith([
-        { name: 'equity', desiredAllocationPercentage: 60 },
-        { name: 'debt', desiredAllocationPercentage: 20 },
-        { name: 'gold', desiredAllocationPercentage: 20 }
-      ])).to.be.true
+      expect(accountBulkCreateStub.calledWith(
+        accounts.map((account, index) => ({
+          name: account.name,
+          desiredAllocationPercentage: percentages[index]
+        }))
+      )).to.be.true
     })
   })
 })
