@@ -20,8 +20,13 @@ const createManyWithPercentage = async accounts => {
   )
 }
 
-const setSip = async () => {
-
+const setSip = async (accuontSip) => {
+  return Promise.all(
+    accuontSip.map(account => db.Account.update(
+      { sip: account.sip },
+      { where: { name: account.name } }
+    ))
+  )
 }
 
 module.exports = {
