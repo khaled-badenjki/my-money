@@ -57,5 +57,24 @@ describe('commands/sip', () => {
       expect(loggerStub.calledWith(sinon.match(/sip/))).to.be.true
       loggerStub.restore()
     })
+
+    it('should call accountService.setSip with correct params', async () => {
+      program.parseAsync(['node', 'index.js', 'sip', '1000', '1000', '1000'])
+
+      expect(accountServiceStub.calledWith([
+        {
+          name: 'equity',
+          sip: 1000
+        },
+        {
+          name: 'debt',
+          sip: 1000
+        },
+        {
+          name: 'gold',
+          sip: 1000
+        }
+      ])).to.be.true
+    })
   })
 })
