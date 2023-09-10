@@ -1,7 +1,9 @@
 const { Command } = require('commander')
-const { logger, logCommand } = require('../helpers/logger')
+const { logError, logCommand } = require('../helpers/logger')
 const { accountService, operationService } = require('../services')
 const db = require('../dal/models')
+
+const INPUT_ORDER = [ 'equity', 'debt', 'gold' ]
 
 const allocate = new Command('allocate')
   .description('receives the initial investment amounts for each fund.')
@@ -9,7 +11,7 @@ const allocate = new Command('allocate')
   .argument('<debt>', 'debt investment amount')
   .argument('<gold>', 'gold investment amount')
   .action((equity, debt, gold, options, command) =>
-    _handleAllocate({ equity, debt, gold }, command))
+    _handleAllocate([ equity, debt, gold ], command))
 
 
 /**
@@ -21,14 +23,19 @@ const allocate = new Command('allocate')
  */
 const _handleAllocate = async (allocateInput, command) => {
   if (!_validateAllocateInput(allocateInput)) {
-    logger.error('Invalid input')
+    logError('Invalid input')
     return
   }
+
+  const accountsData = allocateInput.map((amount, index) => ({
+    name: INPUT_ORDER[index],
+    amount
+  }))
 
   logCommand(command)
 
   const accounts = await accountService
-    .setDesiredAllocationPercentage(allocateInput)
+    .setDesiredAllocationPercentage(accountsData)
 
   const x = {
     equity: {
@@ -48,35 +55,22 @@ const _handleAllocate = async (allocateInput, command) => {
   await db.sequelize.close()
 }
 
-const _validateAllocateInput = allocateInput => {
-  const exists = _validateExists(allocateInput)
-  const isNumber = _validateIsNumber(allocateInput)
-  const isPositive = _validateIsPositive(allocateInput)
-  return exists && isNumber && isPositive
+const _validateAllocateInput = arr => {
+  return _validateExists(arr) && 
+    _validateIsNumber(arr) && 
+    _validateIsPositive(arr)
 }
 
-const _validateExists = allocateInput => {
-  const { equity, debt, gold } = allocateInput
-  if (!equity || !debt || !gold) {
-    return false
-  }
-  return true
+const _validateExists = arr => {
+  return arr.some(amount => !amount) ? false : true
 }
 
-const _validateIsNumber = allocateInput => {
-  const { equity, debt, gold } = allocateInput
-  if (isNaN(equity) || isNaN(debt) || isNaN(gold)) {
-    return false
-  }
-  return true
+const _validateIsNumber = arr => {
+  return arr.some(amount => isNaN(amount)) ? false : true
 }
 
-const _validateIsPositive = allocateInput => {
-  const { equity, debt, gold } = allocateInput
-  if (equity < 0 || debt < 0 || gold < 0) {
-    return false
-  }
-  return true
+const _validateIsPositive = arr => {
+  return arr.some(amount => amount < 0) ? false : true
 }
 
 module.exports = allocate

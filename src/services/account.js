@@ -8,7 +8,7 @@ const db = require('../dal/models')
  * @description sets the desired allocation percentage for each
  * account type
  */
-const setDesiredAllocationPercentage = accounts => {
+const setDesiredAllocationPercentage = async accounts => {
   const amounts = Object.values(accounts)
   const percentages = calculator.calculatePercentages(amounts)
 

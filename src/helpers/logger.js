@@ -21,7 +21,11 @@ if (process.env.NODE_ENV !== 'production') {
 const logCommand = command => 
   logger.info(`called ${command.name()}`)
 
+const logError = error => 
+  logger.error(error)
+
 module.exports = {
   logger,
-  logCommand
+  logCommand,
+  logError
 }
