@@ -37,21 +37,12 @@ const _handleAllocate = async (allocateInput, command) => {
   const accounts = await accountService
     .setDesiredAllocationPercentage(accountsData)
 
-  const x = {
-    equity: {
-      id: accounts.find(account => account.name === 'equity').id,
-      amount: allocateInput.equity
-    },
-    debt: {
-      id: accounts.find(account => account.name === 'debt').id,
-      amount: allocateInput.debt
-    },
-    gold: {
-      id: accounts.find(account => account.name === 'gold').id,
-      amount: allocateInput.gold
-    }
-  }
-  await operationService.createAllocations(x)
+  const accountsDataWithId = accounts.map(accountsData => ({
+    id: accounts.find(account => account.name === accountsData.name).id,
+    name: accountsData.name
+  }))
+
+  await operationService.createAllocations(accountsDataWithId)
   await db.sequelize.close()
 }
 
