@@ -8,11 +8,11 @@ describe('Operation Service', () => {
   describe('createAllocations()', () => {
     let operationBulkCreateStub
 
-    before(() => {
+    beforeEach(() => {
       operationBulkCreateStub = sinon.stub(db.Operation, 'bulkCreate')
     })
 
-    after(() => {
+    afterEach(() => {
       operationBulkCreateStub.restore()
     })
 
@@ -35,23 +35,23 @@ describe('Operation Service', () => {
       expect(operationBulkCreateStub.called).to.be.true
     })
 
-    it('should call operation model bulk create with correct arguments', () => {
-      const accounts = {
-        equity: {
-          id: 1,
+    it('should call operation bulk create with correct arguments', async () => {
+      const accounts = [
+        {
+          accountId: 1,
           amount: 6000
         },
-        debt: {
-          id: 2,
+        {
+          accountId: 2,
           amount: 2000
         },
-        gold: {
-          id: 3,
+        {
+          accountId: 3,
           amount: 2000
         }
-      }
+      ]
 
-      operationService.createAllocations(accounts)
+      await operationService.createAllocations(accounts)
 
       const expectedOperations = [
         {
