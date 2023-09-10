@@ -23,5 +23,10 @@ describe('commands/change', () => {
       program.parse(['node', 'index.js', 'change'])
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
+
+    it('should throw an error if first 3 args are not percentages', () => {
+      program.parse(['node', 'index.js', 'change', '10', '20', '30', 'APRIL'])
+      expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
+    })
   })
 })
