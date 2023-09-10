@@ -58,7 +58,7 @@ describe('commands/allocate', () => {
     beforeEach(() => {
       loggerStub = sinon.stub(logger, 'info')
       accountServiceStub = sinon
-        .stub(accountService, 'setDesiredAllocationPercentage')
+        .stub(accountService, 'createManyWithPercentage')
         .resolves([
           { id: 1, name: 'equity', desiredAllocationPercentage: 60 },
           { id: 2, name: 'debt', desiredAllocationPercentage: 20 },

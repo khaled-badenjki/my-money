@@ -34,8 +34,7 @@ const _handleAllocate = async (allocateInput, command) => {
 
   logCommand(command)
 
-  const accounts = await accountService
-    .setDesiredAllocationPercentage(accountsData)
+  const accounts = await accountService.createManyWithPercentage(accountsData)
 
   const accountsDataWithId = accounts.map(accountsData => ({
     id: accounts.find(account => account.name === accountsData.name).id,

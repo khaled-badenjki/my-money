@@ -4,11 +4,11 @@ const db = require('../dal/models')
 /**
  * @param {object} accounts - accounts object where key is the 
  * type and value is the amount
- * @returns {void}
+ * @returns {Promise} - Promise object represents the accounts
  * @description sets the desired allocation percentage for each
  * account type
  */
-const setDesiredAllocationPercentage = async accounts => {
+const createManyWithPercentage = async accounts => {
   const amounts = Object.values(accounts)
   const percentages = calculator.calculatePercentages(amounts)
 
@@ -21,5 +21,5 @@ const setDesiredAllocationPercentage = async accounts => {
 }
 
 module.exports = {
-  setDesiredAllocationPercentage
+  createManyWithPercentage
 }

@@ -6,7 +6,7 @@ const db = require('../../src/dal/models')
 
 
 describe('Account Service', () => {
-  describe('setDesiredAllocationPercentage()', () => {
+  describe('createManyWithPercentage()', () => {
     let accountBulkCreateStub
 
     before(() => {
@@ -23,7 +23,7 @@ describe('Account Service', () => {
         debt: 100,
         gold: 100
       }
-      accountService.setDesiredAllocationPercentage(accounts)
+      accountService.createManyWithPercentage(accounts)
       expect(accountBulkCreateStub.called).to.be.true
     })
 
@@ -33,7 +33,7 @@ describe('Account Service', () => {
         debt: 2000,
         gold: 2000
       }
-      accountService.setDesiredAllocationPercentage(accounts)
+      accountService.createManyWithPercentage(accounts)
       expect(accountBulkCreateStub.calledWith([
         { name: 'equity', desiredAllocationPercentage: 60 },
         { name: 'debt', desiredAllocationPercentage: 20 },
