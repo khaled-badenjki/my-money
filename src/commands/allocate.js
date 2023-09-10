@@ -1,5 +1,6 @@
 const { Command } = require('commander')
 const { logError, logCommand } = require('../helpers/logger')
+const { validateAllocateInput } = require('../helpers/validator')
 const { accountService, operationService } = require('../services')
 const db = require('../dal/models')
 
@@ -21,7 +22,7 @@ const allocate = new Command('allocate')
  * @returns void
  */
 const _handleAllocate = async (allocateInput, command) => {
-  if (!_validateAllocateInput(allocateInput)) {
+  if (! validateAllocateInput(allocateInput)) {
     logError('Invalid input')
     return
   }
@@ -50,24 +51,5 @@ const _serializeAllocateInput = arr => arr.map((amount, index) => ({
   name: INPUT_ORDER[index],
   amount
 }))
-
-
-const _validateAllocateInput = arr => {
-  return _validateExists(arr) && 
-    _validateIsNumber(arr) && 
-    _validateIsPositive(arr)
-}
-
-const _validateExists = arr => {
-  return arr.some(amount => !amount) ? false : true
-}
-
-const _validateIsNumber = arr => {
-  return arr.some(amount => isNaN(amount)) ? false : true
-}
-
-const _validateIsPositive = arr => {
-  return arr.some(amount => amount < 0) ? false : true
-}
 
 module.exports = allocate
