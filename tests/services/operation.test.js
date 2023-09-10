@@ -6,6 +6,21 @@ const db = require('../../src/dal/models')
 
 describe('Operation Service', () => {
   describe('createAllocations()', () => {
+    const accounts = [
+      {
+        accountId: 1,
+        amount: 6000
+      },
+      {
+        accountId: 2,
+        amount: 2000
+      },
+      {
+        accountId: 3,
+        amount: 2000
+      }
+    ]
+
     let operationBulkCreateStub
 
     beforeEach(() => {
@@ -17,43 +32,18 @@ describe('Operation Service', () => {
     })
 
     it('should call the operation model bulk create', () => {
-      const accounts = [
-        {
-          accountId: 1,
-          amount: 6000
-        },
-        {
-          accountId: 2,
-          amount: 2000
-        },
-        {
-          accountId: 3,
-          amount: 2000
-        }
-      ]
+
       operationService.createAllocations(accounts)
       expect(operationBulkCreateStub.called).to.be.true
     })
 
     it('should call operation bulk create with correct arguments', async () => {
-      const accounts = [
-        {
-          accountId: 1,
-          amount: 6000
-        },
-        {
-          accountId: 2,
-          amount: 2000
-        },
-        {
-          accountId: 3,
-          amount: 2000
-        }
-      ]
-
+      
       await operationService.createAllocations(accounts)
 
-      const expectedOperations = [
+      const expectedOperations = 
+
+      expect(operationBulkCreateStub.calledWith([
         {
           type: 'allocation',
           amount: 6000,
@@ -72,9 +62,8 @@ describe('Operation Service', () => {
           accountId: 3,
           date: sinon.match.date
         }
-      ]
-
-      expect(operationBulkCreateStub.calledWith(expectedOperations)).to.be.true
+      ])).to.be.true
     })
+
   })
 })
