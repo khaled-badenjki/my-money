@@ -7,6 +7,21 @@ const db = require('../../src/dal/models')
 
 describe('Account Service', () => {
   describe('createManyWithPercentage()', () => {
+    const accounts = [
+      {
+        name: 'equity',
+        amount: 6000
+      },
+      {
+        name: 'debt',
+        amount: 2000
+      },
+      {
+        name: 'gold',
+        amount: 2000
+      }
+    ]
+
     let accountBulkCreateStub
 
     before(() => {
@@ -18,22 +33,14 @@ describe('Account Service', () => {
     })
 
     it('should call account model bulk create', async () => {
-      const accounts = {
-        equity: 100,
-        debt: 100,
-        gold: 100
-      }
       accountService.createManyWithPercentage(accounts)
       expect(accountBulkCreateStub.called).to.be.true
     })
 
     it('should call account model bulk create correct arguments', async () => {
-      const accounts = {
-        equity: 6000,
-        debt: 2000,
-        gold: 2000
-      }
+      
       accountService.createManyWithPercentage(accounts)
+      
       expect(accountBulkCreateStub.calledWith([
         { name: 'equity', desiredAllocationPercentage: 60 },
         { name: 'debt', desiredAllocationPercentage: 20 },
