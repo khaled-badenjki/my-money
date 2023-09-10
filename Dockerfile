@@ -19,4 +19,4 @@ COPY ./ ./
 USER node
 
 # Run yarn start script
-CMD ["yarn", "start"]
+CMD ["yarn", "create:migrate:start"]

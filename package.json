@@ -8,7 +8,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "start": "node index.js --help",
+    "create:migrate:start": "sequelize-cli db:create && sequelize-cli db:migrate && node index.js --help",
     "dev": "nodemon index.js",
     "test": "mocha 'tests/**/*.js' --exit",
     "lint": "eslint . --ext .js",
