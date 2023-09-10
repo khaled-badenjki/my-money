@@ -1,5 +1,6 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
+const db = require('../../src/dal/models')
 const program = require('../../src/commands')
 const { logger } = require('../../src/helpers/logger')
 const { accountService, operationService } = require('../../src/services')
@@ -128,6 +129,16 @@ describe('commands/allocate', () => {
           amount: params.gold
         }
       })).to.be.true
+    })
+
+    it('should close the database connection', async () => {
+      const dbCloseStub = sinon.stub(db.sequelize, 'close')
+
+      await program.parseAsync(['node', 'index.js', 'allocate', 
+        '6000', '3000', '1000'])
+
+      expect(dbCloseStub.calledOnce).to.be.true
+      dbCloseStub.restore()
     })
   })
 })
