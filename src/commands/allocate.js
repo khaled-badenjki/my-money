@@ -1,6 +1,7 @@
 const { Command } = require('commander')
 const { logger, logCommand } = require('../helpers/logger')
 const { accountService, operationService } = require('../services')
+const db = require('../dal/models')
 
 const allocate = new Command('allocate')
   .description('receives the initial investment amounts for each fund.')
@@ -44,7 +45,7 @@ const _handleAllocate = async (allocateInput, command) => {
     }
   }
   await operationService.createAllocations(x)
-  
+  await db.sequelize.close()
 }
 
 const _validateAllocateInput = allocateInput => {

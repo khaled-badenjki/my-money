@@ -6,6 +6,7 @@ const defaultConfig = {
   port: process.env.POSTGRES_PORT,
   database: process.env.POSTGRES_DB,
   host: process.env.POSTGRES_HOST,
+  logging: false,
   dialect: 'postgres'
 }
 
