@@ -3,6 +3,7 @@ const { expect } = require('chai')
 const { logger } = require('../../src/helpers/logger')
 const program = require('../../src/commands')
 const { accountService } = require('../../src/services')
+const db = require('../../src/dal/models')
 
 describe('commands/sip', () => {
   describe('input validation', () => {
@@ -94,6 +95,15 @@ describe('commands/sip', () => {
           sip: 1000
         }
       ])).to.be.true
+    })
+
+    it('should close the database connection', async () => {
+      const dbCloseStub = sinon.stub(db.sequelize, 'close')
+
+      await program.parseAsync(['node', 'index.js', 'sip', 1000, 1000, 1000])
+
+      expect(dbCloseStub.calledOnce).to.be.true
+      dbCloseStub.restore()
     })
   })
 })
