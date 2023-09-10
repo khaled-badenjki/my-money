@@ -94,7 +94,6 @@ describe('commands/allocate', () => {
         params.gold
       ])
   
-      console.log(accountServiceStub.getCall(0))
       expect(accountServiceStub.calledWith([
         {
           name: 'equity',
@@ -124,7 +123,6 @@ describe('commands/allocate', () => {
         params.gold
       ])
   
-      const log = operationServiceStub.getCall(0)
       expect(operationServiceStub.calledWith([
         {
           name: 'equity',
@@ -132,11 +130,11 @@ describe('commands/allocate', () => {
         },
         {
           name: 'debt',
-          amount: 2
+          id: 2
         },
         {
           name: 'gold',
-          amount: 3
+          id: 3
         }
       ])).to.be.true
     })
