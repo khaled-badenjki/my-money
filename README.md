@@ -13,11 +13,18 @@ This is a challenge provided by [SadaPay](https://sadapay.pk/) during the hiring
 Then run docker compose with this command
 
     docker-compose up --build -d 
+
+
     
    Once the build is done, you can start interacting with the tool. To see a list of available commands, do this:
    
 
     docker-compose run app node index.js --help
+
+If this is the **first time** to run the app, you will need to create the database and run migrations. Do the following:
+
+    docker-compose run app npx sequelize-cli db:create
+    docker-compose run app npx sequelize-cli db:migrate
 
 And you are ready to go :rocket:
 > when dealing with long commands like this ⬆️, I like to create an alis to make my life easier. So i encourage you to create an alias called `mm` (for MyMoney):
@@ -50,6 +57,11 @@ It would look something like this:
 
     docker run --name postgresql -e POSTGRES_USER=user -e POSTGRES_PASSWORD=pass -p 5432:5432 -v /data:/var/lib/postgresql/data -d postgres
    
+Once the app and database are up and running, you will need to create the database and run the migrations:
+
+    npx sequelize-cli db:create
+    npx sequelize-cli db:migrate
+
    After that, you should be ready to go :rocket:
 
 # Design 📐✏️
@@ -64,4 +76,3 @@ It would look something like this:
 
 
 # Limitations 🏋🏽
-1. Due to a limitation in sequelize-cli as per [this issue](https://github.com/sequelize/cli/issues/1368), only the first time you run `docker-compose up --build -d` will succeed immediately. If for any reason you need to re-build, you **NEED** to manually delete the old database `mymoney`
