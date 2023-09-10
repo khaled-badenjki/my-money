@@ -3,6 +3,7 @@ const { logError, logCommand } = require('../helpers/logger')
 const { validateSipInput } = require('../helpers/validator')
 const { accountService } = require('../services')
 const calculator = require('../helpers/calculator')
+const db = require('../dal/models')
 
 const INPUT_ORDER = [ 'equity', 'debt', 'gold' ]
 
@@ -32,6 +33,8 @@ const _handleSip = async (sipInput, command) => {
   const accountSips = _serializeSipInput(sipInput)
 
   await accountService.setSip(accountSips)
+
+  await db.sequelize.close()
 }
 
 const _serializeSipInput = arr => arr.map((sip, index) => ({
