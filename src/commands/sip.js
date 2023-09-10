@@ -2,6 +2,7 @@ const { Command } = require('commander')
 const { logError, logCommand } = require('../helpers/logger')
 const { validateSipInput } = require('../helpers/validator')
 const { accountService } = require('../services')
+const calculator = require('../helpers/calculator')
 
 const INPUT_ORDER = [ 'equity', 'debt', 'gold' ]
 
@@ -35,7 +36,7 @@ const _handleSip = async (sipInput, command) => {
 
 const _serializeSipInput = arr => arr.map((sip, index) => ({
   name: INPUT_ORDER[index],
-  sip
+  sip: calculator.floor(sip)
 }))
 
 module.exports = sip
