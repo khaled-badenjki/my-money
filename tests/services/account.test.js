@@ -80,17 +80,17 @@ describe('Account Service', () => {
       await accountService.setSip(accountSip)
 
       expect(db.Account.update.calledWith(
-        { sip: 6000 },
+        { monthlyInvestment: 6000 },
         { where: { name: 'equity' } }
       )).to.be.true
 
       expect(db.Account.update.calledWith(
-        { sip: 2000 },
+        { monthlyInvestment: 2000 },
         { where: { name: 'debt' } }
       )).to.be.true
 
       expect(db.Account.update.calledWith(
-        { sip: 2000 },
+        { monthlyInvestment: 2000 },
         { where: { name: 'gold' } }
       )).to.be.true
     })
