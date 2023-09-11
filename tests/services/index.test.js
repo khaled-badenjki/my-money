@@ -87,4 +87,41 @@ describe('services', () => {
       ])).to.be.true
     })
   })
+
+  describe('sip service', () => {
+    const accountSip = [
+      {
+        name: 'equity',
+        sip: 6000
+      },
+      {
+        name: 'debt',
+        sip: 2000
+      },
+      {
+        name: 'gold',
+        sip: 2000
+      }
+    ]
+
+    let accountUpdateStub
+    let dbCloseStub
+
+    beforeEach(() => {
+      accountUpdateStub = sinon.stub(db.Account, 'update')
+      dbCloseStub = sinon.stub(db.sequelize, 'close')
+    })
+
+    afterEach(() => {
+      accountUpdateStub.restore()
+      expect(dbCloseStub.calledOnce).to.be.true
+      dbCloseStub.restore()
+    })
+
+    it('should call account model to update monthly investment', async () => {
+      await services.sip(accountSip)
+
+      expect(accountUpdateStub.called).to.be.true
+    })
+  })
 })
