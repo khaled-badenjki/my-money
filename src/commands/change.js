@@ -7,7 +7,7 @@ const db = require('../dal/models')
 
 const INPUT_ORDER = [ 'equity', 'debt', 'gold', 'month' ]
 
-const change = new Command('change')
+const change = new Command('CHANGE')
   .description('receives the monthly rate of change (growth or loss) ' +
     'for each fund type. A negative value represents a loss.')
   .argument('<equity>', 'equity change percentage')

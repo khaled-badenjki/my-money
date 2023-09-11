@@ -7,7 +7,7 @@ const db = require('../dal/models')
 
 const INPUT_ORDER = [ 'equity', 'debt', 'gold' ]
 
-const allocate = new Command('allocate')
+const allocate = new Command('ALLOCATE')
   .description('receives the initial investment amounts for each fund.')
   .argument('<equity>', 'equity investment amount')
   .argument('<debt>', 'debt investment amount')

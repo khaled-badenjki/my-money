@@ -7,7 +7,7 @@ const db = require('../dal/models')
 
 const INPUT_ORDER = [ 'equity', 'debt', 'gold' ]
 
-const sip = new Command('sip')
+const sip = new Command('SIP')
   .description('receives investment amount on a monthly basis for each fund.')
   .argument('<equity>', 'equity investment amount')
   .argument('<debt>', 'debt investment amount')
