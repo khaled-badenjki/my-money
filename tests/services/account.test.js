@@ -56,12 +56,17 @@ describe('Account Service', () => {
   })
 
   describe('setSip()', () => {
-    before(() => {
+    let dbCloseStub
+    
+    beforeEach(() => {
       sinon.stub(db.Account, 'update').resolves()
+      dbCloseStub = sinon.stub(db.sequelize, 'close')
     })
 
-    after(() => {
+    afterEach(() => {
       db.Account.update.restore()
+      expect(dbCloseStub.calledOnce).to.be.true
+      dbCloseStub.restore()
     })
 
     it('should call account model update with correct arguments', async () => {
