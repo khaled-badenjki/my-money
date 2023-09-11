@@ -135,20 +135,28 @@ describe('services', () => {
     
     let operationFindAllStub
     let operationCreateStub
+    let accountFindAllStub
 
     beforeEach(() => {
       operationFindAllStub = sinon.stub(db.Operation, 'findAll')
       operationCreateStub = sinon.stub(db.Operation, 'create')
+      accountFindAllStub = sinon.stub(db.Account, 'findAll')
     })
 
     afterEach(() => {
       operationFindAllStub.restore()
       operationCreateStub.restore()
+      accountFindAllStub.restore()
     })
     
     it('should call operation model to get sum of all accounts', async () => {
       await services.change(changeInput)
       expect(operationFindAllStub.called).to.be.true
+    })
+
+    it('should call accounts model to get all accounts', async () => {
+      await services.change(changeInput)
+      expect(accountFindAllStub.called).to.be.true
     })
   })
 })
