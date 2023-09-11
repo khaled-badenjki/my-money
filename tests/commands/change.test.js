@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const { expect } = require('chai')
 const { logger } = require('../../src/helpers/logger')
 const program = require('../../src/commands')
-const { operationService } = require('../../src/services')
+const services = require('../../src/services')
 
 const callChange = args => 
   program.parseAsync(['node', 'index.js', 'CHANGE', ...args])
@@ -10,7 +10,6 @@ const callChange = args =>
 describe('commands/change', () => {
 
   describe('input validation', () => {
-
 
     let loggerStub
     let processExitStub
@@ -42,11 +41,11 @@ describe('commands/change', () => {
   })
 
   describe('interaction', () => {
-    it('should call the operationService.createChanges', () => {
-      sinon.stub(operationService, 'createChanges')
+    it('should call the services.change', () => {
+      sinon.stub(services, 'change')
 
       callChange(['10%', '20%', '30%', 'APRIL'])
-      expect(operationService.createChanges.calledOnce).to.be.true
+      expect(services.change.calledOnce).to.be.true
     })
   })
 })

@@ -1,5 +1,3 @@
-const account = require('./account')
-const operation = require('./operation')
 const calculator = require('../helpers/calculator')
 const db = require('../dal/models')
 
@@ -41,11 +39,13 @@ const sip = async sipAccounts => {
   return accounts
 }
 
+const change = async () => {
+
+}
 
 
 module.exports = {
   allocate,
   sip,
-  accountService: account,
-  operationService: operation
+  change
 }
