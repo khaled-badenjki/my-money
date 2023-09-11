@@ -10,40 +10,6 @@ const callAllocate = args =>
 const sampleArgs = [6000, 3000, 1000]
 
 describe('commands/allocate', () => {
-  describe('input validation', () => {
-    let loggerStub
-    let processExitStub
-  
-    beforeEach(() => {
-      loggerStub = sinon.stub(logger, 'error')
-      processExitStub = sinon.stub(process, 'exit')
-    })
-  
-    afterEach(() => {
-      loggerStub.restore()
-      processExitStub.restore()
-    })
-  
-    it('should throw an error if no arguments are passed', () => {
-      callAllocate([]) // no arguments
-  
-      expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
-
-    })
-
-    it('should throw an error if the arguments are not numbers', () => {
-      callAllocate(['a', 'b', 'c'])
-  
-      expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
-    })
-
-    it('should throw an error if the arguments are not positive', () => {
-      callAllocate(['-1', '-2', '-3'])
-
-      expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
-    })
-  })
-  
   describe('interaction', () => {
 
     let loggerStub

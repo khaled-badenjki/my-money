@@ -6,7 +6,7 @@ const validateSipInput = validateAllocateInput
 
 const validateChangeInput = arr => _validateExists(arr) 
   && _validateIsPercentage(arr)
-  && _validateIsInRange(arr.map(amount => amount.slice(0, -1)))
+  && _validateIsNumber(arr.map(amount => amount.slice(0, -1)))
 
 const _validateExists = arr => arr.some(amount => !amount) ? false : true
 
