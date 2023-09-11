@@ -26,6 +26,11 @@ describe('services', () => {
 
     beforeEach(() => {
       accountBulkCreateStub = sinon.stub(db.Account, 'bulkCreate')
+        .resolves(accounts.map((account, index) => ({
+          id: index + 1,
+          name: account.name,
+          desiredAllocationPercentage: 0
+        })))
       operationBulkCreateStub = sinon.stub(db.Operation, 'bulkCreate')
       dbCloseStub = sinon.stub(db.sequelize, 'close')
     })
@@ -37,8 +42,8 @@ describe('services', () => {
       dbCloseStub.restore()
     })
 
-    it('should call account model to create accounts', () => {
-      services.allocate(accounts)
+    it('should call account model to create accounts', async () => {
+      await services.allocate(accounts)
       expect(accountBulkCreateStub.called).to.be.true
       expect(operationBulkCreateStub.called).to.be.true
     })
