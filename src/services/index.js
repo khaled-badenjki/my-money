@@ -36,34 +36,42 @@ const sip = async sipAccounts => {
 }
 
 const change = async (accountsChangePercentage, month) => {
-  const sum = await db.Operation.findAll({
+  const sum = await db.Operation.findAll(_buildSumQuery())
+
+  const accounts = await db.Account.findAll({
+    raw: true
+  })
+
+  const operations
+    = _buildOperations(accounts, sum, month, accountsChangePercentage)
+
+  await db.Operation.bulkCreate(operations)
+
+  return sum
+}
+
+const _buildSumQuery = () => {
+  return {
     attributes: [
       'accountId',
       [db.sequelize.fn('sum', db.sequelize.col('amount')), 'total']
     ],
     group: ['accountId'],
     raw: true
-  })
+  }
+}
 
-  const accounts = await db.Account.findAll({
-    raw: true
-  })
-
-  const operations = accounts.map((account, index) => {
+const _buildOperations = (accoutnsArr, sum, month, changeArr) => 
+  accoutnsArr.map((account, index) => {
     const total = sum.find(s => s.accountId === account.id).total
-    const change = total * (accountsChangePercentage[index].change / 100)
+    const change = total * (changeArr[index].change / 100)
     return {
       type: 'change',
       amount: change,
       accountId: account.id,
       date: `2023-${_monthToNumber(month)}-15`
     }
-  })
-
-  await db.Operation.bulkCreate(operations)
-
-  return sum
-}
+})
 
 const _monthToNumber = month => {
   const months = {
