@@ -5,7 +5,7 @@ const services= require('../services')
 const calculator = require('../helpers/calculator')
 const db = require('../dal/models')
 
-const INPUT_ORDER = [ 'equity', 'debt', 'gold', 'month' ]
+const INPUT_ORDER = [ 'equity', 'debt', 'gold' ]
 
 const change = new Command('CHANGE')
   .description('receives the monthly rate of change (growth or loss) ' +
@@ -34,12 +34,12 @@ const _handleChange = async (changeInput, month, command) => {
 
   const accountChanges = _serializeChangeInput(changeInput)
 
-  await services.change()
+  await services.change(accountChanges, month)
 }
 
 const _serializeChangeInput = arr => arr.map((change, index) => ({
   name: INPUT_ORDER[index],
-  change: calculator.floor(change)
+  change: Number(change.slice(0, -1))
 }))
 
 module.exports = change
