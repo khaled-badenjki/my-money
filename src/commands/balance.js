@@ -11,7 +11,7 @@ const balance = new Command('BALANCE')
 const _handleBalance = async month => {
   try {
     const balance = await services.balance(month)
-    logger.info(balance)
+    logger.info(balance.map(b => b.balance).join(' '))
   } catch (error) {
     logger.error(error.message)
   }
