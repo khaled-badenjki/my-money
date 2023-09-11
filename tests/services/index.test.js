@@ -21,15 +21,18 @@ describe('services', () => {
     ]
 
     let accountBulkCreateStub
+    let operationBulkCreateStub
     let dbCloseStub
 
     beforeEach(() => {
       accountBulkCreateStub = sinon.stub(db.Account, 'bulkCreate')
+      operationBulkCreateStub = sinon.stub(db.Operation, 'bulkCreate')
       dbCloseStub = sinon.stub(db.sequelize, 'close')
     })
 
     afterEach(() => {
       accountBulkCreateStub.restore()
+      operationBulkCreateStub.restore()
       expect(dbCloseStub.calledOnce).to.be.true
       dbCloseStub.restore()
     })
@@ -37,6 +40,7 @@ describe('services', () => {
     it('should call account model to create accounts', () => {
       services.allocate(accounts)
       expect(accountBulkCreateStub.called).to.be.true
+      expect(operationBulkCreateStub.called).to.be.true
     })
   })
 })
