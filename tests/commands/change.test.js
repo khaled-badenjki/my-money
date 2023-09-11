@@ -4,9 +4,10 @@ const { logger } = require('../../src/helpers/logger')
 const program = require('../../src/commands')
 const { operationService } = require('../../src/services')
 
+const callChange = args => 
+  program.parseAsync(['node', 'index.js', 'change', ...args])
+
 describe('commands/change', () => {
-  const callChange = args => 
-    program.parse(['node', 'index.js', 'change', ...args])
 
   describe('input validation', () => {
 
