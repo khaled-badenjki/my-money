@@ -35,7 +35,7 @@ const sip = async sipAccounts => {
   return accounts
 }
 
-const change = async accountsChangePercentage => {
+const change = async (accountsChangePercentage, month) => {
   const sum = await db.Operation.findAll({
     attributes: [
       'accountId',
@@ -44,6 +44,12 @@ const change = async accountsChangePercentage => {
     group: ['accountId'],
     raw: true
   })
+
+  const accounts = await db.Account.findAll({
+    raw: true
+  })
+
+  await db.Operation.bulkCreate()
 
   return sum
 }

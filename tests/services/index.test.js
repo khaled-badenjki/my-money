@@ -139,8 +139,41 @@ describe('services', () => {
 
     beforeEach(() => {
       operationFindAllStub = sinon.stub(db.Operation, 'findAll')
-      operationCreateStub = sinon.stub(db.Operation, 'create')
+        .resolves(
+          [
+            {
+              accountId: 3,
+              total: '1000',
+            },
+            {
+              accountId: 2,
+              total: '3000',
+            },
+            {
+              accountId: 1,
+              total: '6000',
+            },
+          ]
+        )
+      operationCreateStub = sinon.stub(db.Operation, 'bulkCreate')
       accountFindAllStub = sinon.stub(db.Account, 'findAll')
+        .resolves([
+          {
+            id: 1,
+            name: 'equity',
+            desiredAllocationPercentage: 60
+          },
+          {
+            id: 2,
+            name: 'debt',
+            desiredAllocationPercentage: 20
+          },
+          {
+            id: 3,
+            name: 'gold',
+            desiredAllocationPercentage: 20
+          }
+        ])
     })
 
     afterEach(() => {
