@@ -69,7 +69,7 @@ const balance = async month => {
     const total = sum.find(s => s.accountId === account.id).total
     return {
       name: account.name,
-      amount: total
+      balance: total
     }
   })
 
