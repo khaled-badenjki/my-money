@@ -16,13 +16,11 @@ const allocate = async accounts => {
     }))
   )
 
-  const accountAmounts = _appendAccountIds(dbAccounts, accounts)
-
   await db.Operation.bulkCreate(
-    accountAmounts.map(accountAmount => ({
+    accounts.map((account, index) => ({
       type: 'allocation',
-      amount: accountAmount.amount,
-      accountId: accountAmount.accountId,
+      amount: account.amount,
+      accountId: dbAccounts[index].id,
       date: ALLOCATION_DATE
     }))
   )
@@ -31,12 +29,6 @@ const allocate = async accounts => {
 }
 
 
-const _appendAccountIds = (accounts, accountAmounts) => 
-  accountAmounts.map(accountAmount => ({
-    amount: accountAmount.amount,
-    accountId: accounts.find(account => account.name === accountAmount.name).id
-  })
-)
 
 module.exports = {
   allocate,
