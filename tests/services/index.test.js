@@ -236,9 +236,26 @@ describe('services', () => {
             },
           ]
         )
+
+      const accountFindAllStub = sinon.stub(db.Account, 'findAll')
+        .resolves([
+          {
+            id: 1,
+            name: 'equity'
+          },
+          {
+            id: 2,
+            name: 'debt'
+          },
+          {
+            id: 3,
+            name: 'gold'
+          }
+        ])
       await services.balance('APRIL')
       expect(operationFindAllStub.called).to.be.true
       operationFindAllStub.restore()
+      accountFindAllStub.restore()
     })
 
     it('should call account model to get all accounts', async () => {
@@ -257,9 +274,28 @@ describe('services', () => {
             name: 'gold'
           }
         ])
+
+      const operationFindAllStub = sinon.stub(db.Operation, 'findAll')
+        .resolves(
+          [
+            {
+              accountId: 3,
+              total: '1000',
+            },
+            {
+              accountId: 2,
+              total: '3000',
+            },
+            {
+              accountId: 1,
+              total: '6000',
+            },
+          ]
+        )
       await services.balance('APRIL')
       expect(accountFindAllStub.called).to.be.true
       accountFindAllStub.restore()
+      operationFindAllStub.restore()
     })
 
     it('should return array of account names and their balances', async () => {
