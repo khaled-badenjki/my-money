@@ -25,13 +25,17 @@ describe('Account Service', () => {
     const percentages = [ 60, 20, 20 ]
 
     let accountBulkCreateStub
+    let dbCloseStub
 
-    before(() => {
+    beforeEach(() => {
       accountBulkCreateStub = sinon.stub(db.Account, 'bulkCreate')
+      dbCloseStub = sinon.stub(db.sequelize, 'close')
     })
 
-    after(() => {
+    afterEach(() => {
       accountBulkCreateStub.restore()
+      expect(dbCloseStub.calledOnce).to.be.true
+      dbCloseStub.restore()
     })
 
     it('should call account model bulk create', async () => {
@@ -40,7 +44,6 @@ describe('Account Service', () => {
     })
 
     it('should call account bulk create with correct arguments', async () => {
-      
       accountService.createManyWithPercentage(accounts)
       
       expect(accountBulkCreateStub.calledWith(
@@ -49,15 +52,6 @@ describe('Account Service', () => {
           desiredAllocationPercentage: percentages[index]
         }))
       )).to.be.true
-    })
-
-    it('should close the database connection', async () => {
-      const dbCloseStub = sinon.stub(db.sequelize, 'close')
-
-      await accountService.createManyWithPercentage(accounts)
-
-      expect(dbCloseStub.calledOnce).to.be.true
-      dbCloseStub.restore()
     })
   })
 
