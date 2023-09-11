@@ -61,6 +61,9 @@ const _buildSumQuery = () => {
   }
 }
 
+const balance = async month => {
+}
+
 const _buildOperations = (accoutnsArr, sum, month, changeArr) => 
   accoutnsArr.map((account, index) => {
     const total = sum.find(s => s.accountId === account.id).total
@@ -100,5 +103,6 @@ const _monthToNumber = month => {
 module.exports = {
   allocate,
   sip,
-  change
+  change,
+  balance
 }
