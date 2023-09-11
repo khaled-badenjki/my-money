@@ -50,6 +50,15 @@ describe('Account Service', () => {
         }))
       )).to.be.true
     })
+
+    it('should close the database connection', async () => {
+      const dbCloseStub = sinon.stub(db.sequelize, 'close')
+
+      accountService.createManyWithPercentage(accounts)
+
+      expect(dbCloseStub.calledOnce).to.be.true
+      dbCloseStub.restore()
+    })
   })
 
   describe('setSip()', () => {

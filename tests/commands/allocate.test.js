@@ -139,14 +139,5 @@ describe('commands/allocate', () => {
         }
       ])).to.be.true
     })
-
-    it('should close the database connection', async () => {
-      const dbCloseStub = sinon.stub(db.sequelize, 'close')
-
-      await callAllocate()
-
-      expect(dbCloseStub.calledOnce).to.be.true
-      dbCloseStub.restore()
-    })
   })
 })
