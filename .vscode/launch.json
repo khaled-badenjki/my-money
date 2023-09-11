@@ -42,6 +42,9 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
+      "env": {
+        "NODE_ENV": "test"
+      },
       "args": ["--timeout", "999999", "--colors", "${workspaceFolder}/tests/**/*.js"]
     }
   ]
