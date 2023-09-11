@@ -5,6 +5,7 @@ const services = require('../../src/services')
 
 describe('services', () => {
   describe('allocate service', () => {
+    const ALLOCATION_DATE = '2023-01-15'
     const accounts = [
       {
         name: 'equity',
@@ -45,7 +46,45 @@ describe('services', () => {
     it('should call account model to create accounts', async () => {
       await services.allocate(accounts)
       expect(accountBulkCreateStub.called).to.be.true
+      expect(accountBulkCreateStub.calledWith([
+        {
+          name: 'equity',
+          desiredAllocationPercentage: 60
+        },
+        {
+          name: 'debt',
+          desiredAllocationPercentage: 20
+        },
+        {
+          name: 'gold',
+          desiredAllocationPercentage: 20
+        }
+      ])).to.be.true
+    })
+
+    it('should call operation model to create operations', async () => {
+      await services.allocate(accounts)
       expect(operationBulkCreateStub.called).to.be.true
+      expect(operationBulkCreateStub.calledWith([
+        {
+          type: 'allocation',
+          amount: 6000,
+          accountId: 1,
+          date: ALLOCATION_DATE
+        },
+        {
+          type: 'allocation',
+          amount: 2000,
+          accountId: 2,
+          date: ALLOCATION_DATE
+        },
+        {
+          type: 'allocation',
+          amount: 2000,
+          accountId: 3,
+          date: ALLOCATION_DATE
+        }
+      ])).to.be.true
     })
   })
 })
