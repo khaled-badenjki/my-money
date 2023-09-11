@@ -8,8 +8,8 @@ const ALLOCATION_DATE = '2023-01-15'
  * @returns {Promise} - Promise object represents the operations
  * 
  */
-const createAllocations = accounts => {
-  return db.Operation.bulkCreate(
+const createAllocations = async accounts => {
+  const operations = db.Operation.bulkCreate(
     accounts.map(account => ({
       type: 'allocation',
       amount: account.amount,
@@ -17,6 +17,10 @@ const createAllocations = accounts => {
       date: ALLOCATION_DATE
     }))
   )
+
+  await db.sequelize.close()
+
+  return operations
 }
 
 const createChanges = () => {
