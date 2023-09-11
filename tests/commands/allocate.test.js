@@ -24,21 +24,21 @@ describe('commands/allocate', () => {
       processExitStub.restore()
     })
   
-    it('should throw an error if no arguments are passed', async () => {
-      await callAllocate([]) // no arguments
+    it('should throw an error if no arguments are passed', () => {
+      callAllocate([]) // no arguments
   
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
 
     })
 
-    it('should throw an error if the arguments are not numbers', async () => {
-      await callAllocate(['a', 'b', 'c'])
+    it('should throw an error if the arguments are not numbers', () => {
+      callAllocate(['a', 'b', 'c'])
   
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
 
-    it('should throw an error if the arguments are not positive', async () => {
-      await callAllocate(['-1', '-2', '-3'])
+    it('should throw an error if the arguments are not positive', () => {
+      callAllocate(['-1', '-2', '-3'])
 
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
@@ -76,8 +76,8 @@ describe('commands/allocate', () => {
       expect(loggerStub.calledWith(sinon.match(/allocate/))).to.be.true
     })
   
-    it('should call account service with the correct params', async () => {
-      await callAllocate(sampleArgs)
+    it('should call account service with the correct params', () => {
+      callAllocate(sampleArgs)
   
       expect(accountCreateManyWithPercentageStub.calledWith([
         {
@@ -98,7 +98,6 @@ describe('commands/allocate', () => {
     it('should call operation service with the correct params', async () => {
       await callAllocate(sampleArgs)
 
-      const log = operationCreateAllocationsStub.args[0][0]
       expect(operationCreateAllocationsStub.calledWithMatch([
         {
           accountId: 1,
@@ -115,8 +114,8 @@ describe('commands/allocate', () => {
       ])).to.be.true
     })
 
-    it('should floor the amount down if it has decimal places', async () => {
-      await callAllocate([1000.5, 1000.5, 1000.5])
+    it('should floor the amount down if it has decimal places', () => {
+      callAllocate([1000.5, 1000.5, 1000.5])
 
       expect(accountCreateManyWithPercentageStub.calledWithMatch([
         {

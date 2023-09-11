@@ -25,18 +25,18 @@ describe('commands/sip', () => {
       processExitStub.restore()
     })
 
-    it('should throw an error if no arguments are passed', async () => {
-      await callSip([]) // no arguments
+    it('should throw an error if no arguments are passed',  () => {
+      callSip([]) // no arguments
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
 
-    it('should throw an error if the arguments are not numbers', async () => {
-      await callSip(['a', 'b', 'c'])
+    it('should throw an error if the arguments are not numbers',  () => {
+      callSip(['a', 'b', 'c'])
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
 
-    it('should throw an error if the arguments are not positive', async () => {
-      await callSip(['-1', '-2', '-3'])
+    it('should throw an error if the arguments are not positive',  () => {
+      callSip(['-1', '-2', '-3'])
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
   })
@@ -57,13 +57,13 @@ describe('commands/sip', () => {
       accountSetSipStub.restore()
     })
 
-    it('should log sip as info', async () => {
-      await callSip(sampleArgs)
+    it('should log sip as info',  () => {
+      callSip(sampleArgs)
       expect(loggerStub.calledWith(sinon.match(/sip/))).to.be.true
     })
 
-    it('should call accountService.setSip with correct params', async () => {
-      await callSip(sampleArgs)
+    it('should call accountService.setSip with correct params',  () => {
+      callSip(sampleArgs)
 
       expect(accountSetSipStub.calledWith([
         {
@@ -81,8 +81,8 @@ describe('commands/sip', () => {
       ])).to.be.true
     })
 
-    it('should floor the sip down if it has decimal places', async () => {
-      await callSip(sampleArgs.map(sip => sip + 0.7))
+    it('should floor the sip down if it has decimal places',  () => {
+      callSip(sampleArgs.map(sip => sip + 0.7))
 
       expect(accountSetSipStub.calledWith([
         {
