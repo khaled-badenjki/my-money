@@ -1,7 +1,7 @@
 const { Command } = require('commander')
 const { logError, logCommand } = require('../helpers/logger')
 const { validateSipInput } = require('../helpers/validator')
-const services = require('../services')
+const { sipService } = require('../services')
 const calculator = require('../helpers/calculator')
 const db = require('../dal/models')
 
@@ -32,7 +32,7 @@ const _handleSip = async (sipInput, command) => {
 
   const accountSips = _serializeSipInput(sipInput)
 
-  await services.sip(accountSips)
+  await sipService.execute(accountSips)
 }
 
 const _serializeSipInput = arr => arr.map((sip, index) => ({

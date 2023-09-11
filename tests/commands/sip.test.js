@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const { expect } = require('chai')
 const { logger } = require('../../src/helpers/logger')
 const program = require('../../src/commands')
-const services = require('../../src/services')
+const { sipService } = require('../../src/services')
 
 const callSip = args =>
   program.parseAsync(['node', 'index.js', 'SIP', ...args])
@@ -17,7 +17,7 @@ describe('commands/sip', () => {
     beforeEach(() => {
       loggerStub = sinon.stub(logger, 'info')
       sipServiceStub = sinon
-        .stub(services, 'sip')
+        .stub(sipService, 'execute')
         .resolves()
     })
 
@@ -31,7 +31,7 @@ describe('commands/sip', () => {
       expect(loggerStub.calledWith(sinon.match(/SIP/))).to.be.true
     })
 
-    it('should call services.sip with correct params',  () => {
+    it('should call services.execute with correct params',  () => {
       callSip(sampleArgs)
 
       expect(sipServiceStub.calledWith([

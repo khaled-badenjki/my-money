@@ -1,7 +1,7 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
 const db = require('../../src/dal/models')
-const services = require('../../src/services')
+const { changeService } = require('../../src/services')
 
 describe('change service', () => {
   const changeInput = [[
@@ -66,17 +66,17 @@ describe('change service', () => {
   })
   
   it('should call operation model to get sum of all accounts', async () => {
-    await services.change(...changeInput)
+    await changeService.execute(...changeInput)
     expect(operationFindAllStub.called).to.be.true
   })
 
   it('should call accounts model to get all accounts', async () => {
-    await services.change(...changeInput)
+    await changeService.execute(...changeInput)
     expect(accountFindAllStub.called).to.be.true
   })
 
   it('should call operation bulkCreate with correct arguments', async () => {
-    await services.change(...changeInput)
+    await changeService.execute(...changeInput)
     expect(operationCreateStub.called).to.be.true
     expect(operationCreateStub.calledWith(
       [

@@ -1,6 +1,6 @@
 const { Command } = require('commander')
 const { logger } = require('../helpers/logger')
-const services = require('../services')
+const { balanceService } = require('../services')
 
 const ACCOUNTS_ORDER = ['equity', 'debt', 'gold']
 
@@ -12,8 +12,8 @@ const balance = new Command('BALANCE')
 
 const _handleBalance = async month => {
   try {
-    const balance = await services.balance(month)
-    // order the output as equity -> debt -> gold
+    const balance = await balanceService.execute(month)
+
     balance.sort((a, b) => 
       ACCOUNTS_ORDER.indexOf(a.name) - ACCOUNTS_ORDER.indexOf(b.name))
       

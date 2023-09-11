@@ -1,9 +1,7 @@
 const { Command } = require('commander')
 const { logError, logCommand } = require('../helpers/logger')
 const { validateChangeInput } = require('../helpers/validator')
-const services= require('../services')
-const calculator = require('../helpers/calculator')
-const db = require('../dal/models')
+const { changeService }  = require('../services')
 
 const INPUT_ORDER = [ 'equity', 'debt', 'gold' ]
 
@@ -34,7 +32,7 @@ const _handleChange = async (changeInput, month, command) => {
 
   const accountChanges = _serializeChangeInput(changeInput)
 
-  await services.change(accountChanges, month)
+  await changeService.execute(accountChanges, month)
 }
 
 const _serializeChangeInput = arr => arr.map((change, index) => ({

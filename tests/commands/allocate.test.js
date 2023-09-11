@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const { expect } = require('chai')
 const program = require('../../src/commands')
 const { logger } = require('../../src/helpers/logger')
-const services = require('../../src/services')
+const { allocateService } = require('../../src/services')
 
 const callAllocate = args => 
   program.parseAsync(['node', 'index.js', 'ALLOCATE', ...args])
@@ -18,7 +18,7 @@ describe('commands/allocate', () => {
     beforeEach(() => {
       loggerStub = sinon.stub(logger, 'info')
       allocateServiceStub = sinon
-        .stub(services, 'allocate')
+        .stub(allocateService, 'execute')
         .resolves([
           { id: 1, name: 'equity', desiredAllocationPercentage: 60 },
           { id: 2, name: 'debt', desiredAllocationPercentage: 20 },

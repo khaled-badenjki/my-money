@@ -1,7 +1,7 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
 const db = require('../../src/dal/models')
-const services = require('../../src/services')
+const { sipService } = require('../../src/services')
 
 describe('sip service', () => {
   const accountSip = [
@@ -30,7 +30,7 @@ describe('sip service', () => {
   })
 
   it('should call account model to update monthly investment', async () => {
-    await services.sip(accountSip)
+    await sipService.execute(accountSip)
 
     expect(accountUpdateStub.called).to.be.true
   })

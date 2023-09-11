@@ -1,7 +1,7 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
 const db = require('../../src/dal/models')
-const services = require('../../src/services')
+const { allocateService } = require('../../src/services')
 
 
 describe('allocate service', () => {
@@ -40,7 +40,7 @@ describe('allocate service', () => {
   })
 
   it('should call account model to create accounts', async () => {
-    await services.allocate(accounts)
+    await allocateService.execute(accounts)
     expect(accountBulkCreateStub.called).to.be.true
     expect(accountBulkCreateStub.calledWith([
       {
@@ -59,7 +59,7 @@ describe('allocate service', () => {
   })
 
   it('should call operation model to create operations', async () => {
-    await services.allocate(accounts)
+    await allocateService.execute(accounts)
     expect(operationBulkCreateStub.called).to.be.true
     expect(operationBulkCreateStub.calledWith([
       {
