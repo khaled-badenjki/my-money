@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const { expect } = require('chai')
 const program = require('../../src/commands')
 const { logger } = require('../../src/helpers/logger')
-const { accountService, operationService } = require('../../src/services')
+const services = require('../../src/services')
 
 const callAllocate = args => 
   program.parseAsync(['node', 'index.js', 'ALLOCATE', ...args])
@@ -47,27 +47,22 @@ describe('commands/allocate', () => {
   describe('interaction', () => {
 
     let loggerStub
-    let accountCreateManyWithPercentageStub
-    let operationCreateAllocationsStub
+    let allocateServiceStub
   
     beforeEach(() => {
       loggerStub = sinon.stub(logger, 'info')
-      accountCreateManyWithPercentageStub = sinon
-        .stub(accountService, 'createManyWithPercentage')
+      allocateServiceStub = sinon
+        .stub(services, 'allocate')
         .resolves([
           { id: 1, name: 'equity', desiredAllocationPercentage: 60 },
           { id: 2, name: 'debt', desiredAllocationPercentage: 20 },
           { id: 3, name: 'gold', desiredAllocationPercentage: 20 }
         ])
-      operationCreateAllocationsStub = sinon
-        .stub(operationService, 'createAllocations')
-        .resolves()
     })
   
     afterEach(() => {
       loggerStub.restore()
-      accountCreateManyWithPercentageStub.restore()
-      operationCreateAllocationsStub.restore()
+      allocateServiceStub.restore()
     })
   
     it('should log ALLOCATE as info', () => {
@@ -79,7 +74,7 @@ describe('commands/allocate', () => {
     it('should call account service with the correct params', () => {
       callAllocate(sampleArgs)
   
-      expect(accountCreateManyWithPercentageStub.calledWith([
+      expect(allocateServiceStub.calledWith([
         {
           name: 'equity',
           amount: sampleArgs[0]
@@ -94,30 +89,11 @@ describe('commands/allocate', () => {
         }
       ])).to.be.true
     })
-  
-    it('should call operation service with the correct params', async () => {
-      await callAllocate(sampleArgs)
-
-      expect(operationCreateAllocationsStub.calledWithMatch([
-        {
-          accountId: 1,
-          amount: sampleArgs[0]
-        },
-        {
-          accountId: 2,
-          amount: sampleArgs[1]
-        },
-        {
-          accountId: 3,
-          amount: sampleArgs[2]
-        }
-      ])).to.be.true
-    })
 
     it('should floor the amount down if it has decimal places', () => {
       callAllocate([1000.5, 1000.5, 1000.5])
 
-      expect(accountCreateManyWithPercentageStub.calledWithMatch([
+      expect(allocateServiceStub.calledWithMatch([
         {
           name: 'equity',
           amount: 1000
