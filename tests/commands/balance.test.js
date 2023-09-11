@@ -18,5 +18,15 @@ describe('commands/balance', () => {
 
       services.balance.restore()
     })
+
+    it('should log error if month name is not valid', async () => {
+      sinon.stub(services, 'balance').throws(new Error('Invalid month name'))
+      sinon.stub(logger, 'error')
+
+      await callBalance(['INVALID'])
+
+      expect(logger.error.calledOnce).to.be.true
+      expect(logger.error.calledWith('Invalid month name')).to.be.true
+    })
   })
 })
