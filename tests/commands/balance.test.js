@@ -27,6 +27,9 @@ describe('commands/balance', () => {
 
       expect(logger.error.calledOnce).to.be.true
       expect(logger.error.calledWith('Invalid month name')).to.be.true
+
+      services.balance.restore()
+      logger.error.restore()
     })
   })
 })
