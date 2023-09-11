@@ -7,12 +7,32 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Allocate",
+      "name": "ALLOCATE",
       "skipFiles": [
         "<node_internals>/**"
       ],
       "program": "${workspaceFolder}/index.js",
-      "args": ["allocate", "6000", "3000", "1000"]
+      "args": ["ALLOCATE", "6000", "3000", "1000"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "SIP",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/index.js",
+      "args": ["SIP", "2000", "1000", "500"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "CHANGE",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/index.js",
+      "args": ["CHANGE", "4.00%", "10.00%", "2.00%", "JANUARY"]
     },
     {
       "type": "node",
