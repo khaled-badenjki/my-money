@@ -1,12 +1,13 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
-const db = require('../../src/dal/models')
 const program = require('../../src/commands')
 const { logger } = require('../../src/helpers/logger')
 const { accountService, operationService } = require('../../src/services')
 
 const callAllocate = async args => 
   program.parseAsync(['node', 'index.js', 'allocate', ...args])
+
+const sampleArgs = [6000, 3000, 1000]
 
 describe('commands/allocate', () => {
   describe('input validation', () => {
@@ -44,26 +45,6 @@ describe('commands/allocate', () => {
   })
   
   describe('interaction', () => {
-    const params = [
-      {
-        name: 'equity',
-        amount: 6000
-      },
-      {
-        name: 'debt',
-        amount: 3000
-      },
-      {
-        name: 'gold',
-        amount: 1000
-      }
-    ]
-    const callAllocate = () => program
-      .parseAsync(['node', 'index.js', 'allocate',
-        params[0].amount,
-        params[1].amount,
-        params[2].amount
-      ])
 
     let loggerStub
     let accountServiceStub
@@ -90,42 +71,54 @@ describe('commands/allocate', () => {
     })
   
     it('should log ALLOCATE as info', () => {
-      program.parse(['node', 'index.js', 'allocate', '6000', '3000', '1000'])
+      callAllocate(sampleArgs)
   
       expect(loggerStub.calledWith(sinon.match(/allocate/))).to.be.true
     })
   
-    it ('should call account service with the correct params', async () => {
-      await callAllocate()
+    it('should call account service with the correct params', async () => {
+      await callAllocate(sampleArgs)
   
-      expect(accountServiceStub.calledWith(params)).to.be.true
+      expect(accountServiceStub.calledWith([
+        {
+          name: 'equity',
+          amount: sampleArgs[0]
+        },
+        {
+          name: 'debt',
+          amount: sampleArgs[1]
+        },
+        {
+          name: 'gold',
+          amount: sampleArgs[2]
+        }
+      ])).to.be.true
     })
   
     it('should call operation service with the correct params', async () => {
-      await callAllocate()
+      await callAllocate(sampleArgs)
 
       const log = operationServiceStub.args[0][0]
       expect(operationServiceStub.calledWithMatch([
         {
           accountId: 1,
-          amount: params[0].amount
+          amount: sampleArgs[0]
         },
         {
           accountId: 2,
-          amount: params[1].amount
+          amount: sampleArgs[1]
         },
         {
           accountId: 3,
-          amount: params[2].amount
+          amount: sampleArgs[2]
         }
       ])).to.be.true
     })
 
     it('should floor the amount down if it has decimal places', async () => {
-      await program.parseAsync(['node', 'index.js', 
-        'allocate', '1000.5', '1000.5', '1000.5'])
+      await callAllocate([1000.5, 1000.5, 1000.5])
 
-      expect(accountServiceStub.calledWith([
+      expect(accountServiceStub.calledWithMatch([
         {
           name: 'equity',
           amount: 1000
