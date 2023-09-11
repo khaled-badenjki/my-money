@@ -216,4 +216,29 @@ describe('services', () => {
       )).to.be.true
     })
   })
+
+  describe('balance service', () => {
+    it('should call operation model to get sum of all accounts', async () => {
+      const operationFindAllStub = sinon.stub(db.Operation, 'findAll')
+        .resolves(
+          [
+            {
+              accountId: 3,
+              total: '1000',
+            },
+            {
+              accountId: 2,
+              total: '3000',
+            },
+            {
+              accountId: 1,
+              total: '6000',
+            },
+          ]
+        )
+      await services.balance('APRIL')
+      expect(operationFindAllStub.called).to.be.true
+      operationFindAllStub.restore()
+    })
+  })
 })
