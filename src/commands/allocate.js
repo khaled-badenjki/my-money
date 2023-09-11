@@ -1,7 +1,7 @@
 const { Command } = require('commander')
 const { logError, logCommand } = require('../helpers/logger')
 const { validateAllocateInput } = require('../helpers/validator')
-const { accountService, operationService } = require('../services')
+const services = require('../services')
 const calculator = require('../helpers/calculator')
 const db = require('../dal/models')
 
@@ -32,11 +32,7 @@ const _handleAllocate = async (allocateInput, command) => {
 
   const accountAmounts = _serializeAllocateInput(allocateInput)
 
-  const accounts = await accountService.createManyWithPercentage(accountAmounts)
-
-  const accountOperations = _appendAccountIds(accounts, accountAmounts)
-
-  await operationService.createAllocations(accountOperations)
+  const accounts = await services.allocate(accountAmounts)
 }
 
 const _appendAccountIds = (accounts, accountAmounts) => 
