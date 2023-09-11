@@ -19,6 +19,11 @@ const createAllocations = accounts => {
   )
 }
 
+const createChanges = () => {
+
+}
+
 module.exports = {
-  createAllocations
+  createAllocations,
+  createChanges
 }

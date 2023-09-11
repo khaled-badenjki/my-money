@@ -1,7 +1,7 @@
 const { Command } = require('commander')
 const { logError, logCommand } = require('../helpers/logger')
 const { validateChangeInput } = require('../helpers/validator')
-const { accountService } = require('../services')
+const { operationService } = require('../services')
 const calculator = require('../helpers/calculator')
 const db = require('../dal/models')
 
@@ -34,7 +34,7 @@ const _handleChange = async (changeInput, month, command) => {
 
   const accountChanges = _serializeChangeInput(changeInput)
 
-  await accountService.setChange(accountChanges)
+  await operationService.createChanges()
 
   await db.sequelize.close()
 }
