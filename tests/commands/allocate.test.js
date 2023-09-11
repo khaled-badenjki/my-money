@@ -5,6 +5,9 @@ const program = require('../../src/commands')
 const { logger } = require('../../src/helpers/logger')
 const { accountService, operationService } = require('../../src/services')
 
+const callAllocate = async args => 
+  program.parseAsync(['node', 'index.js', 'allocate', ...args])
+
 describe('commands/allocate', () => {
   describe('input validation', () => {
     let loggerStub
@@ -13,7 +16,6 @@ describe('commands/allocate', () => {
     beforeEach(() => {
       loggerStub = sinon.stub(logger, 'error')
       processExitStub = sinon.stub(process, 'exit')
-
     })
   
     afterEach(() => {
@@ -21,22 +23,21 @@ describe('commands/allocate', () => {
       processExitStub.restore()
     })
   
-    it('should throw an error if no arguments are passed', () => {
-      program.parse(['node', 'index.js', 'allocate'])
+    it('should throw an error if no arguments are passed', async () => {
+      await callAllocate([]) // no arguments
   
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
 
     })
 
-    it('should throw an error if the arguments are not numbers', () => {
-      program.parse(['node', 'index.js', 'allocate', 'a', 'b', 'c'])
+    it('should throw an error if the arguments are not numbers', async () => {
+      await callAllocate(['a', 'b', 'c'])
   
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
 
-    it('should throw an error if the arguments are not positive', () => {
-      program.parse(['node', 'index.js', 'allocate', '-1', '-2', '-3'])
-  
+    it('should throw an error if the arguments are not positive', async () => {
+      await callAllocate(['-1', '-2', '-3'])
 
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
