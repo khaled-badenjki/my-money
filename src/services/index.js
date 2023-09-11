@@ -22,8 +22,6 @@ const allocate = async accounts => {
       date: ALLOCATION_DATE
     }))
   )
-
-  await db.sequelize.close()
 }
 
 const sip = async sipAccounts => {
@@ -33,8 +31,6 @@ const sip = async sipAccounts => {
       { where: { name: account.name } }
     ))
   )
-
-  await db.sequelize.close()
 
   return accounts
 }
@@ -48,8 +44,6 @@ const change = async accountsChangePercentage => {
     group: ['accountId'],
     raw: true
   })
-
-  await db.sequelize.close()
 
   return sum
 }

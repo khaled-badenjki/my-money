@@ -7,7 +7,11 @@ const defaultConfig = {
   database: process.env.POSTGRES_DB,
   host: process.env.POSTGRES_HOST,
   logging: false,
-  dialect: 'postgres'
+  dialect: 'postgres',
+  pool: {
+    idle: 1,
+    evict: 1,
+  }
 }
 
 module.exports = {

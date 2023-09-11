@@ -33,8 +33,6 @@ const _handleSip = async (sipInput, command) => {
   const accountSips = _serializeSipInput(sipInput)
 
   await services.sip(accountSips)
-
-  await db.sequelize.close()
 }
 
 const _serializeSipInput = arr => arr.map((sip, index) => ({

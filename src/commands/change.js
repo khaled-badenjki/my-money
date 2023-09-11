@@ -35,8 +35,6 @@ const _handleChange = async (changeInput, month, command) => {
   const accountChanges = _serializeChangeInput(changeInput)
 
   await services.change()
-
-  await db.sequelize.close()
 }
 
 const _serializeChangeInput = arr => arr.map((change, index) => ({

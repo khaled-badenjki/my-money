@@ -23,7 +23,6 @@ describe('services', () => {
 
     let accountBulkCreateStub
     let operationBulkCreateStub
-    let dbCloseStub
 
     beforeEach(() => {
       accountBulkCreateStub = sinon.stub(db.Account, 'bulkCreate')
@@ -33,14 +32,11 @@ describe('services', () => {
           desiredAllocationPercentage: 0
         })))
       operationBulkCreateStub = sinon.stub(db.Operation, 'bulkCreate')
-      dbCloseStub = sinon.stub(db.sequelize, 'close')
     })
 
     afterEach(() => {
       accountBulkCreateStub.restore()
       operationBulkCreateStub.restore()
-      expect(dbCloseStub.calledOnce).to.be.true
-      dbCloseStub.restore()
     })
 
     it('should call account model to create accounts', async () => {
@@ -105,17 +101,13 @@ describe('services', () => {
     ]
 
     let accountUpdateStub
-    let dbCloseStub
 
     beforeEach(() => {
       accountUpdateStub = sinon.stub(db.Account, 'update')
-      dbCloseStub = sinon.stub(db.sequelize, 'close')
     })
 
     afterEach(() => {
       accountUpdateStub.restore()
-      expect(dbCloseStub.calledOnce).to.be.true
-      dbCloseStub.restore()
     })
 
     it('should call account model to update monthly investment', async () => {
@@ -143,19 +135,15 @@ describe('services', () => {
     
     let operationFindAllStub
     let operationCreateStub
-    let dbCloseStub
 
     beforeEach(() => {
       operationFindAllStub = sinon.stub(db.Operation, 'findAll')
       operationCreateStub = sinon.stub(db.Operation, 'create')
-      dbCloseStub = sinon.stub(db.sequelize, 'close')
     })
 
     afterEach(() => {
       operationFindAllStub.restore()
       operationCreateStub.restore()
-      expect(dbCloseStub.calledOnce).to.be.true
-      dbCloseStub.restore()
     })
     
     it('should call operation model to get sum of all accounts', async () => {
