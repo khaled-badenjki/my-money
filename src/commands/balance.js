@@ -1,4 +1,5 @@
 const { Command } = require('commander')
+const { logger } = require('../helpers/logger')
 const services = require('../services')
 
 const balance = new Command('BALANCE')
@@ -8,7 +9,12 @@ const balance = new Command('BALANCE')
     _handleBalance(month))
 
 const _handleBalance = async month => {
-  await services.balance(month)
+  try {
+    const balance = await services.balance(month)
+    logger.info(balance)
+  } catch (error) {
+    logger.error(error.message)
+  }
 }
 
 module.exports = balance
