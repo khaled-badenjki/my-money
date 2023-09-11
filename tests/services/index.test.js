@@ -118,20 +118,20 @@ describe('services', () => {
   })
 
   describe('change service', () => {
-    const changeInput = [
+    const changeInput = [[
       {
         name: 'equity',
-        change: 60
+        change: 4
       },
       {
         name: 'debt',
-        change: 20
+        change: 10
       },
       {
         name: 'gold',
-        change: 20
+        change: 2
       }
-    ]
+    ], 'APRIL']
     
     let operationFindAllStub
     let operationCreateStub
@@ -160,18 +160,15 @@ describe('services', () => {
         .resolves([
           {
             id: 1,
-            name: 'equity',
-            desiredAllocationPercentage: 60
+            name: 'equity'
           },
           {
             id: 2,
-            name: 'debt',
-            desiredAllocationPercentage: 20
+            name: 'debt'
           },
           {
             id: 3,
-            name: 'gold',
-            desiredAllocationPercentage: 20
+            name: 'gold'
           }
         ])
     })
@@ -183,13 +180,40 @@ describe('services', () => {
     })
     
     it('should call operation model to get sum of all accounts', async () => {
-      await services.change(changeInput)
+      await services.change(...changeInput)
       expect(operationFindAllStub.called).to.be.true
     })
 
     it('should call accounts model to get all accounts', async () => {
-      await services.change(changeInput)
+      await services.change(...changeInput)
       expect(accountFindAllStub.called).to.be.true
+    })
+
+    it('should call operation bulkCreate with correct arguments', async () => {
+      await services.change(...changeInput)
+      expect(operationCreateStub.called).to.be.true
+      expect(operationCreateStub.calledWith(
+        [
+          {
+            type: 'change',
+            amount: 240,
+            accountId: 1,
+            date: '2023-04-15',
+          },
+          {
+            type: 'change',
+            amount: 300,
+            accountId: 2,
+            date: '2023-04-15',
+          },
+          {
+            type: 'change',
+            amount: 20,
+            accountId: 3,
+            date: '2023-04-15',
+          },
+        ]
+      )).to.be.true
     })
   })
 })
