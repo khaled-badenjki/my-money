@@ -124,4 +124,43 @@ describe('services', () => {
       expect(accountUpdateStub.called).to.be.true
     })
   })
+
+  describe('change service', () => {
+    const changeInput = [
+      {
+        name: 'equity',
+        change: 60
+      },
+      {
+        name: 'debt',
+        change: 20
+      },
+      {
+        name: 'gold',
+        change: 20
+      }
+    ]
+    
+    let operationFindAllStub
+    let operationCreateStub
+    let dbCloseStub
+
+    beforeEach(() => {
+      operationFindAllStub = sinon.stub(db.Operation, 'findAll')
+      operationCreateStub = sinon.stub(db.Operation, 'create')
+      dbCloseStub = sinon.stub(db.sequelize, 'close')
+    })
+
+    afterEach(() => {
+      operationFindAllStub.restore()
+      operationCreateStub.restore()
+      expect(dbCloseStub.calledOnce).to.be.true
+      dbCloseStub.restore()
+    })
+    
+    it('should call operation model to get sum of all accounts', async () => {
+      await services.change(changeInput)
+      expect(operationFindAllStub.called).to.be.true
+    })
+  })
 })
