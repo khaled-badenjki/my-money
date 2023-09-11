@@ -25,12 +25,16 @@ const createManyWithPercentage = async accounts => {
 }
 
 const setSip = async (accuontSip) => {
-  return Promise.all(
+  const accounts = Promise.all(
     accuontSip.map(account => db.Account.update(
       { monthlyInvestment: account.sip },
       { where: { name: account.name } }
     ))
   )
+
+  await db.sequelize.close()
+
+  return accounts
 }
 
 module.exports = {
