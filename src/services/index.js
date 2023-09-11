@@ -39,8 +39,19 @@ const sip = async sipAccounts => {
   return accounts
 }
 
-const change = async () => {
+const change = async accountsChangePercentage => {
+  const sum = await db.Operation.findAll({
+    attributes: [
+      'accountId',
+      [db.sequelize.fn('sum', db.sequelize.col('amount')), 'total']
+    ],
+    group: ['accountId'],
+    raw: true
+  })
 
+  await db.sequelize.close()
+
+  return sum
 }
 
 

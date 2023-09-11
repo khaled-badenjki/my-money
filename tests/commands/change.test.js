@@ -14,6 +14,8 @@ describe('commands/change', () => {
 
       callChange(['10%', '20%', '30%', 'APRIL'])
       expect(services.change.calledOnce).to.be.true
+
+      services.change.restore()
     })
   })
 })
