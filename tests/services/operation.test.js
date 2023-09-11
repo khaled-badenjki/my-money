@@ -23,13 +23,17 @@ describe('Operation Service', () => {
     ]
 
     let operationBulkCreateStub
+    let dbCloseStub
 
     beforeEach(() => {
       operationBulkCreateStub = sinon.stub(db.Operation, 'bulkCreate')
+      dbCloseStub = sinon.stub(db.sequelize, 'close')
     })
 
     afterEach(() => {
       operationBulkCreateStub.restore()
+      expect(dbCloseStub.calledOnce).to.be.true
+      dbCloseStub.restore()
     })
 
     it('should call the operation model bulk create', () => {
