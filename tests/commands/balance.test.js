@@ -49,5 +49,22 @@ describe('commands/balance', () => {
       services.balance.restore()
       logger.info.restore()
     })
+
+    it('should order the output as equity -> debt -> gold', async () => {
+      sinon.stub(services, 'balance').returns([
+        { name: 'gold', balance: 2000 },
+        { name: 'equity', balance: 1000 },
+        { name: 'debt', balance: 5000 },
+      ])
+      sinon.stub(logger, 'info')
+
+      await callBalance(['APRIL'])
+
+      expect(logger.info.calledOnce).to.be.true
+      expect(logger.info.calledWith('1000 5000 2000')).to.be.true
+
+      services.balance.restore()
+      logger.info.restore()    
+    })
   })
 })
