@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const { expect } = require('chai')
 const { logger } = require('../../src/helpers/logger')
 const program = require('../../src/commands')
-const { accountService } = require('../../src/services')
+const services = require('../../src/services')
 
 const callSip = args =>
   program.parseAsync(['node', 'index.js', 'SIP', ...args])
@@ -43,18 +43,18 @@ describe('commands/sip', () => {
 
   describe('interaction', () => {
     let loggerStub
-    let accountSetSipStub
+    let sipServiceStub
 
     beforeEach(() => {
       loggerStub = sinon.stub(logger, 'info')
-      accountSetSipStub = sinon
-        .stub(accountService, 'setSip')
+      sipServiceStub = sinon
+        .stub(services, 'sip')
         .resolves()
     })
 
     afterEach(() => {
       loggerStub.restore()
-      accountSetSipStub.restore()
+      sipServiceStub.restore()
     })
 
     it('should log sip as info',  () => {
@@ -62,10 +62,10 @@ describe('commands/sip', () => {
       expect(loggerStub.calledWith(sinon.match(/SIP/))).to.be.true
     })
 
-    it('should call accountService.setSip with correct params',  () => {
+    it('should call services.sip with correct params',  () => {
       callSip(sampleArgs)
 
-      expect(accountSetSipStub.calledWith([
+      expect(sipServiceStub.calledWith([
         {
           name: 'equity',
           sip: sampleArgs[0]
@@ -84,7 +84,7 @@ describe('commands/sip', () => {
     it('should floor the sip down if it has decimal places',  () => {
       callSip(sampleArgs.map(sip => sip + 0.7))
 
-      expect(accountSetSipStub.calledWith([
+      expect(sipServiceStub.calledWith([
         {
           name: 'equity',
           sip: sampleArgs[0]

@@ -1,7 +1,7 @@
 const { Command } = require('commander')
 const { logError, logCommand } = require('../helpers/logger')
 const { validateSipInput } = require('../helpers/validator')
-const { accountService } = require('../services')
+const services = require('../services')
 const calculator = require('../helpers/calculator')
 const db = require('../dal/models')
 
@@ -32,7 +32,7 @@ const _handleSip = async (sipInput, command) => {
 
   const accountSips = _serializeSipInput(sipInput)
 
-  await accountService.setSip(accountSips)
+  await services.sip(accountSips)
 
   await db.sequelize.close()
 }

@@ -28,10 +28,24 @@ const allocate = async accounts => {
   await db.sequelize.close()
 }
 
+const sip = async sipAccounts => {
+  const accounts = Promise.all(
+    sipAccounts.map(account => db.Account.update(
+      { monthlyInvestment: account.sip },
+      { where: { name: account.name } }
+    ))
+  )
+
+  await db.sequelize.close()
+
+  return accounts
+}
+
 
 
 module.exports = {
   allocate,
+  sip,
   accountService: account,
   operationService: operation
 }
