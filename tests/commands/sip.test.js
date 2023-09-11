@@ -5,7 +5,7 @@ const program = require('../../src/commands')
 const { accountService } = require('../../src/services')
 
 const callSip = args =>
-  program.parseAsync(['node', 'index.js', 'sip', ...args])
+  program.parseAsync(['node', 'index.js', 'SIP', ...args])
 
 const sampleArgs = [1000, 1000, 1000]
 
@@ -59,7 +59,7 @@ describe('commands/sip', () => {
 
     it('should log sip as info',  () => {
       callSip(sampleArgs)
-      expect(loggerStub.calledWith(sinon.match(/sip/))).to.be.true
+      expect(loggerStub.calledWith(sinon.match(/SIP/))).to.be.true
     })
 
     it('should call accountService.setSip with correct params',  () => {

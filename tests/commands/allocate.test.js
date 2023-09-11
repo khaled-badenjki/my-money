@@ -5,7 +5,7 @@ const { logger } = require('../../src/helpers/logger')
 const { accountService, operationService } = require('../../src/services')
 
 const callAllocate = args => 
-  program.parseAsync(['node', 'index.js', 'allocate', ...args])
+  program.parseAsync(['node', 'index.js', 'ALLOCATE', ...args])
 
 const sampleArgs = [6000, 3000, 1000]
 
@@ -73,7 +73,7 @@ describe('commands/allocate', () => {
     it('should log ALLOCATE as info', () => {
       callAllocate(sampleArgs)
   
-      expect(loggerStub.calledWith(sinon.match(/allocate/))).to.be.true
+      expect(loggerStub.calledWith(sinon.match(/ALLOCATE/))).to.be.true
     })
   
     it('should call account service with the correct params', () => {

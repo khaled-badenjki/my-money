@@ -5,7 +5,7 @@ const program = require('../../src/commands')
 const { operationService } = require('../../src/services')
 
 const callChange = args => 
-  program.parseAsync(['node', 'index.js', 'change', ...args])
+  program.parseAsync(['node', 'index.js', 'CHANGE', ...args])
 
 describe('commands/change', () => {
 
