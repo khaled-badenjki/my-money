@@ -49,9 +49,43 @@ const change = async (accountsChangePercentage, month) => {
     raw: true
   })
 
-  await db.Operation.bulkCreate()
+  const operations = accounts.map((account, index) => {
+    const total = sum.find(s => s.accountId === account.id).total
+    const change = total * (accountsChangePercentage[index].change / 100)
+    return {
+      type: 'change',
+      amount: change,
+      accountId: account.id,
+      date: `2023-${_monthToNumber(month)}-15`
+    }
+  })
+
+  await db.Operation.bulkCreate(operations)
 
   return sum
+}
+
+const _monthToNumber = month => {
+  const months = {
+    january: '01',
+    february: '02',
+    march: '03',
+    april: '04',
+    may: '05',
+    june: '06',
+    july: '07',
+    august: '08',
+    september: '09',
+    october: '10',
+    november: '11',
+    december: '12'
+  }
+
+  if (! months[month.toLowerCase()]) {
+    throw new Error('Invalid month')
+  }
+
+  return months[month.toLowerCase()]
 }
 
 
