@@ -4,7 +4,7 @@ This is a challenge provided by [SadaPay](https://sadapay.pk/) during the hiring
 
 
 # Setup :rocket:
-## 1. Using Docker :whale:
+## 1. Using docker-compose :whale:
 
  Copy the `.env.example` file to `.env` file 
  
@@ -34,7 +34,7 @@ And you are ready to go :rocket:
 > 
 
    
-## 2. Without Docker :gear:
+## 2. Without docker-compose :gear:
 For the application, you will need `yarn` to be installed. Run this command to install dependencies
 
     yarn
