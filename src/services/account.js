@@ -12,12 +12,16 @@ const createManyWithPercentage = async accounts => {
   const amounts = accounts.map(account => account.amount)
   const percentages = calculator.calculatePercentages(amounts)
 
-  return db.Account.bulkCreate(
+  const dbAccounts = await db.Account.bulkCreate(
     accounts.map((account, index) => ({
       name: account.name,
       desiredAllocationPercentage: percentages[index]
     }))
   )
+
+  await db.sequelize.close()
+
+  return dbAccounts
 }
 
 const setSip = async (accuontSip) => {

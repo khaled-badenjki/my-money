@@ -37,8 +37,6 @@ const _handleAllocate = async (allocateInput, command) => {
   const accountOperations = _appendAccountIds(accounts, accountAmounts)
 
   await operationService.createAllocations(accountOperations)
-
-  await db.sequelize.close()
 }
 
 const _appendAccountIds = (accounts, accountAmounts) => 
