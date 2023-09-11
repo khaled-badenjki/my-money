@@ -5,6 +5,9 @@ const program = require('../../src/commands')
 const { accountService } = require('../../src/services')
 const db = require('../../src/dal/models')
 
+const callSip = async args =>
+  program.parseAsync(['node', 'index.js', 'sip', ...args])
+
 describe('commands/sip', () => {
   describe('input validation', () => {
     let loggerStub
@@ -21,18 +24,18 @@ describe('commands/sip', () => {
       processExitStub.restore()
     })
 
-    it('should throw an error if no arguments are passed', () => {
-      program.parse(['node', 'index.js', 'sip'])
+    it('should throw an error if no arguments are passed', async () => {
+      await callSip([]) // no arguments
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
 
     it('should throw an error if the arguments are not numbers', () => {
-      program.parse(['node', 'index.js', 'sip', 'a', 'b', 'c'])
+      callSip(['a', 'b', 'c'])
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
 
     it('should throw an error if the arguments are not positive', () => {
-      program.parse(['node', 'index.js', 'sip', '-1', '-2', '-3'])
+      callSip(['-1', '-2', '-3'])
       expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
   })
@@ -53,14 +56,13 @@ describe('commands/sip', () => {
       accountServiceStub.restore()
     })
 
-    it('should log sip as info', () => {
-      program.parse(['node', 'index.js', 'sip', 1000, 1000, 1000])
+    it('should log sip as info', async () => {
+      await callSip([1000, 1000, 1000])
       expect(loggerStub.calledWith(sinon.match(/sip/))).to.be.true
-      loggerStub.restore()
     })
 
     it('should call accountService.setSip with correct params', async () => {
-      program.parseAsync(['node', 'index.js', 'sip', 1000, 1000, 1000])
+      await callSip([1000, 1000, 1000])
 
       expect(accountServiceStub.calledWith([
         {
@@ -79,7 +81,7 @@ describe('commands/sip', () => {
     })
 
     it('should floor the sip down if it has decimal places', async () => {
-      program.parseAsync(['node', 'index.js', 'sip', 1000.5, 1000.5, 1000.5])
+      await callSip([1000.5, 1000.5, 1000.5])
 
       expect(accountServiceStub.calledWith([
         {
