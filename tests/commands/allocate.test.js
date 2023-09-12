@@ -10,7 +10,7 @@ const callAllocate = args =>
 const sampleArgs = [6000, 3000, 1000]
 
 describe('commands/allocate', () => {
-  describe('interaction', () => {
+  describe('success', () => {
 
     let loggerStub
     let allocateServiceStub
@@ -73,6 +73,29 @@ describe('commands/allocate', () => {
           amount: 1000
         }
       ])).to.be.true
+    })
+  })
+
+  describe('failure', () => {
+    let loggerStub
+    let allocateServiceStub
+  
+    beforeEach(() => {
+      loggerStub = sinon.stub(logger, 'info')
+      allocateServiceStub = sinon
+        .stub(allocateService, 'execute')
+        .rejects(new Error('Invalid input'))
+    })
+  
+    afterEach(() => {
+      loggerStub.restore()
+      allocateServiceStub.restore()
+    })
+
+    it('should log error message', async () => {
+      await callAllocate(sampleArgs)
+
+      expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
   })
 })
