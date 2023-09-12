@@ -81,7 +81,7 @@ describe('commands/allocate', () => {
     let allocateServiceStub
   
     beforeEach(() => {
-      loggerStub = sinon.stub(logger, 'info')
+      loggerStub = sinon.stub(logger, 'error')
       allocateServiceStub = sinon
         .stub(allocateService, 'execute')
         .rejects(new Error('Invalid input'))

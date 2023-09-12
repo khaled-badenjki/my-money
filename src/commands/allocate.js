@@ -32,7 +32,12 @@ const _handleAllocate = async (allocateInput, command) => {
 
   const accountAmounts = _serializeAllocateInput(allocateInput)
 
-  const accounts = await allocateService.execute(accountAmounts)
+  try {
+    const accounts = await allocateService.execute(accountAmounts)
+    
+  } catch (error) {
+    logError(error.message)
+  }
 }
 
 const _appendAccountIds = (accounts, accountAmounts) => 
