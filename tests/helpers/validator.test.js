@@ -55,39 +55,40 @@ describe('Validator', () => {
   })
 
   describe('validateChangeInput', () => {
+    const month = 'JANUARY'
     it('should pass if all inputs are valid', () => {
-      const input = ['100%', '200%', '300%', 'JANUARY']
-      expect(validator.validateChangeInput(input)).to.be.true
-      expect(() => validator.validateChangeInput(input)).not.to.throw()
+      const input = ['100%', '200%', '300%']
+      expect(validator.validateChangeInput(input, month)).to.be.true
+      expect(() => validator.validateChangeInput(input, month)).not.to.throw()
     })
 
     it('should pass if input is in negative', () => {
-      const input = ['-100%', '-200%', '-300%', 'JANUARY']
-      expect(validator.validateChangeInput(input)).to.be.true
-      expect(() => validator.validateChangeInput(input)).not.to.throw()
+      const input = ['-100%', '-200%', '-300%']
+      expect(validator.validateChangeInput(input, month)).to.be.true
+      expect(() => validator.validateChangeInput(input, month)).not.to.throw()
     })
 
     it('should fail if month name is invalid', () => {
-      const input = ['100%', '200%', '300%', 'JANUARYY']
-      expect(() => validator.validateChangeInput(input))
+      const input = ['100%', '200%', '300%']
+      expect(() => validator.validateChangeInput(input, 'JANUARYY'))
         .to.throw('INVALID_MONTH')
     })
 
     it('should fail if any input is missing', () => {
-      const input = ['100%', '200%', '', 'JANUARY']
-      expect(() => validator.validateChangeInput(input))
+      const input = ['100%', '200%', '']
+      expect(() => validator.validateChangeInput(input, 'JANUARY'))
         .to.throw('MISSING_INPUT')
     })
 
     it('should fail if any input is not a number', () => {
-      const input = ['100%', '200%', 'abc%', 'JANUARY']
-      expect(() => validator.validateChangeInput(input))
+      const input = ['100%', '200%', 'abc%']
+      expect(() => validator.validateChangeInput(input, 'JANUARY'))
         .to.throw('INPUT_NOT_NUMBER')
     })
 
     it('should fail if any input is not a percentage', () => {
       const input = ['100', '200', '300']
-      expect(() => validator.validateChangeInput(input))
+      expect(() => validator.validateChangeInput(input, month))
         .to.throw('INPUT_NOT_PERCENTAGE')
     })
   })

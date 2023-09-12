@@ -25,10 +25,9 @@ const allocate = new Command('ALLOCATE')
 const _handleAllocate = async (allocateInput, command) => {
   try {
 
-    if (! validateAllocateInput(allocateInput)) {
-      logError('Invalid input')
-      return
-    }
+    validateAllocateInput(allocateInput) 
+  
+    logCommand(command)
 
     const accountAmounts = _serializeAllocateInput(allocateInput)
 

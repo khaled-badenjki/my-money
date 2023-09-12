@@ -23,16 +23,18 @@ const change = new Command('CHANGE')
  * @returns void
  */
 const _handleChange = async (changeInput, month, command) => {
-  if (! validateChangeInput(changeInput)) {
-    logError('Invalid input')
-    return
+  try {
+    validateChangeInput(changeInput, month) 
+  
+    logCommand(command)
+  
+    const accountChanges = _serializeChangeInput(changeInput)
+  
+    await changeService.execute(accountChanges, month)
+  } catch (error) {
+    logError(error.message)
   }
 
-  logCommand(command)
-
-  const accountChanges = _serializeChangeInput(changeInput)
-
-  await changeService.execute(accountChanges, month)
 }
 
 const _serializeChangeInput = arr => arr.map((change, index) => ({

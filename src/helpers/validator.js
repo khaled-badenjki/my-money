@@ -1,26 +1,42 @@
+const MONTHS = [
+  'january', 'february', 'march', 'april', 'may', 'june', 
+  'july','august', 'september', 'october', 'november', 'december']
+
 const validateAllocateInput = arr => _validateExists(arr) 
   && _validateIsNumber(arr) 
   && _validateIsPositive(arr)
 
 const validateSipInput = validateAllocateInput
 
-const validateChangeInput = arr => _validateExists(arr) 
+const validateChangeInput = (arr, month) => _validateExists(arr) 
   && _validateIsPercentage(arr)
   && _validateIsNumber(arr.map(amount => amount.slice(0, -1)))
+  && _validateIsMonth(month)
 
-const _validateExists = arr => arr.some(amount => !amount) ? false : true
+const _validateExists = arr => {
+  if (arr.some(amount => ! amount)) throw new Error('MISSING_INPUT')
+  return true
+}
 
-const _validateIsNumber = arr => arr.some(amount => isNaN(amount)) 
-  ? false : true
+const _validateIsNumber = arr => {
+  if (arr.some(amount => isNaN(amount))) throw new Error('INPUT_NOT_NUMBER')
+  return true
+}
 
-const _validateIsPositive = arr => arr.some(amount => amount < 0) ? false : true
+const _validateIsPositive = arr => {
+  if (arr.some(amount => amount < 0)) throw new Error('INPUT_NEGATIVE')
+  return true
+}
 
-const _validateIsPercentage = arr => arr.some(amount => amount.endsWith('%')) 
-  ? true : false
+const _validateIsPercentage = arr => {
+  if (arr.some(el => !el.endsWith('%'))) throw new Error('INPUT_NOT_PERCENTAGE')
+  return true
+}
 
-const _validateIsInRange = arr => arr.some(
-  amount => amount > 100 || amount < -100
-  ) ? false : true
+const _validateIsMonth = month => {
+  if (! MONTHS.includes(month.toLowerCase())) throw new Error('INVALID_MONTH')
+  return true
+}
 
 module.exports = {
   validateAllocateInput,
