@@ -31,7 +31,7 @@ const _handleAllocate = async (allocateInput, command) => {
 
     const accountAmounts = _serializeAllocateInput(allocateInput)
 
-    const accounts = await allocateService.execute(accountAmounts)
+    await allocateService.execute(accountAmounts)
     
   } catch (error) {
     logError(error.message)
