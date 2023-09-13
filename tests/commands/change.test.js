@@ -18,7 +18,7 @@ describe('commands/change', () => {
         { name: 'equity', change: 10 },
         { name: 'debt', change: 20 },
         { name: 'gold', change: 30 }
-      ], 'APRIL')).to.be.true
+      ], '04')).to.be.true
 
       changeService.execute.restore()
     })
