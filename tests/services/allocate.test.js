@@ -1,8 +1,10 @@
 const sinon = require('sinon')
-const { expect } = require('chai')
+const chai = require('chai')
+var chaiAsPromised = require('chai-as-promised')
+chai.use(chaiAsPromised)
+const { expect } = chai
 const db = require('../../src/dal/models')
 const { allocateService } = require('../../src/services')
-
 
 describe('allocate service', () => {
   const ALLOCATION_DATE = '2023-01-15'
@@ -82,4 +84,13 @@ describe('allocate service', () => {
       }
     ])).to.be.true
   })
+
+  it('should fail if there are already accounts', async () => {
+    accountBulkCreateStub.restore()
+    accountBulkCreateStub = sinon.stub(db.Account, 'bulkCreate')
+      .rejects(new Error('Validation error'))
+
+    expect(allocateService.execute(accounts))
+      .to.be.rejectedWith('Validation error')
+    })
 })
