@@ -10,7 +10,7 @@ const callSip = args =>
 const sampleArgs = [1000, 1000, 1000]
 
 describe('commands/sip', () => {
-  describe('interaction', () => {
+  describe('success', () => {
     let loggerStub
     let sipServiceStub
 
@@ -67,6 +67,22 @@ describe('commands/sip', () => {
           sip: sampleArgs[2]
         }
       ])).to.be.true
+    })
+  })
+
+  describe('failure', () => {
+    it('should log error if it catches an error', async () => {
+      const loggerStub = sinon.stub(logger, 'error')
+      const sipServiceStub = sinon
+        .stub(sipService, 'execute')
+        .throws('error')
+
+      await callSip(sampleArgs)
+
+      expect(loggerStub.calledWith(sinon.match(/error/))).to.be.true
+
+      loggerStub.restore()
+      sipServiceStub.restore()
     })
   })
 })
