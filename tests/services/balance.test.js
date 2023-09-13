@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const { expect } = require('chai')
 const db = require('../../src/dal/models')
 const { balanceService } = require('../../src/services')
-const { months } = require('../../config')
+const { months, defaults } = require('../../config')
 
 describe('balance service', () => {
   const month = months.APRIL
@@ -62,7 +62,8 @@ describe('balance service', () => {
       raw: true,
       where: {
         date: {
-          [db.Sequelize.Op.lte]: '2023-04-16'
+          [db.Sequelize.Op.lte]:  
+            `${defaults.YEAR}-${month}-${parseInt(defaults.DAY)+1}`
         }
       }
     })

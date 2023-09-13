@@ -1,4 +1,5 @@
 const db = require('../dal/models')
+const { defaults } = require('../../config')
 
 const execute = async month => {
   const sum = await db.Operation.findAll(_buildSumQuery(month))
@@ -25,7 +26,8 @@ const _buildSumQuery = (month) => {
     raw: true,
     where: {
       date: {
-        [db.Sequelize.Op.lte]: `2023-${month}-16`
+        [db.Sequelize.Op.lte]: 
+          `${defaults.YEAR}-${month}-${parseInt(defaults.DAY)+1}`
       }
     }
   }
