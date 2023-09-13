@@ -1,5 +1,5 @@
 const { Command } = require('commander')
-const { logError, logCommand } = require('../helpers/logger')
+const logger = require('../helpers/logger')
 const { validateSipInput } = require('../helpers/validator')
 const { sipService } = require('../services')
 const calculator = require('../helpers/calculator')
@@ -26,13 +26,11 @@ const _handleSip = async (sipInput, command) => {
   try {
     validateSipInput(sipInput)
 
-    logCommand(command)
-  
     const accountSips = _serializeSipInput(sipInput)
   
     await sipService.execute(accountSips)
   } catch (error) {
-    logError(error.message)
+    logger.error(error.message)
   }
 
 }

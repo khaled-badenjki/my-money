@@ -1,7 +1,7 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
 const program = require('../../src/commands')
-const { logger } = require('../../src/helpers/logger')
+const logger = require('../../src/helpers/logger')
 const { allocateService } = require('../../src/services')
 
 const callAllocate = args => 
@@ -29,12 +29,6 @@ describe('commands/allocate', () => {
     afterEach(() => {
       loggerStub.restore()
       allocateServiceStub.restore()
-    })
-  
-    it('should log ALLOCATE as info', () => {
-      callAllocate(sampleArgs)
-  
-      expect(loggerStub.args[0][0]).to.include('ALLOCATE')
     })
   
     it('should call account service with the correct params', () => {

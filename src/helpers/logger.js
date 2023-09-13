@@ -14,18 +14,11 @@ const logger = createLogger({
 
 if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test' ) {
   logger.add(new transports.Console({
-    format: format.simple()
+    format: format.combine(
+      format.colorize(),
+      format.printf(info => `${info.message}`)
+    )
   }))
 }
 
-const logCommand = command => 
-  logger.info(`called ${command.name()}`)
-
-const logError = error => 
-  logger.error(error)
-
-module.exports = {
-  logger,
-  logCommand,
-  logError
-}
+module.exports = logger

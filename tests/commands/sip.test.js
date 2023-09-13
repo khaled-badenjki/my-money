@@ -1,6 +1,6 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
-const { logger } = require('../../src/helpers/logger')
+const logger = require('../../src/helpers/logger')
 const program = require('../../src/commands')
 const { sipService } = require('../../src/services')
 
@@ -24,11 +24,6 @@ describe('commands/sip', () => {
     afterEach(() => {
       loggerStub.restore()
       sipServiceStub.restore()
-    })
-
-    it('should log sip as info',  () => {
-      callSip(sampleArgs)
-      expect(loggerStub.args[0][0]).to.include('SIP')
     })
 
     it('should call services.execute with correct params',  () => {

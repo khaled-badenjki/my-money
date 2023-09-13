@@ -1,6 +1,6 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
-const { logger } = require('../../src/helpers/logger')
+const logger = require('../../src/helpers/logger')
 const program = require('../../src/commands')
 const { changeService } = require('../../src/services')
 

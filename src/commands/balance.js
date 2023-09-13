@@ -1,5 +1,5 @@
 const { Command } = require('commander')
-const { logger } = require('../helpers/logger')
+const logger = require('../helpers/logger')
 const { balanceService } = require('../services')
 const { months } = require('../../config')
 

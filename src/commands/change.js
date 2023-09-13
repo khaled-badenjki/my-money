@@ -1,5 +1,5 @@
 const { Command } = require('commander')
-const { logError, logCommand } = require('../helpers/logger')
+const logger = require('../helpers/logger')
 const { validateChangeInput } = require('../helpers/validator')
 const { changeService }  = require('../services')
 const { months } = require('../../config')
@@ -27,14 +27,12 @@ const _handleChange = async (changeInput, month, command) => {
   try {
     validateChangeInput(changeInput, month) 
   
-    logCommand(command)
-  
     const accountChanges = _serializeChangeInput(changeInput)
     const monthNumber = months[month.toUpperCase()]
   
     await changeService.execute(accountChanges, monthNumber)
   } catch (error) {
-    logError(error.message)
+    logger.error(error.message)
   }
 
 }

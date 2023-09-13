@@ -1,5 +1,5 @@
 const { Command } = require('commander')
-const { logError, logCommand } = require('../helpers/logger')
+const logger = require('../helpers/logger')
 const { validateAllocateInput } = require('../helpers/validator')
 const { allocateService } = require('../services')
 const calculator = require('../helpers/calculator')
@@ -27,14 +27,12 @@ const _handleAllocate = async (allocateInput, command) => {
 
     validateAllocateInput(allocateInput) 
   
-    logCommand(command)
-
     const accountAmounts = _serializeAllocateInput(allocateInput)
 
     await allocateService.execute(accountAmounts)
     
   } catch (error) {
-    logError(error.message)
+    logger.error(error.message)
   }
 }
 
