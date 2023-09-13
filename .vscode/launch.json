@@ -37,6 +37,26 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "BALANCE",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/index.js",
+      "args": ["BALANCE", "JANUARY"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "REBALANCE",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/index.js",
+      "args": ["REBALANCE"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Run Tests",
       "runtimeExecutable": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "skipFiles": [
