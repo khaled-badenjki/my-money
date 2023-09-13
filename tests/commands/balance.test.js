@@ -3,79 +3,81 @@ const { expect } = require('chai')
 const { logger } = require('../../src/helpers/logger')
 const program = require('../../src/commands')
 const { balanceService } = require('../../src/services')
+const { months } = require('../../config')
+
 
 const callBalance = args => 
   program.parseAsync(['node', 'index.js', 'BALANCE', ...args])
 
+const sampleArgs = ['APRIL']
+const month = months.APRIL
+  
 describe('commands/balance', () => {
+  let loggerStub
+  let balanceServiceStub
+  
   describe('success', () => {
     beforeEach(() => {
-      sinon.stub(logger, 'info')
+      loggerStub = sinon.stub(logger, 'info')
+      balanceServiceStub = sinon.stub(balanceService, 'execute').returns([
+        { name: 'equity', balance: 1000 },
+        { name: 'debt', balance: 5000 },
+        { name: 'gold', balance: 2000 },
+      ])
     })
   
     afterEach(() => {
-      logger.info.restore()
+      loggerStub.restore()
+      balanceServiceStub.restore()
     })
     it('should call the balanceService.execute', () => {
-      sinon.stub(balanceService, 'execute')
-
-      callBalance(['APRIL'])
-      expect(balanceService.execute.calledOnce).to.be.true
-      expect(balanceService.execute.calledWith('APRIL')).to.be.true
-
-      balanceService.execute.restore()
+      callBalance(sampleArgs)
+      expect(balanceServiceStub.calledOnce).to.be.true
+      expect(balanceServiceStub.args[0][0]).to.equal(month)
     })
 
     it('should print the balance', async () => {
-      sinon.stub(balanceService, 'execute').returns([
-        { name: 'equity', balance: 1000 },
-        { name: 'debt', balance: 5000 },
-        { name: 'gold', balance: 2000 },
+      await callBalance(sampleArgs)
 
-      ])
+      expect(loggerStub.calledOnce).to.be.true
+      expect(loggerStub.args[0][0]).to.equal('1000 5000 2000')
 
-      await callBalance(['APRIL'])
-
-      expect(logger.info.calledOnce).to.be.true
-      expect(logger.info.calledWith('1000 5000 2000')).to.be.true
-
-      balanceService.execute.restore()
     })
 
     it('should order the output as equity -> debt -> gold', async () => {
-      sinon.stub(balanceService, 'execute').returns([
+      balanceServiceStub.restore()
+      balanceServiceStub = sinon.stub(balanceService, 'execute').returns([
         { name: 'gold', balance: 2000 },
         { name: 'equity', balance: 1000 },
         { name: 'debt', balance: 5000 },
       ])
 
-      await callBalance(['APRIL'])
+      await callBalance(sampleArgs)
 
-      expect(logger.info.calledOnce).to.be.true
-      expect(logger.info.calledWith('1000 5000 2000')).to.be.true
+      expect(loggerStub.calledOnce).to.be.true
+      expect(loggerStub.args[0][0]).to.equal('1000 5000 2000')
 
       balanceService.execute.restore()
     })
   })
 
   describe('failure', () => {
-
   
     beforeEach(() => {
-      sinon.stub(logger, 'error')
-      sinon.stub(balanceService, 'execute')
+      loggerStub = sinon.stub(logger, 'error')
+      balanceServiceStub = sinon.stub(balanceService, 'execute')
         .rejects(new Error('Invalid input'))
     })
   
     afterEach(() => {
-      logger.error.restore()
-      balanceService.execute.restore()
+      loggerStub.restore()
+      balanceServiceStub.restore()
     })
 
     it('should log error message', async () => {
       await callBalance([''])
 
-      expect(logger.error.calledWith(sinon.match(/Invalid input/))).to.be.true
+      expect(loggerStub.args[0][0]).to.equal('Invalid input')
     })
   })
 })
