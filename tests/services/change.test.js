@@ -124,12 +124,6 @@ describe('change service', () => {
     expect(operationCreateStub.calledWith(
       [
         {
-          type: 'change',
-          amount: -824,
-          accountId: 1,
-          date: '2023-02-15',
-        },
-        {
           type: 'sip',
           amount: 2000,
           accountId: 1,
@@ -137,8 +131,8 @@ describe('change service', () => {
         },
         {
           type: 'change',
-          amount: 1720,
-          accountId: 2,
+          amount: -824,
+          accountId: 1,
           date: '2023-02-15',
         },
         {
@@ -149,13 +143,19 @@ describe('change service', () => {
         },
         {
           type: 'change',
-          amount: 0,
-          accountId: 3,
+          amount: 1720,
+          accountId: 2,
           date: '2023-02-15',
         },
         {
           type: 'sip',
           amount: 500,
+          accountId: 3,
+          date: '2023-02-15',
+        },
+        {
+          type: 'change',
+          amount: 0,
           accountId: 3,
           date: '2023-02-15',
         },

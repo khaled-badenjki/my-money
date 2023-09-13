@@ -8,7 +8,7 @@ const execute = async (accountsChangePercentage, month) => {
   })
 
   const operations
-    = _buildOperations(accounts, sum, month, accountsChangePercentage)
+    = _buildOperations(accounts, sum, month, accountsChangePercentage).flat()
 
   await db.Operation.bulkCreate(operations)
 
@@ -28,14 +28,22 @@ const _buildSumQuery = () => {
 
 const _buildOperations = (accoutnsArr, sum, month, changeArr) => 
   accoutnsArr.map((account, index) => {
-    const total = sum.find(s => s.accountId === account.id).total
+    let total = parseInt(sum.find(s => s.accountId === account.id).total)
+    if (month === 'FEBRUARY') {
+      total += account.sip
+    }
     const change = total * (changeArr[index].change / 100)
-    return {
+    return [{
+      type: 'sip',
+      amount: account.sip,
+      accountId: account.id,
+      date: `2023-${_monthToNumber(month)}-15`
+    }, {
       type: 'change',
       amount: change,
       accountId: account.id,
       date: `2023-${_monthToNumber(month)}-15`
-    }
+    }]
 })
 
 const _monthToNumber = month => {
