@@ -38,13 +38,6 @@ const _handleAllocate = async (allocateInput, command) => {
   }
 }
 
-const _appendAccountIds = (accounts, accountAmounts) => 
-  accountAmounts.map(accountAmount => ({
-    amount: accountAmount.amount,
-    accountId: accounts.find(account => account.name === accountAmount.name).id
-  })
-)
-
 const _serializeAllocateInput = arr => arr.map((amount, index) => ({
   name: INPUT_ORDER[index],
   amount: calculator.floor(amount)

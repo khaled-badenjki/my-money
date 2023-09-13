@@ -94,7 +94,7 @@ describe('allocate service', () => {
     accountBulkCreateStub = sinon.stub(db.Account, 'bulkCreate')
       .rejects(new Error('Validation error'))
 
-    expect(allocateService.execute(accounts))
+    await expect(allocateService.execute(accounts))
       .to.be.rejectedWith('Validation error')
     })
 })
