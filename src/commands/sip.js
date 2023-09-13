@@ -23,16 +23,18 @@ const sip = new Command('SIP')
  * @returns void
  */
 const _handleSip = async (sipInput, command) => {
-  if (! validateSipInput(sipInput)) {
-    logError('Invalid input')
-    return
+  try {
+    validateSipInput(sipInput)
+
+    logCommand(command)
+  
+    const accountSips = _serializeSipInput(sipInput)
+  
+    await sipService.execute(accountSips)
+  } catch (error) {
+    logError(error.message)
   }
 
-  logCommand(command)
-
-  const accountSips = _serializeSipInput(sipInput)
-
-  await sipService.execute(accountSips)
 }
 
 const _serializeSipInput = arr => arr.map((sip, index) => ({

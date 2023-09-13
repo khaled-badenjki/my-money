@@ -75,7 +75,7 @@ describe('commands/sip', () => {
       const loggerStub = sinon.stub(logger, 'error')
       const sipServiceStub = sinon
         .stub(sipService, 'execute')
-        .throws('error')
+        .rejects(new Error('error'))
 
       await callSip(sampleArgs)
 
