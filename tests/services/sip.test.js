@@ -23,14 +23,17 @@ describe('sip service', () => {
   ]
 
   let accountUpdateStub
+  let accountFindOneStub
 
   beforeEach(() => {
     accountUpdateStub = sinon.stub(db.Account, 'update')
       .resolves([1])
+    accountFindOneStub = sinon.stub(db.Account, 'findOne').resolves(null)
   })
 
   afterEach(() => {
     accountUpdateStub.restore()
+    accountFindOneStub.restore()
   })
 
   it('should call account model to update monthly investment', async () => {
@@ -39,14 +42,12 @@ describe('sip service', () => {
     expect(accountUpdateStub.called).to.be.true
   })
 
-  it.only('should fail if monthly investment is already set', async () => {
-    sinon.stub(db.Account, 'findOne').resolves({
+  it('should fail if monthly investment is already set', async () => {
+    accountFindOneStub.resolves({
       monthlyInvestment: 1000
     })
-
     await expect(sipService.execute(accountSip))
       .to.be.rejectedWith(Error)
 
-    db.Account.findOne.restore()
   })
 })
