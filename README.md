@@ -4,7 +4,7 @@ This is a challenge provided by [SadaPay](https://sadapay.pk/) during the hiring
 
 
 # Setup :rocket:
-## 1. Using docker-compose :whale:
+## 1. Using Docker :whale:
 
  Copy the `.env.example` file to `.env` file 
  
@@ -14,12 +14,19 @@ Then run docker compose with this command
 
     docker-compose up --build -d 
 
-
     
    Once the build is done, you can start interacting with the tool. To see a list of available commands, do this:
    
 
     docker-compose run app node index.js --help
+
+
+
+> when dealing with long commands like this, I like to create an alis to make my life easier. So i encourage you to create an alias called `mm` (for MyMoney):
+> `alias mm='docker-compose run app node index.js'`
+> Now you can interact with the tool like this
+> `mm --help`
+> 
 
 If this is the **first time** to run the app, you will need to create the database and run migrations. Do the following:
 
@@ -27,14 +34,8 @@ If this is the **first time** to run the app, you will need to create the databa
     docker-compose run app npx sequelize-cli db:migrate
 
 And you are ready to go :rocket:
-> when dealing with long commands like this ⬆️, I like to create an alis to make my life easier. So i encourage you to create an alias called `mm` (for MyMoney):
-> `alias mm='docker-compose run app node index.js'`
-> Now you can interact with the tool like this
-> `mm --help`
-> 
-
    
-## 2. Without docker-compose :gear:
+## 2. Without Docker :gear:
 For the application, you will need `yarn` to be installed. Run this command to install dependencies
 
     yarn
@@ -68,6 +69,10 @@ Once the app and database are up and running, you will need to create the databa
 
 
 # Usage ⭐
+when passing a negative value (for example the `CHANGE` command, you need to pass double dash `--` to signify the end of options, so it would be like this
+
+    node index.js CHANGE -- 10.00% 8.00% -5.00% JUNE
+    
 
 # Testing 🧪
 
@@ -76,3 +81,4 @@ Once the app and database are up and running, you will need to create the databa
 
 
 # Limitations 🏋🏽
+

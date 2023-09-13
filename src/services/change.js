@@ -44,7 +44,7 @@ const _buildSumQuery = () => {
 const _buildChangeOperations = (account, change, month) => {
   return {
     type: 'change',
-    amount: change,
+    amount: Math.floor(change),
     accountId: account.id,
     date: `${defaults.YEAR}-${month}-${defaults.DAY}`
   }
