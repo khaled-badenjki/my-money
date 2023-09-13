@@ -21,7 +21,7 @@ const execute = async accounts => {
       amount: account.amount,
       accountId: dbAccounts[index].id,
       date: ALLOCATION_DATE
-    }))
+  }))
   )
 }
 
