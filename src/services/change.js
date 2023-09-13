@@ -10,14 +10,19 @@ const execute = async (accountsChangePercentage, month) => {
 
   const operations = accounts.map((account, index) => {
     let total = _getAccountTotal(sum, account)
-
-    if (_sipIsApplicable(month)) total += account.sip
+    const op = []
+    if (_sipIsApplicable(month)) {
+      total += account.monthlyInvestment
+      op.push(_buildSipOperations(account, month))
+    }
 
     const change = 
       _changePercentToAmount(total, accountsChangePercentage[index].change)
 
-    return _buildOperations(account, change, month)
-  })
+    op.push(_buildChangeOperations(account, change, month))
+
+    return op
+  }).flat()
 
 
   await db.Operation.bulkCreate(operations.flat())
@@ -36,18 +41,23 @@ const _buildSumQuery = () => {
   }
 }
 
-const _buildOperations = (account, change, month) => 
-  [{
-    type: 'sip',
-    amount: account.sip,
-    accountId: account.id,
-    date: `${defaults.YEAR}-${month}-${defaults.DAY}`
-  }, {
+const _buildChangeOperations = (account, change, month) => {
+  return {
     type: 'change',
     amount: change,
     accountId: account.id,
     date: `${defaults.YEAR}-${month}-${defaults.DAY}`
-  }].flat()
+  }
+}
+
+const _buildSipOperations = (account, month) => {
+  return {
+    type: 'sip',
+    amount: account.monthlyInvestment,
+    accountId: account.id,
+    date: `${defaults.YEAR}-${month}-${defaults.DAY}`
+  }
+}
 
 const _sipIsApplicable = month => 
   month >= defaults.SIP_START_MONTH

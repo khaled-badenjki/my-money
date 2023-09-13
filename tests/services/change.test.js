@@ -9,7 +9,7 @@ const testData = [
     accountId: 1,
     name: 'equity',
     total: 6240,
-    sip: 2000,
+    monthlyInvestment: 2000,
     change: -10.00,
     expectedSip: 2000,
     expectedChangeBeforeSip: -624,
@@ -19,7 +19,7 @@ const testData = [
     accountId: 2,
     name: 'debt',
     total: 3300,
-    sip: 1000,
+    monthlyInvestment: 1000,
     change: 40.00,
     expectedSip: 1000,
     expectedChangeBeforeSip: 1320,
@@ -29,7 +29,7 @@ const testData = [
     accountId: 3,
     name: 'gold',
     total: 1020,
-    sip: 500,
+    monthlyInvestment: 500,
     change: 0.00,
     expectedSip: 500,
     expectedChangeBeforeSip: 0,
@@ -63,7 +63,7 @@ describe('change service', () => {
         testData.map(data => ({
           id: data.accountId,
           name: data.name,
-          sip: data.sip
+          monthlyInvestment: data.monthlyInvestment
         }))
       )
   })
@@ -130,12 +130,6 @@ describe('change service', () => {
     await changeService.execute(changeInput, month)
     expect(operationCreateStub.args[0][0]).to.deep.equal(
       testData.map(data => [
-        {
-          type: 'sip',
-          amount: data.expectedSip,
-          accountId: data.accountId,
-          date: `${defaults.YEAR}-${month}-${defaults.DAY}`
-        },
         {
           type: 'change',
           amount: data.expectedChangeBeforeSip,
