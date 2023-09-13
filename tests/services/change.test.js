@@ -8,29 +8,32 @@ const testData = [
   {
     accountId: 1,
     name: 'equity',
-    total: '6240',
+    total: 6240,
     sip: 2000,
     change: -10.00,
     expectedSip: 2000,
-    expectedChange: -824
+    expectedChangeBeforeSip: -624,
+    expectedChangeAfterSip: -824
   },
   {
     accountId: 2,
     name: 'debt',
-    total: '3300',
+    total: 3300,
     sip: 1000,
     change: 40.00,
     expectedSip: 1000,
-    expectedChange: 1720
+    expectedChangeBeforeSip: 1320,
+    expectedChangeAfterSip: 1720
   },
   {
     accountId: 3,
     name: 'gold',
-    total: '1020',
+    total: 1020,
     sip: 500,
     change: 0.00,
     expectedSip: 500,
-    expectedChange: 0
+    expectedChangeBeforeSip: 0,
+    expectedChangeAfterSip: 0
   }
 ]
 
@@ -40,7 +43,7 @@ describe('change service', () => {
     change: data.change
   }))
 
-  const month = months.APRIL
+  let month = months.APRIL
   
   let operationFindAllStub
   let operationCreateStub
@@ -94,7 +97,7 @@ describe('change service', () => {
         },
         {
           type: 'change',
-          amount: data.expectedChange,
+          amount: data.expectedChangeAfterSip,
           accountId: data.accountId,
           date: `${defaults.YEAR}-${month}-${defaults.DAY}`
         }
@@ -102,7 +105,7 @@ describe('change service', () => {
     )
   })
 
-  it('should add SIP to balance if SIP starting month or later', async () =>{
+  it('should add SIP to balance if SIP starting month or later', async () => {
     await changeService.execute(changeInput, month)
     expect(operationCreateStub.args[0][0]).to.deep.equal(
       testData.map(data => [
@@ -114,7 +117,28 @@ describe('change service', () => {
         },
         {
           type: 'change',
-          amount: data.expectedChange,
+          amount: data.expectedChangeAfterSip,
+          accountId: data.accountId,
+          date: `${defaults.YEAR}-${month}-${defaults.DAY}`
+        }
+      ]).flat()
+    )
+  })
+
+  it('should not add SIP to balance if before SIP starting month', async () => {
+    month = months.JANUARY
+    await changeService.execute(changeInput, month)
+    expect(operationCreateStub.args[0][0]).to.deep.equal(
+      testData.map(data => [
+        {
+          type: 'sip',
+          amount: data.expectedSip,
+          accountId: data.accountId,
+          date: `${defaults.YEAR}-${month}-${defaults.DAY}`
+        },
+        {
+          type: 'change',
+          amount: data.expectedChangeBeforeSip,
           accountId: data.accountId,
           date: `${defaults.YEAR}-${month}-${defaults.DAY}`
         }
