@@ -8,7 +8,14 @@ const callBalance = args =>
   program.parseAsync(['node', 'index.js', 'BALANCE', ...args])
 
 describe('commands/balance', () => {
-  describe('interaction', () => {
+  describe('success', () => {
+    beforeEach(() => {
+      sinon.stub(logger, 'info')
+    })
+  
+    afterEach(() => {
+      logger.info.restore()
+    })
     it('should call the balanceService.execute', () => {
       sinon.stub(balanceService, 'execute')
 
@@ -19,28 +26,13 @@ describe('commands/balance', () => {
       balanceService.execute.restore()
     })
 
-    it('should log error if month name is not valid', async () => {
-      sinon.stub(balanceService, 'execute')
-        .throws(new Error('Invalid month name'))
-      sinon.stub(logger, 'error')
-
-      await callBalance(['INVALID'])
-
-      expect(logger.error.calledOnce).to.be.true
-      expect(logger.error.calledWith('Invalid month name')).to.be.true
-
-      balanceService.execute.restore()
-      logger.error.restore()
-    })
-
-    it('should log the balance', async () => {
+    it('should print the balance', async () => {
       sinon.stub(balanceService, 'execute').returns([
         { name: 'equity', balance: 1000 },
         { name: 'debt', balance: 5000 },
         { name: 'gold', balance: 2000 },
 
       ])
-      sinon.stub(logger, 'info')
 
       await callBalance(['APRIL'])
 
@@ -48,7 +40,6 @@ describe('commands/balance', () => {
       expect(logger.info.calledWith('1000 5000 2000')).to.be.true
 
       balanceService.execute.restore()
-      logger.info.restore()
     })
 
     it('should order the output as equity -> debt -> gold', async () => {
@@ -57,7 +48,6 @@ describe('commands/balance', () => {
         { name: 'equity', balance: 1000 },
         { name: 'debt', balance: 5000 },
       ])
-      sinon.stub(logger, 'info')
 
       await callBalance(['APRIL'])
 
@@ -65,7 +55,27 @@ describe('commands/balance', () => {
       expect(logger.info.calledWith('1000 5000 2000')).to.be.true
 
       balanceService.execute.restore()
-      logger.info.restore()    
+    })
+  })
+
+  describe('failure', () => {
+
+  
+    beforeEach(() => {
+      sinon.stub(logger, 'error')
+      sinon.stub(balanceService, 'execute')
+        .rejects(new Error('Invalid input'))
+    })
+  
+    afterEach(() => {
+      logger.error.restore()
+      balanceService.execute.restore()
+    })
+
+    it('should log error message', async () => {
+      await callBalance([''])
+
+      expect(logger.error.calledWith(sinon.match(/Invalid input/))).to.be.true
     })
   })
 })
