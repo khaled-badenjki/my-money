@@ -2,8 +2,10 @@ const sinon = require('sinon')
 const { expect } = require('chai')
 const db = require('../../src/dal/models')
 const { balanceService } = require('../../src/services')
+const { months } = require('../../config')
 
 describe('balance service', () => {
+  const month = months.APRIL
   let operationFindAllStub
   let accountFindAllStub
 
@@ -49,17 +51,30 @@ describe('balance service', () => {
   })
 
   it('should call operation model to get sum of all accounts', async () => {
-    await balanceService.execute('APRIL')
+    await balanceService.execute(month)
     expect(operationFindAllStub.called).to.be.true
+    expect(operationFindAllStub.args[0][0]).to.deep.equal({
+      attributes: [
+        'accountId',
+        [db.sequelize.fn('sum', db.sequelize.col('amount')), 'total']
+      ],
+      group: ['accountId'],
+      raw: true,
+      where: {
+        date: {
+          [db.Sequelize.Op.lte]: '2023-04-16'
+        }
+      }
+    })
   })
 
   it('should call account model to get all accounts', async () => {
-    await balanceService.execute('APRIL')
+    await balanceService.execute(month)
     expect(accountFindAllStub.called).to.be.true
   })
 
   it('should return array of account names and their balances', async () => {
-    const result = await balanceService.execute('APRIL')
+    const result = await balanceService.execute(month)
     expect(result).to.deep.equal([
       {
         name: 'equity',
