@@ -1,3 +1,4 @@
+const { defaults } = require('../../config')
 const db = require('../dal/models')
 
 const execute = async (accountsChangePercentage, month) => {
@@ -29,7 +30,7 @@ const _buildSumQuery = () => {
 const _buildOperations = (accoutnsArr, sum, month, changeArr) => 
   accoutnsArr.map((account, index) => {
     let total = parseInt(sum.find(s => s.accountId === account.id).total)
-    if (month === 'FEBRUARY') {
+    if (month >= defaults.SIP_START_MONTH) {
       total += account.sip
     }
     const change = total * (changeArr[index].change / 100)
@@ -37,37 +38,14 @@ const _buildOperations = (accoutnsArr, sum, month, changeArr) =>
       type: 'sip',
       amount: account.sip,
       accountId: account.id,
-      date: `2023-${_monthToNumber(month)}-15`
+      date: `${defaults.YEAR}-${month}-${defaults.DAY}`
     }, {
       type: 'change',
       amount: change,
       accountId: account.id,
-      date: `2023-${_monthToNumber(month)}-15`
+      date: `${defaults.YEAR}-${month}-${defaults.DAY}`
     }]
 })
-
-const _monthToNumber = month => {
-  const months = {
-    january: '01',
-    february: '02',
-    march: '03',
-    april: '04',
-    may: '05',
-    june: '06',
-    july: '07',
-    august: '08',
-    september: '09',
-    october: '10',
-    november: '11',
-    december: '12'
-  }
-
-  if (! months[month.toLowerCase()]) {
-    throw new Error('Invalid month')
-  }
-
-  return months[month.toLowerCase()]
-}
 
 module.exports = {
   execute

@@ -36,7 +36,7 @@ const _validateIsPercentage = arr => {
 }
 
 const _validateIsMonth = month => {
-  if (! months.includes(month.toLowerCase())) 
+  if (!months[month.toUpperCase()]) 
     throw new Error(errors.INVALID_MONTH)
   return true
 }
