@@ -1,20 +1,23 @@
 const calculator = require('../helpers/calculator')
 const db = require('../dal/models')
 
+
 const ALLOCATION_DATE = '2023-01-15'
 
 const execute = async accounts => {
+  const t = await db.sequelize.transaction()
+
   const amounts = accounts.map(account => account.amount)
   const percentages = calculator.calculatePercentages(amounts)
 
 
-  await db.sequelize.transaction(async t => {
-    const dbAccounts = await db.Account.bulkCreate(
-      _buildAccounts(accounts, percentages), { transaction: t })
-  
-    await db.Operation.bulkCreate(
-      _buildOperations(accounts, dbAccounts), { transaction: t })
-  })
+  const dbAccounts = await db.Account.bulkCreate(
+    _buildAccounts(accounts, percentages), { transaction: t })
+
+  await db.Operation.bulkCreate(
+    _buildOperations(accounts, dbAccounts), { transaction: t })
+
+  await t.commit()
 }
 
 const _buildAccounts = (accounts, percentages) => 

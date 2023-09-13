@@ -25,6 +25,7 @@ describe('allocate service', () => {
 
   let accountBulkCreateStub
   let operationBulkCreateStub
+  let transactionStub
 
   beforeEach(() => {
     accountBulkCreateStub = sinon.stub(db.Account, 'bulkCreate')
@@ -34,11 +35,14 @@ describe('allocate service', () => {
         desiredAllocationPercentage: 0
       })))
     operationBulkCreateStub = sinon.stub(db.Operation, 'bulkCreate')
+    transactionStub = sinon.stub(db.sequelize, 'transaction')
+      .resolves({ commit: () => {} })
   })
 
   afterEach(() => {
     accountBulkCreateStub.restore()
     operationBulkCreateStub.restore()
+    transactionStub.restore()
   })
 
   it('should call account model to create accounts', async () => {
