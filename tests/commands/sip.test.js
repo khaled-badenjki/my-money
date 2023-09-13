@@ -28,13 +28,13 @@ describe('commands/sip', () => {
 
     it('should log sip as info',  () => {
       callSip(sampleArgs)
-      expect(loggerStub.calledWith(sinon.match(/SIP/))).to.be.true
+      expect(loggerStub.args[0][0]).to.include('SIP')
     })
 
     it('should call services.execute with correct params',  () => {
       callSip(sampleArgs)
 
-      expect(sipServiceStub.calledWith([
+      expect(sipServiceStub.args[0][0]).to.deep.equal([
         {
           name: 'equity',
           sip: sampleArgs[0]
@@ -47,13 +47,13 @@ describe('commands/sip', () => {
           name: 'gold',
           sip: sampleArgs[2]
         }
-      ])).to.be.true
+      ])
     })
 
     it('should floor the sip down if it has decimal places',  () => {
       callSip(sampleArgs.map(sip => sip + 0.7))
 
-      expect(sipServiceStub.calledWith([
+      expect(sipServiceStub.args[0][0]).to.deep.equal([
         {
           name: 'equity',
           sip: sampleArgs[0]
@@ -66,7 +66,7 @@ describe('commands/sip', () => {
           name: 'gold',
           sip: sampleArgs[2]
         }
-      ])).to.be.true
+      ])
     })
   })
 
@@ -79,7 +79,7 @@ describe('commands/sip', () => {
 
       await callSip(sampleArgs)
 
-      expect(loggerStub.calledWith(sinon.match(/error/))).to.be.true
+      expect(loggerStub.args[0][0]).to.include('error')
 
       loggerStub.restore()
       sipServiceStub.restore()

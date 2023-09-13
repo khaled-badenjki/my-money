@@ -14,11 +14,11 @@ describe('commands/change', () => {
 
       callChange(['10%', '20%', '30%', 'APRIL'])
       expect(changeService.execute.calledOnce).to.be.true
-      expect(changeService.execute.calledWith([
+      expect(changeService.execute.args[0][0]).to.deep.equal([
         { name: 'equity', change: 10 },
         { name: 'debt', change: 20 },
         { name: 'gold', change: 30 }
-      ], '04')).to.be.true
+      ], '04')
 
       changeService.execute.restore()
     })

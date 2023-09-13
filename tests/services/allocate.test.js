@@ -48,7 +48,7 @@ describe('allocate service', () => {
   it('should call account model to create accounts', async () => {
     await allocateService.execute(accounts)
     expect(accountBulkCreateStub.called).to.be.true
-    expect(accountBulkCreateStub.calledWith([
+    expect(accountBulkCreateStub.args[0][0]).to.deep.equal([
       {
         name: 'equity',
         desiredAllocationPercentage: 60
@@ -61,13 +61,13 @@ describe('allocate service', () => {
         name: 'gold',
         desiredAllocationPercentage: 20
       }
-    ])).to.be.true
+    ])
   })
 
   it('should call operation model to create operations', async () => {
     await allocateService.execute(accounts)
     expect(operationBulkCreateStub.called).to.be.true
-    expect(operationBulkCreateStub.calledWith([
+    expect(operationBulkCreateStub.args[0][0]).to.deep.equal([
       {
         type: 'allocation',
         amount: 6000,
@@ -86,7 +86,7 @@ describe('allocate service', () => {
         accountId: 3,
         date: ALLOCATION_DATE
       }
-    ])).to.be.true
+    ])
   })
 
   it('should fail if there are already accounts', async () => {

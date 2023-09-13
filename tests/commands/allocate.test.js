@@ -34,13 +34,13 @@ describe('commands/allocate', () => {
     it('should log ALLOCATE as info', () => {
       callAllocate(sampleArgs)
   
-      expect(loggerStub.calledWith(sinon.match(/ALLOCATE/))).to.be.true
+      expect(loggerStub.args[0][0]).to.include('ALLOCATE')
     })
   
     it('should call account service with the correct params', () => {
       callAllocate(sampleArgs)
   
-      expect(allocateServiceStub.calledWith([
+      expect(allocateServiceStub.args[0][0]).to.deep.equal([
         {
           name: 'equity',
           amount: sampleArgs[0]
@@ -53,13 +53,13 @@ describe('commands/allocate', () => {
           name: 'gold',
           amount: sampleArgs[2]
         }
-      ])).to.be.true
+      ])
     })
 
     it('should floor the amount down if it has decimal places', () => {
       callAllocate([1000.5, 1000.5, 1000.5])
 
-      expect(allocateServiceStub.calledWithMatch([
+      expect(allocateServiceStub.args[0][0]).to.deep.equal([
         {
           name: 'equity',
           amount: 1000
@@ -72,7 +72,7 @@ describe('commands/allocate', () => {
           name: 'gold',
           amount: 1000
         }
-      ])).to.be.true
+      ])
     })
   })
 
@@ -95,7 +95,7 @@ describe('commands/allocate', () => {
     it('should log error message', async () => {
       await callAllocate(sampleArgs)
 
-      expect(loggerStub.calledWith(sinon.match(/Invalid input/))).to.be.true
+      expect(loggerStub.args[0][0]).to.include('Invalid input')
     })
   })
 })
