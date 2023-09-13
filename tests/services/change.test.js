@@ -3,6 +3,8 @@ const { expect } = require('chai')
 const db = require('../../src/dal/models')
 const { changeService } = require('../../src/services')
 
+const SIP_START_MONTH = '2'
+
 describe('change service', () => {
   const changeInput = [[
     {
@@ -28,17 +30,17 @@ describe('change service', () => {
       .resolves(
         [
           {
-            accountId: 3,
-            total: '1000',
+            accountId: 1,
+            total: '6240',
           },
           {
             accountId: 2,
-            total: '3000',
+            total: '3300',
           },
           {
-            accountId: 1,
-            total: '6000',
-          },
+            accountId: 3,
+            total: '1020',
+          }
         ]
       )
     operationCreateStub = sinon.stub(db.Operation, 'bulkCreate')
@@ -46,15 +48,18 @@ describe('change service', () => {
       .resolves([
         {
           id: 1,
-          name: 'equity'
+          name: 'equity',
+          sip: 2000,
         },
         {
           id: 2,
-          name: 'debt'
+          name: 'debt',
+          sip: 1000,
         },
         {
           id: 3,
-          name: 'gold'
+          name: 'gold',
+          sip: 500,
         }
       ])
   })
@@ -97,6 +102,62 @@ describe('change service', () => {
           amount: 20,
           accountId: 3,
           date: '2023-04-15',
+        },
+      ]
+    )).to.be.true
+  })
+
+  it('should add SIP to balance if SIP starting month or later', async () =>{
+    await changeService.execute([
+      {
+        name: 'equity',
+        change: -10.00
+      },{
+        name: 'debt',
+        change: 40.00
+      },
+      {
+        name: 'gold',
+        change: 0.00
+      }
+  ], 'FEBRUARY')
+    expect(operationCreateStub.calledWith(
+      [
+        {
+          type: 'change',
+          amount: -824,
+          accountId: 1,
+          date: '2023-02-15',
+        },
+        {
+          type: 'sip',
+          amount: 2000,
+          accountId: 1,
+          date: '2023-02-15',
+        },
+        {
+          type: 'change',
+          amount: 1720,
+          accountId: 2,
+          date: '2023-02-15',
+        },
+        {
+          type: 'sip',
+          amount: 1000,
+          accountId: 2,
+          date: '2023-02-15',
+        },
+        {
+          type: 'change',
+          amount: 0,
+          accountId: 3,
+          date: '2023-02-15',
+        },
+        {
+          type: 'sip',
+          amount: 500,
+          accountId: 3,
+          date: '2023-02-15',
         },
       ]
     )).to.be.true
