@@ -5,6 +5,16 @@ const db = require('../dal/models')
 const ALLOCATION_DATE = '2023-01-15'
 
 const execute = async accounts => {
+
+  await validateNonAllocated()
+
+  const percentages = calculateDesiredPercentages(accounts)
+
+  await persistAsTransaction(accounts, percentages)
+
+}
+
+const validateNonAllocated = async () => {
   const existingAllocations = await db.Operation.findAll({
     attributes: ['id'],
     where: {
@@ -16,12 +26,15 @@ const execute = async accounts => {
   if (existingAllocations.length > 0) {
     throw new Error('ALREADY_ALLOCATED')
   }
+}
 
-  const t = await db.sequelize.transaction()
-
+const calculateDesiredPercentages = accounts => {
   const amounts = accounts.map(account => account.amount)
-  const percentages = calculator.calculatePercentages(amounts)
+  return calculator.calculatePercentages(amounts)
+}
 
+const persistAsTransaction = async (accounts, percentages) => {
+  const t = await db.sequelize.transaction()
 
   const dbAccounts = await db.Account.bulkCreate(
     _buildAccounts(accounts, percentages), { transaction: t })
