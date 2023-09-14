@@ -9,6 +9,12 @@ const runCommand = (command, args) => program
     .parseAsync(['node', 'index.js', command, ...args])
 
 describe('rebalance e2e', () => {
+  it('should log CANNOT_REBALANCE if no data is available', async () => {
+    await runCommand('REBALANCE', [])
+
+    expect(logger.error.calledOnceWith('CANNOT_REBALANCE')).to.be.true
+  })
+  
   it('should log CANNOT_REBALANCE if 6 months data is unvailable', async () => {
     await runCommand('ALLOCATE', ['8000', '6000', '3500'])
 
