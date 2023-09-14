@@ -10,12 +10,10 @@ const callRebalance = args =>
   program.parseAsync(['node', 'index.js', 'REBALANCE'])
 
 describe('commands/rebalance', () => {
-  let loggerStub
   let rebalanceServiceStub
   
   describe('success', () => {
     beforeEach(() => {
-      loggerStub = sinon.stub(logger, 'info')
       rebalanceServiceStub = sinon
         .stub(rebalanceService, 'execute').returns([
           { name: 'equity', rebalance: 1000 },
@@ -25,7 +23,6 @@ describe('commands/rebalance', () => {
     })
   
     afterEach(() => {
-      loggerStub.restore()
       rebalanceServiceStub.restore()
     })
     it('should call the rebalanceService.execute', () => {
@@ -38,14 +35,12 @@ describe('commands/rebalance', () => {
 
   describe('failure', () => {
     beforeEach(() => {
-      loggerStub = sinon.stub(logger, 'error')
       rebalanceServiceStub = sinon
         .stub(rebalanceService, 'execute')
         .throws(new Error('error'))
     })
 
     afterEach(() => {
-      loggerStub.restore()
       rebalanceServiceStub.restore()
     })
     

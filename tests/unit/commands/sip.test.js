@@ -11,18 +11,15 @@ const sampleArgs = [1000, 1000, 1000]
 
 describe('commands/sip', () => {
   describe('success', () => {
-    let loggerStub
     let sipServiceStub
 
     beforeEach(() => {
-      loggerStub = sinon.stub(logger, 'info')
       sipServiceStub = sinon
         .stub(sipService, 'execute')
         .resolves()
     })
 
     afterEach(() => {
-      loggerStub.restore()
       sipServiceStub.restore()
     })
 
@@ -66,24 +63,21 @@ describe('commands/sip', () => {
   })
 
   describe('failure', () => {
-    let loggerStub
     let sipServiceStub
     beforeEach(() => {
-      loggerStub = sinon.stub(logger, 'error')
       sipServiceStub = sinon
         .stub(sipService, 'execute')
         .rejects(new Error('error'))
     })
 
     afterEach(() => {
-      loggerStub.restore()
       sipServiceStub.restore()
     })
 
     it('should log error if it catches an error', async () => {
       await callSip(sampleArgs)
 
-      expect(loggerStub.args[0][0]).to.include('error')
+      expect(logger.error.args[0][0]).to.include('error')
     })
   })
 })
