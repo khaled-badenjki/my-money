@@ -5,6 +5,18 @@ const db = require('../dal/models')
 const ALLOCATION_DATE = '2023-01-15'
 
 const execute = async accounts => {
+  const existingAllocations = await db.Operation.findAll({
+    attributes: ['id'],
+    where: {
+      type: 'allocation'
+    },
+    raw: true
+  })
+
+  if (existingAllocations.length > 0) {
+    throw new Error('ALREADY_ALLOCATED')
+  }
+
   const t = await db.sequelize.transaction()
 
   const amounts = accounts.map(account => account.amount)

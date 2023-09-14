@@ -97,7 +97,7 @@ describe('allocate e2e', () => {
     })
 
     expect(operations.length).to.equal(3)
-    expect(logger.info.calledOnce).to.be.true
-    expect(logger.info.args[0][0]).to.equal('ALREADY_ALLOCATED')
+    expect(logger.error.calledOnce).to.be.true
+    expect(logger.error.args[0][0]).to.equal('ALREADY_ALLOCATED')
   })
 })
