@@ -9,6 +9,11 @@ const execute = async () => {
     ],
     raw: true
   })
+
+  if (!operation.latestDate) {
+    throw new Error('CANNOT_REBALANCE')
+  }
+
   const month = operation.latestDate.split('-')[1]
 
   if (parseInt(month) < parseInt(months.JUNE)) {
