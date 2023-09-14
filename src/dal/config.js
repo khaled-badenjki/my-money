@@ -16,6 +16,15 @@ const defaultConfig = {
 
 module.exports = {
   development: defaultConfig,
-  test: defaultConfig,
+  test: {
+    ...defaultConfig,
+    dialect: 'sqlite',
+    storage: ':memory:',
+    logging: false,
+    pool: {
+      idle: 1000,
+      evict: 1000,
+    }    
+  },
   production: defaultConfig
 }
