@@ -35,4 +35,25 @@ describe('commands/rebalance', () => {
     })
   })
 
+
+  describe('failure', () => {
+    beforeEach(() => {
+      loggerStub = sinon.stub(logger, 'error')
+      rebalanceServiceStub = sinon
+        .stub(rebalanceService, 'execute')
+        .throws(new Error('error'))
+    })
+
+    afterEach(() => {
+      loggerStub.restore()
+      rebalanceServiceStub.restore()
+    })
+    
+    it('should log the error caught from rebalance service', () => {
+
+      callRebalance()
+      expect(logger.error.calledOnce).to.be.true
+      expect(logger.error.args[0][0]).to.equal('error')
+    })
+  })
 })
