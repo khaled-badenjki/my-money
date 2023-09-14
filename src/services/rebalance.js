@@ -1,6 +1,14 @@
+const db = require('../dal/models')
 
 const execute = async () => {
-  console.log('Rebalance')
+  const operations = await db.Operation.findAll({
+  })
+
+  if (operations.length === 0) {
+    throw new Error('CANNOT_REBALANCE')
+  }
+
+  return operations
 }
 
 module.exports = {
