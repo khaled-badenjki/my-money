@@ -66,18 +66,24 @@ describe('commands/sip', () => {
   })
 
   describe('failure', () => {
-    it('should log error if it catches an error', async () => {
-      const loggerStub = sinon.stub(logger, 'error')
-      const sipServiceStub = sinon
+    let loggerStub
+    let sipServiceStub
+    beforeEach(() => {
+      loggerStub = sinon.stub(logger, 'error')
+      sipServiceStub = sinon
         .stub(sipService, 'execute')
         .rejects(new Error('error'))
+    })
 
+    afterEach(() => {
+      loggerStub.restore()
+      sipServiceStub.restore()
+    })
+
+    it('should log error if it catches an error', async () => {
       await callSip(sampleArgs)
 
       expect(loggerStub.args[0][0]).to.include('error')
-
-      loggerStub.restore()
-      sipServiceStub.restore()
     })
   })
 })
