@@ -10,6 +10,7 @@ const rebalance = new Command('REBALANCE')
 const _handleRebalance = async () => {
   try {
     const rebalance = await rebalanceService.execute()
+    logger.info(rebalance.map(r => r.amount).join(' '))
   } catch (error) {
     logger.error(error.message)
   }
