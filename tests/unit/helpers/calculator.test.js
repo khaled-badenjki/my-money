@@ -1,5 +1,5 @@
 const { expect } = require('chai')
-const calculator = require('../../src/helpers/calculator')
+const calculator = require('../../../src/helpers/calculator')
 
 describe('Calculator', () => {
   describe('calculatePercentages', () => {

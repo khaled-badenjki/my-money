@@ -3,8 +3,8 @@ const chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 const { expect } = chai
-const db = require('../../src/dal/models')
-const { sipService } = require('../../src/services')
+const db = require('../../../src/dal/models')
+const { sipService } = require('../../../src/services')
 
 describe('sip service', () => {
   const accountSip = [

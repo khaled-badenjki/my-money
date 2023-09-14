@@ -1,8 +1,8 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
-const db = require('../../src/dal/models')
-const { changeService } = require('../../src/services')
-const { months, defaults } = require('../../config')
+const db = require('../../../src/dal/models')
+const { changeService } = require('../../../src/services')
+const { months, defaults } = require('../../../config')
 
 const testData = [
   {

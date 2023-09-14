@@ -1,8 +1,8 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
-const program = require('../../src/commands')
-const logger = require('../../src/helpers/logger')
-const { allocateService } = require('../../src/services')
+const program = require('../../../src/commands')
+const logger = require('../../../src/helpers/logger')
+const { allocateService } = require('../../../src/services')
 
 const callAllocate = args => 
   program.parseAsync(['node', 'index.js', 'ALLOCATE', ...args])

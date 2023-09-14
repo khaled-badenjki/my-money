@@ -1,7 +1,7 @@
 const { expect } = require('chai')
 const sinon = require('sinon')
-const { rebalanceService } = require('../../src/services')
-const db = require('../../src/dal/models')
+const { rebalanceService } = require('../../../src/services')
+const db = require('../../../src/dal/models')
 
 describe('services/rebalance', () => {
   it('should throw an error "CANNOT_REBALANCE"' + 

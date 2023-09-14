@@ -1,9 +1,9 @@
 const sinon = require('sinon')
 const { expect } = require('chai')
-const logger = require('../../src/helpers/logger')
-const program = require('../../src/commands')
-const { rebalanceService } = require('../../src/services')
-const { months } = require('../../config')
+const logger = require('../../../src/helpers/logger')
+const program = require('../../../src/commands')
+const { rebalanceService } = require('../../../src/services')
+const { months } = require('../../../config')
 
 
 const callRebalance = args => 
