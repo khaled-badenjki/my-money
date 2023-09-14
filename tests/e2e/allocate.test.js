@@ -2,17 +2,10 @@ const { expect } = require('chai')
 const sinon = require('sinon')
 const program = require('../../src/commands')
 const db = require('../../src/dal/models')
+const logger = require('../../src/helpers/logger')
 const { defaults } = require('../../config')
 
 describe('allocate e2e', () => {
-  beforeEach(async () => {
-    await db.sequelize.sync({ force: true })
-  })
-
-  after(async () => {
-    await db.sequelize.close()
-  })
-  
   it('should create operations with type "allocations"', async () => {
     await program
       .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
@@ -90,5 +83,21 @@ describe('allocate e2e', () => {
         desiredAllocationPercentage: 10
       }
     ])
+  })
+
+  it('should fail if run more than once', async () => {
+    await program
+      .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
+
+    await program
+      .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
+
+    const operations = await db.Operation.findAll({
+      attributes: ['id']
+    })
+
+    expect(operations.length).to.equal(3)
+    expect(logger.info.calledOnce).to.be.true
+    expect(logger.info.args[0][0]).to.equal('ALREADY_ALLOCATED')
   })
 })
