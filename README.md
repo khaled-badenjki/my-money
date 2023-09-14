@@ -69,7 +69,7 @@ Once the app and database are up and running, you will need to create the databa
 
 
 # Usage ⭐
-when passing a negative value (for example the `CHANGE` command, you need to pass double dash `--` to signify the end of options, so it would be like this
+when passing a negative value (for example the `CHANGE` command), you need to pass double dash `--` to signify the end of options, so it would be like this
 
     node index.js CHANGE -- 10.00% 8.00% -5.00% JUNE
     
@@ -82,3 +82,4 @@ when passing a negative value (for example the `CHANGE` command, you need to pas
 
 # Limitations 🏋🏽
 
+ - This software deals with one year only (it's assumed to be `2023`, but this can be easily changed from `config.js` file). It should be relatively easy to extend it to handle multiple years.
