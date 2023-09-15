@@ -80,7 +80,7 @@ describe('rebalance e2e', () => {
     
     expect(logger.info.getCall(1).args[0]).to.be.equal('23619 11809 3936')
 
-    await runCommand('BALANCE', 'JUNE')
+    await runCommand('BALANCE', ['JUNE'])
 
     expect(logger.info.getCall(2).args[0]).to.be.equal('23619 11809 3936')
 

@@ -9,43 +9,45 @@ const execute = async () => {
   if (parseInt(month) < parseInt(months.JUNE)) {
     throw new Error('CANNOT_REBALANCE')
   }
-  
-  if (parseInt(month) < parseInt(months.DECEMBER)) {
-    const balance = await balanceService.execute(months.JUNE)
-    const desiredAllocationPercentages = await db.Account.findAll({
-      attributes: ['desiredAllocationPercentage', 'name'],
-      raw: true
-    })
 
-    const totalBalance = balance.reduce((acc, curr) => acc + curr.balance, 0)
+  const rebalanceMonth = month === months.DECEMBER 
+    ? months.DECEMBER : months.JUNE
 
-    const rebalanceAmount = balance.map((account, index) => {
+  const balance = await balanceService.execute(rebalanceMonth)
+  const desiredAllocationPercentages = await db.Account.findAll({
+    attributes: ['desiredAllocationPercentage', 'name'],
+    raw: true
+  })
 
-      const desiredAllocationPercentage = desiredAllocationPercentages.find(
-        d => d.name === account.name
-      ).desiredAllocationPercentage
-      const desiredBalance = 
-        Math.floor(totalBalance * desiredAllocationPercentage / 100)
+  const totalBalance = balance.reduce((acc, curr) => acc + curr.balance, 0)
+
+  const rebalanceAmount = balance.map((account, index) => {
+
+    const desiredAllocationPercentage = desiredAllocationPercentages.find(
+      d => d.name === account.name
+    ).desiredAllocationPercentage
+    const desiredBalance = 
+      Math.floor(totalBalance * desiredAllocationPercentage / 100)
+    return {
+      id: account.id,
+      name: account.name,
+      amount: desiredBalance,
+      difference: desiredBalance - account.balance
+    }
+  })
+
+  db.Operation.bulkCreate(
+    rebalanceAmount.map(account => {
       return {
-        id: account.id,
-        name: account.name,
-        amount: desiredBalance,
-        difference: desiredBalance - account.balance
+        type: 'rebalance',
+        amount: account.difference,
+        accountId: account.id,
+        date: `${defaults.YEAR}-${month}-${defaults.DAY}`
       }
     })
+  )
+  return rebalanceAmount
 
-    db.Operation.bulkCreate(
-      rebalanceAmount.map(account => {
-        return {
-          type: 'rebalance',
-          amount: account.difference,
-          accountId: account.id,
-          date: `${defaults.YEAR}-${month}-${defaults.DAY}`
-        }
-      })
-    )
-    return rebalanceAmount
-  }
 }
 
 const getLatestOperationMonth = async () => {
