@@ -8,7 +8,7 @@ const callChange = args =>
   program.parseAsync(['node', 'index.js', 'CHANGE', ...args])
 
 describe('commands/change', () => {
-  describe('interaction', () => {
+  describe('success', () => {
     it('should call the changeService.execute', () => {
       sinon.stub(changeService, 'execute')
 
@@ -19,6 +19,19 @@ describe('commands/change', () => {
         { name: 'debt', change: 20 },
         { name: 'gold', change: 30 }
       ], '04')
+
+      changeService.execute.restore()
+    })
+  })
+
+  describe('failure', () => {
+    it('should print the error message', async () => {
+      sinon.stub(changeService, 'execute').throws(new Error('ERROR_MESSAGE'))
+
+      await callChange(['10%', '20%', '30%', 'APRIL'])
+
+      expect(logger.error.calledOnce).to.be.true
+      expect(logger.error.args[0][0]).to.equal('ERROR_MESSAGE')
 
       changeService.execute.restore()
     })
