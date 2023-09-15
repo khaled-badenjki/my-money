@@ -16,12 +16,7 @@ describe('commands/allocate', () => {
   
     beforeEach(() => {
       allocateServiceStub = sinon
-        .stub(allocateService, 'execute')
-        .resolves([
-          { id: 1, name: 'equity', desiredAllocationPercentage: 60 },
-          { id: 2, name: 'debt', desiredAllocationPercentage: 20 },
-          { id: 3, name: 'gold', desiredAllocationPercentage: 20 }
-        ])
+        .stub(allocateService, 'execute').resolves()
     })
   
     afterEach(() => {
@@ -48,20 +43,20 @@ describe('commands/allocate', () => {
     })
 
     it('should floor the amount down if it has decimal places', () => {
-      callAllocate([1000.5, 1000.5, 1000.5])
+      callAllocate(sampleArgs.map(amount => amount + 0.5))
 
       expect(allocateServiceStub.args[0][0]).to.deep.equal([
         {
           name: 'equity',
-          amount: 1000
+          amount: sampleArgs[0]
         },
         {
           name: 'debt',
-          amount: 1000
+          amount: sampleArgs[1]
         },
         {
           name: 'gold',
-          amount: 1000
+          amount: sampleArgs[2]
         }
       ])
     })
@@ -73,17 +68,17 @@ describe('commands/allocate', () => {
     beforeEach(() => {
       allocateServiceStub = sinon
         .stub(allocateService, 'execute')
-        .rejects(new Error('Invalid input'))
+        .rejects(new Error('ERROR_MESSAGE'))
     })
   
     afterEach(() => {
       allocateServiceStub.restore()
     })
 
-    it('should log error message', async () => {
+    it('should log any error it catches', async () => {
       await callAllocate(sampleArgs)
 
-      expect(logger.error.args[0][0]).to.include('Invalid input')
+      expect(logger.error.args[0][0]).to.include('ERROR_MESSAGE')
     })
   })
 })
