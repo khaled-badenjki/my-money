@@ -40,6 +40,22 @@ describe('commands/balance', () => {
       expect(logger.info.args[0][0]).to.equal('1000 5000 2000')
 
     })
+
+    it('should order the output as equity -> debt -> gold', async () => {
+      balanceServiceStub.restore()
+      balanceServiceStub = sinon.stub(balanceService, 'execute').returns([
+        { name: 'gold', balance: 2000 },
+        { name: 'equity', balance: 1000 },
+        { name: 'debt', balance: 5000 },
+      ])
+
+      await callBalance(sampleArgs)
+
+      expect(logger.info.calledOnce).to.be.true
+      expect(logger.info.args[0][0]).to.equal('1000 5000 2000')
+
+      balanceService.execute.restore()
+    })
   })
 
   describe('failure', () => {

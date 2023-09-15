@@ -4,6 +4,8 @@ const { balanceService } = require('../services')
 const { validateBalance } = require('../helpers/validator')
 const { months } = require('../../config')
 
+const BALANCE_ORDER = ['equity', 'debt', 'gold']
+
 const balance = new Command('BALANCE')
   .description('receives a month name')
   .argument('<month>', 'month')
@@ -15,9 +17,11 @@ const _handleBalance = async month => {
 
     validateBalance(month)
 
-    const serializedMonth = _serializeBalance(month)
+    const serializedMonth = _serializeBalanceInput(month)
 
     const balance = await balanceService.execute(serializedMonth)
+
+    _serializeBalanceOutput(balance)
       
     _printBalance(balance)
 
@@ -28,7 +32,10 @@ const _handleBalance = async month => {
   }
 }
 
-const _serializeBalance = month => months[month.toUpperCase()]
+const _serializeBalanceInput = month => months[month.toUpperCase()]
+
+const _serializeBalanceOutput = balance => balance.sort((a, b) => 
+  BALANCE_ORDER.indexOf(a.name) - BALANCE_ORDER.indexOf(b.name))
 
 const _printBalance = balance => 
   logger.info(balance.map(b => b.balance).join(' '))

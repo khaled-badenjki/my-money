@@ -96,25 +96,4 @@ describe('balance service', () => {
     operationFindAllStub.restore()
     accountFindAllStub.restore()
   })
-
-  it('should order the output as equity -> debt -> gold', async () => {
-    accountFindAllStub.restore()
-    accountFindAllStub = sinon.stub(db.Account, 'findAll')
-      .resolves([
-        {
-          id: 1,
-          name: 'gold'
-        },
-        {
-          id: 2,
-          name: 'equity'
-        },
-        {
-          id: 3,
-          name: 'debt'
-        }
-      ])
-    const result = await balanceService.execute(month)
-    expect(result.map(r => r.name)).to.deep.equal(['equity', 'debt', 'gold'])
-  })
 })

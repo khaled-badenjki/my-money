@@ -1,8 +1,6 @@
 const db = require('../dal/models')
 const { defaults } = require('../../config')
 
-const BALANCE_ORDER = ['equity', 'debt', 'gold']
-
 const execute = async month => {
   const sum = await db.Operation.findAll(_buildSumQuery(month))
   const accounts = await db.Account.findAll({ raw: true })
@@ -15,9 +13,6 @@ const execute = async month => {
       balance: total
     }
   })
-
-  balance.sort((a, b) => 
-    BALANCE_ORDER.indexOf(a.name) - BALANCE_ORDER.indexOf(b.name))
 
   return balance
 }
