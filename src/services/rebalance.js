@@ -21,7 +21,7 @@ const execute = async () => {
   }
   
   if (parseInt(month) < parseInt(months.DECEMBER)) {
-    const balance = await balanceService.execute(months.DECEMBER)
+    const balance = await balanceService.execute(months.JUNE)
     const desiredAllocationPercentages = await db.Account.findAll({
       attributes: ['desiredAllocationPercentage', 'name'],
       raw: true
