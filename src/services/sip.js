@@ -16,7 +16,7 @@ const execute = async sipAccounts => {
 
   const accounts = Promise.all(
     sipAccounts.map(account => db.Account.update(
-      { monthlyInvestment: account.sip },
+      { monthlyInvestment: account.amount },
       { where: { name: account.name } }
     ))
   )

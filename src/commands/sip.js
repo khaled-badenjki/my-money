@@ -2,9 +2,8 @@ const { Command } = require('commander')
 const logger = require('../helpers/logger')
 const { validateSip } = require('../helpers/validator')
 const { sipService } = require('../services')
-const calculator = require('../helpers/calculator')
+const { serializeSip } = require('../helpers/serializer')
 
-const SIP_ARGUMENTS = [ 'equity', 'debt', 'gold' ]
 
 const sip = new Command('SIP')
   .description('receives investment amount on a monthly basis for each fund.')
@@ -20,7 +19,7 @@ const _handleSip = async (amounts, command) => {
     
     validateSip(amounts)
 
-    const serializedAmounts = _serializeSipInput(amounts)
+    const serializedAmounts = serializeSip(amounts)
   
     await sipService.execute(serializedAmounts)
   
@@ -29,12 +28,6 @@ const _handleSip = async (amounts, command) => {
     logger.error(error.message)
   
   }
-
 }
-
-const _serializeSipInput = amountsArray => amountsArray.map((sip, index) => ({
-  name: SIP_ARGUMENTS[index],
-  sip: Math.floor(sip)
-}))
 
 module.exports = sip

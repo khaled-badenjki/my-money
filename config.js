@@ -27,6 +27,9 @@ module.exports = {
     ALLOCATION_DATE: '2023-01-15',
     YEAR: '2023',
     DAY: '15',
-    NEXT_DAY: '16'
+    NEXT_DAY: '16',
+    EQUITY: 'equity',
+    DEBT: 'debt',
+    GOLD: 'gold',
   }
 }

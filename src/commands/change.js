@@ -1,10 +1,9 @@
 const { Command } = require('commander')
 const logger = require('../helpers/logger')
+const { serializeChange } = require('../helpers/serializer')
 const { validateChange } = require('../helpers/validator')
 const { changeService }  = require('../services')
-const { months } = require('../../config')
 
-const CHANGE_ARGUMENTS = [ 'equity', 'debt', 'gold' ]
 
 const change = new Command('CHANGE')
   .description('receives the monthly rate of change (growth or loss) ' +
@@ -25,7 +24,7 @@ const _handleChange = async (percentages, month, command) => {
     const { 
       serializedPercentages, 
       serializedMonth 
-    } = _serializeChange(percentages, month)
+    } = serializeChange(percentages, month)
 
     await changeService.execute(serializedPercentages, serializedMonth)
 
@@ -37,17 +36,6 @@ const _handleChange = async (percentages, month, command) => {
 
 }
 
-const _serializeChange = (percentagesArray, month) => {
-  const serializedPercentages = percentagesArray.map((change, index) => ({
-    name: CHANGE_ARGUMENTS[index],
-    change: Number(change.slice(0, -1))
-  }))
 
-  return {
-    serializedPercentages,
-    serializedMonth: months[month.toUpperCase()]
-  }
-}
-  
 
 module.exports = change

@@ -12,15 +12,15 @@ const sampleArgs = [1000, 1000, 1000]
 const expectedServiceStubArgs = [
   {
     name: 'equity',
-    sip: sampleArgs[0]
+    amount: sampleArgs[0]
   },
   {
     name: 'debt',
-    sip: sampleArgs[1]
+    amount: sampleArgs[1]
   },
   {
     name: 'gold',
-    sip: sampleArgs[2]
+    amount: sampleArgs[2]
   }
 ]
 
