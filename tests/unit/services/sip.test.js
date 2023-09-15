@@ -28,7 +28,11 @@ describe('sip service', () => {
   beforeEach(() => {
     accountUpdateStub = sinon.stub(db.Account, 'update')
       .resolves([1])
-    accountFindOneStub = sinon.stub(db.Account, 'findOne').resolves(null)
+    accountFindOneStub = sinon.stub(db.Account, 'findAll').resolves([
+      {
+        monthlyInvestment: null
+      }
+    ])
   })
 
   afterEach(() => {
