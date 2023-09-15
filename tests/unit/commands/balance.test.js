@@ -62,7 +62,7 @@ describe('commands/balance', () => {
   
     beforeEach(() => {
       balanceServiceStub = sinon.stub(balanceService, 'execute')
-        .rejects(new Error('Invalid input'))
+        .rejects(new Error('ERROR_MESSAGE'))
     })
   
     afterEach(() => {
@@ -72,7 +72,13 @@ describe('commands/balance', () => {
     it('should log error message', async () => {
       await callBalance([''])
 
-      expect(logger.error.args[0][0]).to.equal('Invalid input')
+      expect(logger.error.args[0][0]).to.equal('ERROR_MESSAGE')
+    })
+
+    it('should fail if month is not valid', async () => {
+      await callBalance(['invalid'])
+
+      expect(logger.error.args[0][0]).to.equal('INVALID_MONTH')
     })
   })
 })

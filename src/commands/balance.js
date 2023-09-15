@@ -3,7 +3,7 @@ const logger = require('../helpers/logger')
 const { balanceService } = require('../services')
 const { months } = require('../../config')
 
-const ACCOUNTS_ORDER = ['equity', 'debt', 'gold']
+const BALANCE_ARGUMENTS = ['equity', 'debt', 'gold']
 
 const balance = new Command('BALANCE')
   .description('receives a month name')
@@ -13,12 +13,13 @@ const balance = new Command('BALANCE')
 
 const _handleBalance = async month => {
   try {
+    
     const monthNumber = months[month.toUpperCase()]
 
     const balance = await balanceService.execute(monthNumber)
 
     balance.sort((a, b) => 
-      ACCOUNTS_ORDER.indexOf(a.name) - ACCOUNTS_ORDER.indexOf(b.name))
+      BALANCE_ARGUMENTS.indexOf(a.name) - BALANCE_ARGUMENTS.indexOf(b.name))
       
     logger.info(balance.map(b => b.balance).join(' '))
   } catch (error) {
