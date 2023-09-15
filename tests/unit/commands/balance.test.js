@@ -9,9 +9,6 @@ const { months } = require('../../../config')
 const callBalance = args => 
   program.parseAsync(['node', 'index.js', 'BALANCE', ...args])
 
-const sampleArgs = ['APRIL']
-const month = months.APRIL
-  
 describe('commands/balance', () => {
   let balanceServiceStub
   
@@ -27,14 +24,15 @@ describe('commands/balance', () => {
     afterEach(() => {
       balanceServiceStub.restore()
     })
+
     it('should call the balanceService.execute', () => {
-      callBalance(sampleArgs)
+      callBalance(['APRIL'])
       expect(balanceServiceStub.calledOnce).to.be.true
-      expect(balanceServiceStub.args[0][0]).to.equal(month)
+      expect(balanceServiceStub.args[0][0]).to.equal(months.APRIL)
     })
 
     it('should print the balance', async () => {
-      await callBalance(sampleArgs)
+      await callBalance(['APRIL'])
 
       expect(logger.info.calledOnce).to.be.true
       expect(logger.info.args[0][0]).to.equal('1000 5000 2000')
@@ -49,7 +47,7 @@ describe('commands/balance', () => {
         { name: 'debt', balance: 5000 },
       ])
 
-      await callBalance(sampleArgs)
+      await callBalance(['APRIL'])
 
       expect(logger.info.calledOnce).to.be.true
       expect(logger.info.args[0][0]).to.equal('1000 5000 2000')
