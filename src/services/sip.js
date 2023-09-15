@@ -7,7 +7,7 @@ const execute = async sipAccounts => {
   })
 
   if (account) {
-    throw new Error('Monthly investment is already set')
+    throw new Error('MONTHLY_INVESTMENT_ALREADY_SET')
   }
 
   const accounts = Promise.all(
