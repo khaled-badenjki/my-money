@@ -35,4 +35,10 @@ describe('SIP e2e', () => {
 
     expect(logger.error.args[0][0]).to.be.equal('MONTHLY_INVESTMENT_ALREADY_SET')
   })
+
+  it('should log error if no allocation is set', async () => {
+    await runCommand('SIP', ['2000', '1000', '500'])
+
+    expect(logger.error.args[0][0]).to.be.equal('NO_ALLOCATION_SET')
+  })
 })
