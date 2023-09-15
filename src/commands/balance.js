@@ -1,6 +1,7 @@
 const { Command } = require('commander')
 const logger = require('../helpers/logger')
 const { balanceService } = require('../services')
+const { validateBalance } = require('../helpers/validator')
 const { months } = require('../../config')
 
 const BALANCE_ARGUMENTS = ['equity', 'debt', 'gold']
@@ -13,7 +14,8 @@ const balance = new Command('BALANCE')
 
 const _handleBalance = async month => {
   try {
-    
+    validateBalance(month)
+
     const monthNumber = months[month.toUpperCase()]
 
     const balance = await balanceService.execute(monthNumber)

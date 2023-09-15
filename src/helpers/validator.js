@@ -11,6 +11,8 @@ const validateChange = (arr, month) => _validateExists(arr)
   && _validateIsNumber(arr.map(el => el.slice(0, -1)))
   && _validateIsMonth(month)
 
+const validateBalance = month => _validateIsMonth(month)
+
 const _validateExists = arr => {
   if (arr.some(el => ! el)) 
     throw new Error(errors.MISSING_INPUT)
@@ -44,5 +46,6 @@ const _validateIsMonth = month => {
 module.exports = {
   validateAllocate,
   validateSip,
-  validateChange
+  validateChange,
+  validateBalance
 }

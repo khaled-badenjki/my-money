@@ -69,8 +69,8 @@ describe('commands/balance', () => {
       balanceServiceStub.restore()
     })
 
-    it('should log error message', async () => {
-      await callBalance([''])
+    it('should catch error message from balanceService', async () => {
+      await callBalance(['APRIL'])
 
       expect(logger.error.args[0][0]).to.equal('ERROR_MESSAGE')
     })
