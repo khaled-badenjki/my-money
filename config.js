@@ -26,6 +26,7 @@ module.exports = {
     SIP_START_MONTH: '02',
     ALLOCATION_DATE: '2023-01-15',
     YEAR: '2023',
-    DAY: '15'
+    DAY: '15',
+    NEXT_DAY: '16'
   }
 }

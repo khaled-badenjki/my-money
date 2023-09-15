@@ -52,7 +52,7 @@ describe('rebalance e2e', () => {
 
     await runCommand('REBALANCE', [])
 
-    expect(logger.info.calledWith('23619 11809 3936')).to.be.true
+    expect(logger.info.args[0][0]).to.be.equal('23619 11809 3936')
   })
 
   it('should persist operations to rebalance the amount', async () => {
@@ -83,6 +83,15 @@ describe('rebalance e2e', () => {
     await runCommand('BALANCE', 'JUNE')
 
     expect(logger.info.getCall(2).args[0]).to.be.equal('23619 11809 3936')
+
+    const rebalanceOperations = await db.Operation.findAll({
+      where: {
+        type: 'rebalance'
+      },
+      raw: true
+    })
+
+    expect(rebalanceOperations).to.have.lengthOf(3)
   })
 
   it('should rebalance in June even if more records exist', async () => {

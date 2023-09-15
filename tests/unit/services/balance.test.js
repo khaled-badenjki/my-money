@@ -78,14 +78,17 @@ describe('balance service', () => {
     const result = await balanceService.execute(month)
     expect(result).to.deep.equal([
       {
+        id: 1,
         name: 'equity',
         balance: '6000'
       },
       {
+        id: 2,
         name: 'debt',
         balance: '3000'
       },
       {
+        id: 3,
         name: 'gold',
         balance: '1000'
       }

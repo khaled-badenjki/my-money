@@ -8,6 +8,7 @@ const execute = async month => {
   const balance = accounts.map(account => {
     const total = sum.find(s => s.accountId === account.id).total
     return {
+      id: account.id,
       name: account.name,
       balance: total
     }
@@ -27,7 +28,7 @@ const _buildSumQuery = (month) => {
     where: {
       date: {
         [db.Sequelize.Op.lte]: 
-          `${defaults.YEAR}-${month}-${parseInt(defaults.DAY)+1}`
+          `${defaults.YEAR}-${month}-${defaults.NEXT_DAY}`
       }
     }
   }

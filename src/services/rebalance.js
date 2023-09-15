@@ -1,6 +1,7 @@
 const { months } = require('../../config')
 const db = require('../dal/models')
 const balanceService = require('./balance')
+const { defaults } = require('../../config')
 
 const execute = async () => {
   const month = await getLatestOperationMonth()
@@ -26,11 +27,23 @@ const execute = async () => {
       const desiredBalance = 
         Math.floor(totalBalance * desiredAllocationPercentage / 100)
       return {
+        id: account.id,
         name: account.name,
-        amount: desiredBalance
+        amount: desiredBalance,
+        difference: desiredBalance - account.balance
       }
     })
 
+    db.Operation.bulkCreate(
+      rebalanceAmount.map(account => {
+        return {
+          type: 'rebalance',
+          amount: account.difference,
+          accountId: account.id,
+          date: `${defaults.YEAR}-${month}-${defaults.DAY}`
+        }
+      })
+    )
     return rebalanceAmount
   }
 }
