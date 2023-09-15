@@ -26,4 +26,13 @@ describe('SIP e2e', () => {
 
     expect(updatedAccounts.length).to.be.equal(3)
   })
+
+  it('should log error if monthlyInvestment is already set', async () => {
+    await runCommand('ALLOCATE', ['6000', '3000', '1000'])
+    await runCommand('SIP', ['2000', '1000', '500'])
+
+    await runCommand('SIP', ['2000', '1000', '500'])
+
+    expect(logger.error.args[0][0]).to.be.equal('MONTHLY_INVESTMENT_ALREADY_SET')
+  })
 })
