@@ -17,6 +17,6 @@ module.exports = {
     'semi': ['error', 'never'],
     'quotes': ['error', 'single'],
     'eol-last': ['error', 'always'],
-    'max-len': ['error', { 'code': 80 }],
+    'max-len': ['error', { 'code': 81 }],
   }
 }

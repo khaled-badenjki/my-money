@@ -117,4 +117,46 @@ describe('rebalance e2e', () => {
 
     expect(logger.info.calledWith('23619 11809 3936')).to.be.true
   })
+
+  it('should rebalance in December', async () => {
+    await runCommand('ALLOCATE', ['6000', '3000', '1000'])
+
+    await runCommand('SIP', ['2000', '1000', '500'])
+
+    await runCommand('CHANGE', ['4.00%', '10.00%', '2.00%', 'JANUARY'])
+
+    await runCommand('CHANGE', ['--', '-10.00%', '40.00%', '0.00%', 'FEBRUARY'])
+
+    await runCommand('CHANGE', ['12.50%', '12.50%', '12.50%', 'MARCH'])
+
+    await runCommand('CHANGE', ['--', '8.00%', '-3.00%', '7.00%', 'APRIL'])
+
+    await runCommand('CHANGE', ['13.00%', '21.00%', '10.50%', 'MAY'])
+
+    await runCommand('CHANGE', ['--', '10.00%', '8.00%', '-5.00%', 'JUNE'])
+
+    await runCommand('REBALANCE', [])
+
+    expect(logger.info.getCall(0).args[0]).to.be.equal('23619 11809 3936')
+
+    await runCommand('CHANGE', ['--', '10.00%', '-5.00%', '2.00%', 'JULY'])
+
+    await runCommand('CHANGE', ['5.50%', '6.00%', '3.00%', 'AUGUST'])
+
+    await runCommand('CHANGE', ['--', '-4.00%', '0.50%', '-4.00%', 'SEPTEMBER'])
+
+    await runCommand('CHANGE', ['7.00%', '10.00%', '20.00%', 'OCTOBER'])
+
+    await runCommand('CHANGE', ['--', '-3.00%', '-8.00%', '-11.00%', 'NOVEMBER'])
+
+    await runCommand('CHANGE', ['15.25%', '11.00%', '10.50%', 'DECEMBER'])
+
+    await runCommand('BALANCE', ['DECEMBER'])
+
+    expect(logger.info.getCall(1).args[0]).to.be.equal('45789 20139 8062')
+
+    await runCommand('REBALANCE', [])
+
+    expect(logger.info.getCall(2).args[0]).to.be.equal('44394 22197 7399')
+  })
 })
