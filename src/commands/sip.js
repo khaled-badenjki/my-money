@@ -3,9 +3,8 @@ const logger = require('../helpers/logger')
 const { validateSip } = require('../helpers/validator')
 const { sipService } = require('../services')
 const calculator = require('../helpers/calculator')
-const db = require('../dal/models')
 
-const INPUT_ORDER = [ 'equity', 'debt', 'gold' ]
+const SIP_ARGUMENTS = [ 'equity', 'debt', 'gold' ]
 
 const sip = new Command('SIP')
   .description('receives investment amount on a monthly basis for each fund.')
@@ -16,28 +15,26 @@ const sip = new Command('SIP')
     _handleSip([ equity, debt, gold ], command))
 
 
-/**
- * Handles the sip command
- * @param {Array} sipInput
- * @param {Object} command
- * @returns void
- */
-const _handleSip = async (sipInput, command) => {
+const _handleSip = async (amounts, command) => {
   try {
-    validateSip(sipInput)
+    
+    validateSip(amounts)
 
-    const accountSips = _serializeSipInput(sipInput)
+    const serializedAmounts = _serializeSipInput(amounts)
   
-    await sipService.execute(accountSips)
+    await sipService.execute(serializedAmounts)
+  
   } catch (error) {
+  
     logger.error(error.message)
+  
   }
 
 }
 
 const _serializeSipInput = arr => arr.map((sip, index) => ({
-  name: INPUT_ORDER[index],
-  sip: calculator.floor(sip)
+  name: SIP_ARGUMENTS[index],
+  sip: Math.floor(sip)
 }))
 
 module.exports = sip

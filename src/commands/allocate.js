@@ -24,7 +24,9 @@ const _handleAllocate = async (amounts, command) => {
     await allocateService.execute(serializedAmounts)
     
   } catch (error) {
+  
     logger.error(error.message)
+  
   }
 }
 
