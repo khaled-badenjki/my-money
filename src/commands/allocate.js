@@ -30,7 +30,7 @@ const _handleAllocate = async (amounts, command) => {
   }
 }
 
-const _serializeAllocate = arr => arr.map((amount, index) => ({
+const _serializeAllocate = amountsArray => amountsArray.map((amount, index) => ({
   name: ALLOCATE_ARGUMENTS[index],
   amount: Math.floor(amount)
 }))

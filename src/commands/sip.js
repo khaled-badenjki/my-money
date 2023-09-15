@@ -32,7 +32,7 @@ const _handleSip = async (amounts, command) => {
 
 }
 
-const _serializeSipInput = arr => arr.map((sip, index) => ({
+const _serializeSipInput = amountsArray => amountsArray.map((sip, index) => ({
   name: SIP_ARGUMENTS[index],
   sip: Math.floor(sip)
 }))

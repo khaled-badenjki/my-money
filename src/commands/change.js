@@ -4,7 +4,7 @@ const { validateChange } = require('../helpers/validator')
 const { changeService }  = require('../services')
 const { months } = require('../../config')
 
-const INPUT_ORDER = [ 'equity', 'debt', 'gold' ]
+const CHANGE_ARGUMENTS = [ 'equity', 'debt', 'gold' ]
 
 const change = new Command('CHANGE')
   .description('receives the monthly rate of change (growth or loss) ' +
@@ -17,29 +17,39 @@ const change = new Command('CHANGE')
     _handleChange([ equity, debt, gold ], month, command))
 
 
-/**
- * Handles the change command
- * @param {Array} changeInput
- * @param {Object} command
- * @returns void
- */
-const _handleChange = async (changeInput, month, command) => {
+const _handleChange = async (percentages, month, command) => {
   try {
-    validateChange(changeInput, month) 
+
+    validateChange(percentages, month) 
   
-    const accountChanges = _serializeChangeInput(changeInput)
+    const { 
+      serializedPercentages, 
+      serializedMonth 
+    } = _serializeChange(percentages, month)
+
     const monthNumber = months[month.toUpperCase()]
   
-    await changeService.execute(accountChanges, monthNumber)
+    await changeService.execute(serializedPercentages, serializedMonth)
+
   } catch (error) {
+
     logger.error(error.message)
+    
   }
 
 }
 
-const _serializeChangeInput = arr => arr.map((change, index) => ({
-  name: INPUT_ORDER[index],
-  change: Number(change.slice(0, -1))
-}))
+const _serializeChange = (percentagesArray, month) => {
+  const serializedPercentages = percentagesArray.map((change, index) => ({
+    name: CHANGE_ARGUMENTS[index],
+    change: Number(change.slice(0, -1))
+  }))
+
+  return {
+    serializedPercentages,
+    serializedMonth: months[month.toUpperCase()]
+  }
+}
+  
 
 module.exports = change
