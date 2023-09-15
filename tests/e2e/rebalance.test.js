@@ -55,6 +55,36 @@ describe('rebalance e2e', () => {
     expect(logger.info.calledWith('23619 11809 3936')).to.be.true
   })
 
+  it('should persist operations to rebalance the amount', async () => {
+    await runCommand('ALLOCATE', ['6000', '3000', '1000'])
+
+    await runCommand('SIP', ['2000', '1000', '500'])
+
+    await runCommand('CHANGE', ['4.00%', '10.00%', '2.00%', 'JANUARY'])
+
+    await runCommand('CHANGE', ['--', '-10.00%', '40.00%', '0.00%', 'FEBRUARY'])
+
+    await runCommand('CHANGE', ['12.50%', '12.50%', '12.50%', 'MARCH'])
+
+    await runCommand('CHANGE', ['--', '8.00%', '-3.00%', '7.00%', 'APRIL'])
+
+    await runCommand('CHANGE', ['13.00%', '21.00%', '10.50%', 'MAY'])
+
+    await runCommand('CHANGE', ['--', '10.00%', '8.00%', '-5.00%', 'JUNE'])
+
+    await runCommand('BALANCE', ['JUNE'])
+
+    expect(logger.info.getCall(0).args[0]).to.be.equal('21590 13664 4112')
+
+    await runCommand('REBALANCE', [])
+    
+    expect(logger.info.getCall(1).args[0]).to.be.equal('23619 11809 3936')
+
+    await runCommand('BALANCE', 'JUNE')
+
+    expect(logger.info.getCall(2).args[0]).to.be.equal('23619 11809 3936')
+  })
+
   it('should rebalance in June even if more records exist', async () => {
     await runCommand('ALLOCATE', ['6000', '3000', '1000'])
 
