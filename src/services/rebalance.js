@@ -3,18 +3,7 @@ const db = require('../dal/models')
 const balanceService = require('./balance')
 
 const execute = async () => {
-  const operation = await db.Operation.findOne({
-    attributes: [
-      [db.sequelize.fn('max', db.sequelize.col('date')), 'latestDate']
-    ],
-    raw: true
-  })
-
-  if (!operation.latestDate) {
-    throw new Error('CANNOT_REBALANCE')
-  }
-
-  const month = operation.latestDate.split('-')[1]
+  const month = await getLatestOperationMonth()
 
   if (parseInt(month) < parseInt(months.JUNE)) {
     throw new Error('CANNOT_REBALANCE')
@@ -44,8 +33,21 @@ const execute = async () => {
 
     return rebalanceAmount
   }
+}
 
-  return operation
+const getLatestOperationMonth = async () => {
+  const operation = await db.Operation.findOne({
+    attributes: [
+      [db.sequelize.fn('max', db.sequelize.col('date')), 'latestDate']
+    ],
+    raw: true
+  })
+
+  if (!operation.latestDate) {
+    throw new Error('CANNOT_REBALANCE')
+  }
+
+  return operation.latestDate.split('-')[1]
 }
 
 module.exports = {
