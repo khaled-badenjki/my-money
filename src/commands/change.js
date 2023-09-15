@@ -27,8 +27,6 @@ const _handleChange = async (percentages, month, command) => {
       serializedMonth 
     } = _serializeChange(percentages, month)
 
-    const monthNumber = months[month.toUpperCase()]
-  
     await changeService.execute(serializedPercentages, serializedMonth)
 
   } catch (error) {
