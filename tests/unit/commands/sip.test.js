@@ -9,6 +9,21 @@ const callSip = args =>
 
 const sampleArgs = [1000, 1000, 1000]
 
+const expectedServiceStubArgs = [
+  {
+    name: 'equity',
+    sip: sampleArgs[0]
+  },
+  {
+    name: 'debt',
+    sip: sampleArgs[1]
+  },
+  {
+    name: 'gold',
+    sip: sampleArgs[2]
+  }
+]
+
 describe('commands/sip', () => {
   describe('success', () => {
     let sipServiceStub
@@ -26,39 +41,13 @@ describe('commands/sip', () => {
     it('should call services.execute with correct params',  () => {
       callSip(sampleArgs)
 
-      expect(sipServiceStub.args[0][0]).to.deep.equal([
-        {
-          name: 'equity',
-          sip: sampleArgs[0]
-        },
-        {
-          name: 'debt',
-          sip: sampleArgs[1]
-        },
-        {
-          name: 'gold',
-          sip: sampleArgs[2]
-        }
-      ])
+      expect(sipServiceStub.args[0][0]).to.deep.equal(expectedServiceStubArgs)
     })
 
     it('should floor the sip down if it has decimal places',  () => {
       callSip(sampleArgs.map(sip => sip + 0.7))
 
-      expect(sipServiceStub.args[0][0]).to.deep.equal([
-        {
-          name: 'equity',
-          sip: sampleArgs[0]
-        },
-        {
-          name: 'debt',
-          sip: sampleArgs[1]
-        },
-        {
-          name: 'gold',
-          sip: sampleArgs[2]
-        }
-      ])
+      expect(sipServiceStub.args[0][0]).to.deep.equal(expectedServiceStubArgs)
     })
   })
 
