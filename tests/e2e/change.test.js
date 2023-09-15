@@ -21,4 +21,17 @@ describe('CHANGE e2e', () => {
 
     expect(operations.length).to.be.equal(3)
   })
+
+  it('should fail if previous month is not set', async () => {
+    await runCommand('ALLOCATE', ['6000', '3000', '1000'])
+    await runCommand('SIP', ['2000', '1000', '500'])
+
+    await runCommand('CHANGE', ['4.00%', '10.00%', '2.00%', 'JANUARY'])
+
+    // skip February
+
+    await runCommand('CHANGE', ['4.00%', '10.00%', '2.00%', 'MARCH'])
+    
+    expect(logger.error.args[0][0]).to.be.equal('PREVIOUS_MONTH_NOT_SET')
+  })
 })
