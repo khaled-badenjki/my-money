@@ -1,12 +1,12 @@
 const { errors, months } = require('../../config')
   
-const validateAllocateInput = arr => _validateExists(arr) 
+const validateAllocate = arr => _validateExists(arr) 
   && _validateIsNumber(arr) 
   && _validateIsPositive(arr)
 
-const validateSipInput = validateAllocateInput
+const validateSip = validateAllocate
 
-const validateChangeInput = (arr, month) => _validateExists(arr) 
+const validateChange = (arr, month) => _validateExists(arr) 
   && _validateIsPercentage(arr)
   && _validateIsNumber(arr.map(el => el.slice(0, -1)))
   && _validateIsMonth(month)
@@ -42,7 +42,7 @@ const _validateIsMonth = month => {
 }
 
 module.exports = {
-  validateAllocateInput,
-  validateSipInput,
-  validateChangeInput
+  validateAllocate,
+  validateSip,
+  validateChange
 }

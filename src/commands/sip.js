@@ -1,6 +1,6 @@
 const { Command } = require('commander')
 const logger = require('../helpers/logger')
-const { validateSipInput } = require('../helpers/validator')
+const { validateSip } = require('../helpers/validator')
 const { sipService } = require('../services')
 const calculator = require('../helpers/calculator')
 const db = require('../dal/models')
@@ -24,7 +24,7 @@ const sip = new Command('SIP')
  */
 const _handleSip = async (sipInput, command) => {
   try {
-    validateSipInput(sipInput)
+    validateSip(sipInput)
 
     const accountSips = _serializeSipInput(sipInput)
   

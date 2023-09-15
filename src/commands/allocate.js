@@ -1,11 +1,9 @@
 const { Command } = require('commander')
 const logger = require('../helpers/logger')
-const { validateAllocateInput } = require('../helpers/validator')
+const { validateAllocate } = require('../helpers/validator')
 const { allocateService } = require('../services')
-const calculator = require('../helpers/calculator')
-const db = require('../dal/models')
 
-const INPUT_ORDER = [ 'equity', 'debt', 'gold' ]
+const ALLOCATE_ARGUMENTS = ['equity', 'debt', 'gold']
 
 const allocate = new Command('ALLOCATE')
   .description('receives the initial investment amounts for each fund.')
@@ -16,29 +14,23 @@ const allocate = new Command('ALLOCATE')
     _handleAllocate([ equity, debt, gold ], command))
 
 
-/**
- * Handles the allocate command
- * @param {Array} allocateInput
- * @param {Object} command
- * @returns void
- */
-const _handleAllocate = async (allocateInput, command) => {
+const _handleAllocate = async (amounts, command) => {
   try {
 
-    validateAllocateInput(allocateInput) 
+    validateAllocate(amounts)
   
-    const accountAmounts = _serializeAllocateInput(allocateInput)
+    const serializedAmounts = _serializeAllocate(amounts)
 
-    await allocateService.execute(accountAmounts)
+    await allocateService.execute(serializedAmounts)
     
   } catch (error) {
     logger.error(error.message)
   }
 }
 
-const _serializeAllocateInput = arr => arr.map((amount, index) => ({
-  name: INPUT_ORDER[index],
-  amount: calculator.floor(amount)
+const _serializeAllocate = arr => arr.map((amount, index) => ({
+  name: ALLOCATE_ARGUMENTS[index],
+  amount: Math.floor(amount)
 }))
 
 module.exports = allocate

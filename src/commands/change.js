@@ -1,6 +1,6 @@
 const { Command } = require('commander')
 const logger = require('../helpers/logger')
-const { validateChangeInput } = require('../helpers/validator')
+const { validateChange } = require('../helpers/validator')
 const { changeService }  = require('../services')
 const { months } = require('../../config')
 
@@ -25,7 +25,7 @@ const change = new Command('CHANGE')
  */
 const _handleChange = async (changeInput, month, command) => {
   try {
-    validateChangeInput(changeInput, month) 
+    validateChange(changeInput, month) 
   
     const accountChanges = _serializeChangeInput(changeInput)
     const monthNumber = months[month.toUpperCase()]
