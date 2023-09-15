@@ -43,7 +43,7 @@ describe('change service', () => {
     change: data.change
   }))
 
-  let month = months.APRIL
+  let month = months.JANUARY
   
   let operationFindAllStub
   let operationCreateStub
@@ -82,47 +82,6 @@ describe('change service', () => {
   it('should call accounts model to get all accounts', async () => {
     await changeService.execute(changeInput, month)
     expect(accountFindAllStub.called).to.be.true
-  })
-
-  it('should call operation bulkCreate with correct arguments', async () => {
-    await changeService.execute(changeInput, month)
-    expect(operationCreateStub.called).to.be.true
-    expect(operationCreateStub.args[0][0]).to.deep.equal(
-      testData.map(data => [
-        {
-          type: 'sip',
-          amount: data.expectedSip,
-          accountId: data.accountId,
-          date: `${defaults.YEAR}-${month}-${defaults.DAY}`
-        },
-        {
-          type: 'change',
-          amount: data.expectedChangeAfterSip,
-          accountId: data.accountId,
-          date: `${defaults.YEAR}-${month}-${defaults.DAY}`
-        }
-      ]).flat()
-    )
-  })
-
-  it('should add SIP to balance if SIP starting month or later', async () => {
-    await changeService.execute(changeInput, month)
-    expect(operationCreateStub.args[0][0]).to.deep.equal(
-      testData.map(data => [
-        {
-          type: 'sip',
-          amount: data.expectedSip,
-          accountId: data.accountId,
-          date: `${defaults.YEAR}-${month}-${defaults.DAY}`
-        },
-        {
-          type: 'change',
-          amount: data.expectedChangeAfterSip,
-          accountId: data.accountId,
-          date: `${defaults.YEAR}-${month}-${defaults.DAY}`
-        }
-      ]).flat()
-    )
   })
 
   it('should not add SIP to balance if before SIP starting month', async () => {

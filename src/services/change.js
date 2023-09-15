@@ -1,7 +1,9 @@
-const { defaults } = require('../../config')
+const { defaults, months } = require('../../config')
 const db = require('../dal/models')
 
 const execute = async (accountsChangePercentage, month) => {
+  await validatePreviousMonth(month)
+
   const sum = await db.Operation.findAll(_buildSumQuery())
 
   const accounts = await db.Account.findAll({
@@ -28,6 +30,26 @@ const execute = async (accountsChangePercentage, month) => {
   await db.Operation.bulkCreate(operations.flat())
 
   return sum
+}
+
+const validatePreviousMonth = async month => {
+  if (month === months.JANUARY) return
+
+  const previousMonth = `${parseInt(month) - 1}`.padStart(2, '0')
+
+  const operation = await db.Operation.findOne({
+    attributes: [
+      [db.sequelize.fn('max', db.sequelize.col('date')), 'latestDate']
+    ],
+    raw: true
+  })
+
+  const lastMonth = operation.latestDate.split('-')[1]
+
+  if (lastMonth !== previousMonth) {
+    throw new Error('PREVIOUS_MONTH_NOT_SET')
+  }
+
 }
 
 const _buildSumQuery = () => {
