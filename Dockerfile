@@ -14,9 +14,5 @@ RUN yarn install --frozen-lockfile
 # Copy all files
 COPY ./ ./
 
-# Run container as non-root (unprivileged) user
-# The node user is provided in the Node.js Alpine base image
-USER node
-
 # Run yarn start script
 CMD ["yarn", "start"]

@@ -1,0 +1,7 @@
+{
+  "exclude": [
+    "src/helpers/logger.js",
+    "src/dal/models/index.js"
+  ],
+  "reporter": ["lcov", "text", "html"]
+}
