@@ -10,7 +10,7 @@ const testData = [
     name: 'equity',
     total: 6240,
     monthlyInvestment: 2000,
-    change: -10.00,
+    percentage: -10.00,
     expectedSip: 2000,
     expectedChangeBeforeSip: -624,
     expectedChangeAfterSip: -824,
@@ -20,7 +20,7 @@ const testData = [
     name: 'debt',
     total: 3300,
     monthlyInvestment: 1000,
-    change: 40.00,
+    percentage: 40.00,
     expectedSip: 1000,
     expectedChangeBeforeSip: 1320,
     expectedChangeAfterSip: 1720,
@@ -30,7 +30,7 @@ const testData = [
     name: 'gold',
     total: 1020,
     monthlyInvestment: 500,
-    change: 0.00,
+    percentage: 0.00,
     expectedSip: 500,
     expectedChangeBeforeSip: 0,
     expectedChangeAfterSip: 0,
@@ -40,7 +40,7 @@ const testData = [
 describe('change service', () => {
   const changeInput = testData.map((data) => ({
     name: data.name,
-    change: data.change,
+    percentage: data.percentage,
   }))
 
   let month = months.JANUARY

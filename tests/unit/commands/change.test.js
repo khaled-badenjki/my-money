@@ -15,9 +15,9 @@ describe('commands/change', () => {
       callChange(['10%', '20%', '30%', 'APRIL'])
       expect(changeService.execute.calledOnce).to.be.true
       expect(changeService.execute.args[0][0]).to.deep.equal([
-        {name: 'equity', change: 10},
-        {name: 'debt', change: 20},
-        {name: 'gold', change: 30},
+        {name: 'equity', percentage: 10},
+        {name: 'debt', percentage: 20},
+        {name: 'gold', percentage: 30},
       ], '04')
 
       changeService.execute.restore()

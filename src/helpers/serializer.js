@@ -32,9 +32,9 @@ const serializeChange = (percentagesArray, month) => {
 }
 
 const _serializeChangePercentage = (percentagesArray) =>
-  percentagesArray.map((change, index) => ({
+  percentagesArray.map((percentage, index) => ({
     name: CHANGE_ARGUMENTS[index],
-    change: Number(change.slice(0, -1)),
+    percentage: Number(percentage.slice(0, -1)),
   }),
   )
 

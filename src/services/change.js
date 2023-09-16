@@ -19,7 +19,7 @@ const execute = async (accountsChangePercentage, month) => {
     }
 
     const change =
-      _changePercentToAmount(total, accountsChangePercentage[index].change)
+      _changePercentToAmount(total, accountsChangePercentage[index].percentage)
 
     op.push(_buildChangeOperations(account, change, month))
 
