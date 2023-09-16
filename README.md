@@ -1,8 +1,7 @@
 # MyMoney Challenge
 ![mymoney workflow](https://github.com/khaled-badenjki/my-money-challenge/actions/workflows/github-actions.yml/badge.svg) ![test coverage](https://img.shields.io/badge/coverage-100-green)
 
-This is a challenge provided by [SadaPay](https://sadapay.pk/) during the hiring process for a senior software engineer position. You can read the requirements [Here](https://codu.ai/coding-problem/mymoney).
-
+MyMoney is a platform that lets investors track their consolidated portfolio value across equity, debt, and gold. It also lets them perform various operations on their portfolio, such as rebalancing, SIP, etc.
 
 # Setup :rocket:
 ## 1. Using Docker :whale:
@@ -66,26 +65,19 @@ Once the app and database are up and running, you will need to create the databa
 
    After that, you should be ready to go :rocket:
 
-# Design 📐✏️
-
-
-# Usage ⭐
-when passing a negative value (for example the `CHANGE` command), you need to pass double dash `--` to signify the end of options, so it would be like this
-
-    node index.js CHANGE -- 10.00% 8.00% -5.00% JUNE
-    
-
 # Testing 🧪
 To run the test suite, run this command:
 
     docker compose run app yarn coverage
 
+### Notes
 
-MyMoney tool was built following **TDD** approach, while keeping an eye on 100% code coverage. I have used `mocha` for testing, `chai` for assertion, `sinon` for stubbing and `nyc` for code coverage.
+ - I followed **TDD** approach, while keeping an eye on high test coverage (currently it's at 100%)
+ - I followed **Trunk Based Development**, by utilizing the `main` branch. To ensure no broken code is pushed to remote, I made use of [husky](https://typicode.github.io/husky/) package to implement a `pre-push` hook, that runs the test suite and only proceed if it's green (it also runs lint as a `pre-commit` hook)
+ - I have used [mocha](https://mochajs.org/) for testing, [chai](https://www.chaijs.com/) for assertion, [sinon](https://sinonjs.org/releases/latest/stubs/) for stubbing and [nyc](https://github.com/istanbuljs/nyc) for code coverage.
+ - to implement e2e tests, I used `sqlite` to run tests quickly, in memory, without the need to setup a postgresql instance. `sequelize` ORM helped make the code working on both databases without the need for modification
 
-Also, to implement e2e tests, I used `sqlite` to run tests quickly, in memory, without the need to setup a postgresql instance. `sequelize` ORM helped make the code working on both databases without the need for modification
-
-The table below shows the result of running `yarn coverage`
+### Report
 
 File                                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 ----------------------------------------|---------|----------|---------|---------|-------------------
@@ -139,6 +131,38 @@ All files                               |     100 |      100 |     100 |     100
   change.test.js                        |     100 |      100 |     100 |     100 |                   
   rebalance.test.js                     |     100 |      100 |     100 |     100 |                   
   sip.test.js                           |     100 |      100 |     100 |     100 |                   
+
+
+# Design 📐✏️
+## Layered Architecture
+
+![Layered Architecture](./docs/images/layered-architecture.png)
+
+I followed the layered architecture approach, where each layer has a specific responsibility. This approach helps to keep the code clean and easy to maintain. It also helps to keep the code testable, as each layer can be tested in isolation.
+
+### Presentation Layer (Commands)
+This layer is responsible for interacting with the user. It's the entry point of the application. It's also responsible for validating and parsing the user input, then passing it to the business layer. 
+
+### Business Layer (Services)
+This layer is responsible for the business logic. It's the heart of the application. It's responsible for orchestrating the data flow between the data layer and the presentation layer.
+
+### Data Access Layer (DAL)
+This layer is responsible for interacting with the database. It's responsible for creating the database connection, defining the database schema, and providing an interface for the business layer to interact with the database.
+
+### Helpers
+This part is not a layer per se, but it's a collection of helper functions that are used across the application. It's responsible for providing utility functions that are used by the presentation layer.
+
+## Database Schema
+![Database Schema](./docs/images/db-schema.png)
+
+I used `sequelize` ORM to define the database schema. I used `postgresql` as a database engine. I used `sequelize-cli` to create the database and run migrations.
+
+# Usage ⭐
+when passing a negative value (for example the `CHANGE` command), you need to pass double dash `--` to signify the end of options, so it would be like this
+
+    node index.js CHANGE -- 10.00% 8.00% -5.00% JUNE
+    
+
 
 
 # Performance 📊
