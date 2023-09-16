@@ -7,47 +7,32 @@ const {months, defaults} = require('../../../config')
 describe('balance service', () => {
   const month = months.APRIL
   let operationFindAllStub
-  let accountFindAllStub
 
   beforeEach(() => {
     operationFindAllStub = sinon.stub(db.Operation, 'findAll')
         .resolves(
             [
               {
-                accountId: 3,
-                total: '1000',
+                accountId: 1,
+                accountName: 'equity',
+                balance: '6000',
               },
               {
                 accountId: 2,
-                total: '3000',
+                accountName: 'debt',
+                balance: '3000',
               },
               {
-                accountId: 1,
-                total: '6000',
+                accountId: 3,
+                accountName: 'gold',
+                balance: '1000',
               },
             ],
         )
-
-    accountFindAllStub = sinon.stub(db.Account, 'findAll')
-        .resolves([
-          {
-            id: 1,
-            name: 'equity',
-          },
-          {
-            id: 2,
-            name: 'debt',
-          },
-          {
-            id: 3,
-            name: 'gold',
-          },
-        ])
   })
 
   afterEach(() => {
     operationFindAllStub.restore()
-    accountFindAllStub.restore()
   })
 
   it('should call operation model to get sum of all accounts', async () => {
@@ -56,9 +41,15 @@ describe('balance service', () => {
     expect(operationFindAllStub.args[0][0]).to.deep.equal({
       attributes: [
         'accountId',
-        [db.sequelize.fn('sum', db.sequelize.col('amount')), 'total'],
+        [db.sequelize.fn('sum', db.sequelize.col('amount')), 'balance'],
+        [db.sequelize.literal('account.name'), 'accountName'],
       ],
-      group: ['accountId'],
+      include: [{
+        model: db.Account,
+        attributes: [],
+        as: 'account',
+      }],
+      group: ['accountId', 'account.name'],
       raw: true,
       where: {
         date: {
@@ -69,31 +60,24 @@ describe('balance service', () => {
     })
   })
 
-  it('should call account model to get all accounts', async () => {
-    await balanceService.execute(month)
-    expect(accountFindAllStub.called).to.be.true
-  })
-
   it('should return array of account names and their balances', async () => {
     const result = await balanceService.execute(month)
     expect(result).to.deep.equal([
       {
-        id: 1,
-        name: 'equity',
+        accountId: 1,
+        accountName: 'equity',
         balance: '6000',
       },
       {
-        id: 2,
-        name: 'debt',
+        accountId: 2,
+        accountName: 'debt',
         balance: '3000',
       },
       {
-        id: 3,
-        name: 'gold',
+        accountId: 3,
+        accountName: 'gold',
         balance: '1000',
       },
     ])
-    operationFindAllStub.restore()
-    accountFindAllStub.restore()
   })
 })

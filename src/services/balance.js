@@ -2,7 +2,7 @@ const db = require('../dal/models')
 const {defaults} = require('../../config')
 
 const execute = async (month) => {
-  const date = getDefaultDate(month)
+  const date = buildDefaultDate(month)
 
   const balances = await queryBalanceGroupedByAccount(date)
 
@@ -29,7 +29,7 @@ const queryBalanceGroupedByAccount = async (date) => db.Operation.findAll({
   },
 })
 
-const getDefaultDate = (month) => {
+const buildDefaultDate = (month) => {
   return `${defaults.YEAR}-${month}-${defaults.NEXT_DAY}`
 }
 

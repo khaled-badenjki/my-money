@@ -21,17 +21,17 @@ const execute = async () => {
 
   const totalBalance = balance.reduce((acc, curr) => acc + curr.balance, 0)
 
-  const rebalanceAmount = balance.map((account, index) => {
+  const rebalanceAmount = balance.map((b, index) => {
     const desiredAllocationPercentage = desiredAllocationPercentages.find(
-        (d) => d.name === account.name,
+        (d) => d.name === b.accountName,
     ).desiredAllocationPercentage
     const desiredBalance =
       Math.floor(totalBalance * desiredAllocationPercentage / 100)
     return {
-      id: account.id,
-      name: account.name,
+      id: b.accountId,
+      name: b.accountName,
       amount: desiredBalance,
-      difference: desiredBalance - account.balance,
+      difference: desiredBalance - b.balance,
     }
   })
 
