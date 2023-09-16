@@ -1,9 +1,5 @@
 # MyMoney Challenge
-![mymoney workflow](https://github.com/khaled-badenjki/my-money-challenge/actions/workflows/github-actions.yml/badge.svg)
-
-  
-
-![test coverage](https://img.shields.io/badge/coverage-100-green)
+![mymoney workflow](https://github.com/khaled-badenjki/my-money-challenge/actions/workflows/github-actions.yml/badge.svg) ![test coverage](https://img.shields.io/badge/coverage-100-green)
 
 This is a challenge provided by [SadaPay](https://sadapay.pk/) during the hiring process for a senior software engineer position. You can read the requirements [Here](https://codu.ai/coding-problem/mymoney).
 
