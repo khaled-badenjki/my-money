@@ -50,13 +50,6 @@ describe('change service', () => {
   let accountFindAllStub
 
   beforeEach(() => {
-    operationFindAllStub = sinon.stub(db.Operation, 'findAll')
-        .resolves(
-            testData.map((data) => ({
-              accountId: data.accountId,
-              total: data.total,
-            })),
-        )
     operationCreateStub = sinon.stub(db.Operation, 'bulkCreate')
     accountFindAllStub = sinon.stub(db.Account, 'findAll')
         .resolves(
@@ -64,19 +57,14 @@ describe('change service', () => {
               id: data.accountId,
               name: data.name,
               monthlyInvestment: data.monthlyInvestment,
+              balance: data.total,
             })),
         )
   })
 
   afterEach(() => {
-    operationFindAllStub.restore()
     operationCreateStub.restore()
     accountFindAllStub.restore()
-  })
-
-  it('should call operation model to get sum of all accounts', async () => {
-    await changeService.execute(changeInput, month)
-    expect(operationFindAllStub.called).to.be.true
   })
 
   it('should call accounts model to get all accounts', async () => {
