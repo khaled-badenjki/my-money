@@ -1,27 +1,34 @@
 const db = require('../dal/models')
+const {errors} = require('../../config')
 
 const execute = async (sipAccounts) => {
-  const existingAccounts = await db.Account.findAll()
-  if (!existingAccounts.length) {
-    throw new Error('NO_ALLOCATION_SET')
-  }
+  const accounts = await db.Account.findAll()
 
-  existingAccounts.some((account) => {
-    if (account.monthlyInvestment) {
-      throw new Error('MONTHLY_INVESTMENT_ALREADY_SET')
-    }
-  })
+  validateExistence(accounts)
 
+  validateNotAlreadySet(accounts)
 
-  const accounts = Promise.all(
-      sipAccounts.map((account) => db.Account.update(
-          {monthlyInvestment: account.amount},
-          {where: {name: account.name}},
-      )),
-  )
-
-  return accounts
+  bulkSetSip(sipAccounts)
 }
+
+const validateExistence = (accounts) => {
+  if (!accounts.length) {
+    throw new Error(errors.NO_ALLOCATION_SET)
+  }
+}
+
+const validateNotAlreadySet = (accounts) => accounts.some((account) => {
+  if (account.monthlyInvestment) {
+    throw new Error(errors.MONTHLY_INVESTMENT_ALREADY_SET)
+  }
+})
+
+const bulkSetSip = async (accounts) => Promise.all(
+    accounts.map((account) => db.Account.update(
+        {monthlyInvestment: account.amount},
+        {where: {name: account.name}},
+    )),
+)
 
 module.exports = {
   execute,
