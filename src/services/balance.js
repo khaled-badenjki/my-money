@@ -2,36 +2,35 @@ const db = require('../dal/models')
 const {defaults} = require('../../config')
 
 const execute = async (month) => {
-  const sum = await db.Operation.findAll(_buildSumQuery(month))
-  const accounts = await db.Account.findAll({raw: true})
+  const date = getDefaultDate(month)
 
-  const balance = accounts.map((account) => {
-    const total = sum.find((s) => s.accountId === account.id).total
-    return {
-      id: account.id,
-      name: account.name,
-      balance: total,
-    }
-  })
+  const balances = await queryBalanceGroupedByAccount(date)
 
-  return balance
+  return balances
 }
 
-const _buildSumQuery = (month) => {
-  return {
-    attributes: [
-      'accountId',
-      [db.sequelize.fn('sum', db.sequelize.col('amount')), 'total'],
-    ],
-    group: ['accountId'],
-    raw: true,
-    where: {
-      date: {
-        [db.Sequelize.Op.lte]:
-          `${defaults.YEAR}-${month}-${defaults.NEXT_DAY}`,
-      },
+const queryBalanceGroupedByAccount = async (date) => db.Operation.findAll({
+  attributes: [
+    'accountId',
+    [db.sequelize.fn('sum', db.sequelize.col('amount')), 'balance'],
+    [db.sequelize.literal('account.name'), 'accountName'],
+  ],
+  include: [{
+    model: db.Account,
+    attributes: [],
+    as: 'account',
+  }],
+  group: ['accountId', 'account.name'],
+  raw: true,
+  where: {
+    date: {
+      [db.Sequelize.Op.lte]: date,
     },
-  }
+  },
+})
+
+const getDefaultDate = (month) => {
+  return `${defaults.YEAR}-${month}-${defaults.NEXT_DAY}`
 }
 
 module.exports = {
