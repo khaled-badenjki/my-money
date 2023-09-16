@@ -6,6 +6,10 @@ module.exports = {
     'mocha': true,
 
   },
+  'plugins': [
+    'mocha',
+    'jsdoc',
+  ],
   'extends': 'google',
   'overrides': [
   ],
@@ -18,5 +22,6 @@ module.exports = {
     'quotes': ['error', 'single'],
     'eol-last': ['error', 'always'],
     'max-len': ['error', {'code': 81}],
+    'jsdoc/check-types': 'error',
   },
 }
