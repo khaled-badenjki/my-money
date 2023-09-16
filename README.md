@@ -1,5 +1,9 @@
 # MyMoney Challenge
-![example workflow](https://github.com/khaled-badenjki/my-money-challenge/actions/workflows/github-actions.yml/badge.svg)
+![mymoney workflow](https://github.com/khaled-badenjki/my-money-challenge/actions/workflows/github-actions.yml/badge.svg)
+
+  
+
+![test coverage](https://img.shields.io/badge/coverage-100-green)
 
 This is a challenge provided by [SadaPay](https://sadapay.pk/) during the hiring process for a senior software engineer position. You can read the requirements [Here](https://codu.ai/coding-problem/mymoney).
 
@@ -76,6 +80,69 @@ when passing a negative value (for example the `CHANGE` command), you need to pa
     
 
 # Testing 🧪
+To run the test suite, run this command:
+
+    docker compose run app yarn coverage
+
+
+MyMoney tool was built following **TDD** approach, while keeping an eye on 100% code coverage. I have used `mocha` for testing, `chai` for assertion, `sinon` for stubbing and `nyc` for code coverage.
+
+Also, to implement e2e tests, I used `sqlite` to run tests quickly, in memory, without the need to setup a postgresql instance. `sequelize` ORM helped make the code working on both databases without the need for modification
+
+The table below shows the result of running `yarn coverage`
+
+File                                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+----------------------------------------|---------|----------|---------|---------|-------------------
+All files                               |     100 |      100 |     100 |     100 |                   
+ my-money-challenge                     |     100 |      100 |     100 |     100 |                   
+  config.js                             |     100 |      100 |     100 |     100 |                   
+ my-money-challenge/src/commands        |     100 |      100 |     100 |     100 |                   
+  allocate.js                           |     100 |      100 |     100 |     100 |                   
+  balance.js                            |     100 |      100 |     100 |     100 |                   
+  change.js                             |     100 |      100 |     100 |     100 |                   
+  index.js                              |     100 |      100 |     100 |     100 |                   
+  rebalance.js                          |     100 |      100 |     100 |     100 |                   
+  sip.js                                |     100 |      100 |     100 |     100 |                   
+ my-money-challenge/src/dal             |     100 |      100 |     100 |     100 |                   
+  config.js                             |     100 |      100 |     100 |     100 |                   
+ my-money-challenge/src/dal/models      |     100 |      100 |     100 |     100 |                   
+  account.js                            |     100 |      100 |     100 |     100 |                   
+  operation.js                          |     100 |      100 |     100 |     100 |                   
+ my-money-challenge/src/helpers         |     100 |      100 |     100 |     100 |                   
+  calculator.js                         |     100 |      100 |     100 |     100 |                   
+  serializer.js                         |     100 |      100 |     100 |     100 |                   
+  validator.js                          |     100 |      100 |     100 |     100 |                   
+ my-money-challenge/src/services        |     100 |      100 |     100 |     100 |                   
+  allocate.js                           |     100 |      100 |     100 |     100 |                   
+  balance.js                            |     100 |      100 |     100 |     100 |                   
+  change.js                             |     100 |      100 |     100 |     100 |                   
+  index.js                              |     100 |      100 |     100 |     100 |                   
+  rebalance.js                          |     100 |      100 |     100 |     100 |                   
+  sip.js                                |     100 |      100 |     100 |     100 |                   
+ my-money-challenge/tests               |     100 |      100 |     100 |     100 |                   
+  hello-world.test.js                   |     100 |      100 |     100 |     100 |                   
+  setup-tests.js                        |     100 |      100 |     100 |     100 |                   
+ my-money-challenge/tests/e2e           |     100 |      100 |     100 |     100 |                   
+  allocate.test.js                      |     100 |      100 |     100 |     100 |                   
+  change.test.js                        |     100 |      100 |     100 |     100 |                   
+  rebalance.test.js                     |     100 |      100 |     100 |     100 |                   
+  setup-e2e.js                          |     100 |      100 |     100 |     100 |                   
+  sip.test.js                           |     100 |      100 |     100 |     100 |                   
+ my-money-challenge/tests/unit/commands |     100 |      100 |     100 |     100 |                   
+  allocate.test.js                      |     100 |      100 |     100 |     100 |                   
+  balance.test.js                       |     100 |      100 |     100 |     100 |                   
+  change.test.js                        |     100 |      100 |     100 |     100 |                   
+  rebalance.test.js                     |     100 |      100 |     100 |     100 |                   
+  sip.test.js                           |     100 |      100 |     100 |     100 |                   
+ my-money-challenge/tests/unit/helpers  |     100 |      100 |     100 |     100 |                   
+  calculator.test.js                    |     100 |      100 |     100 |     100 |                   
+  validator.test.js                     |     100 |      100 |     100 |     100 |                   
+ my-money-challenge/tests/unit/services |     100 |      100 |     100 |     100 |                   
+  allocate.test.js                      |     100 |      100 |     100 |     100 |                   
+  balance.test.js                       |     100 |      100 |     100 |     100 |                   
+  change.test.js                        |     100 |      100 |     100 |     100 |                   
+  rebalance.test.js                     |     100 |      100 |     100 |     100 |                   
+  sip.test.js                           |     100 |      100 |     100 |     100 |                   
 
 
 # Performance 📊
