@@ -1,4 +1,4 @@
-const {defaults, months, constants} = require('../../config')
+const {defaults, months, errors, constants} = require('../../config')
 const db = require('../dal/models')
 
 const execute = async (accountsAndPercentage, month) => {
@@ -55,7 +55,7 @@ const validatePreviousMonth = async (month) => {
   const lastExistingMonth = new Date(operation.latestDate).getMonth() + 1
 
   if (lastExistingMonth !== parseInt(previousMonth)) {
-    throw new Error('PREVIOUS_MONTH_NOT_SET')
+    throw new Error(errors.PREVIOUS_MONTH_NOT_SET)
   }
 }
 

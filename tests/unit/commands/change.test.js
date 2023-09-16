@@ -3,6 +3,7 @@ const {expect} = require('chai')
 const logger = require('../../../src/helpers/logger')
 const program = require('../../../src/commands')
 const {changeService} = require('../../../src/services')
+const {errors} = require('../../../config')
 
 const callChange = (args) =>
   program.parseAsync(['node', 'index.js', 'CHANGE', ...args])
@@ -26,12 +27,12 @@ describe('commands/change', () => {
 
   describe('failure', () => {
     it('should print the error message', async () => {
-      sinon.stub(changeService, 'execute').throws(new Error('ERROR_MESSAGE'))
+      sinon.stub(changeService, 'execute').throws(new Error(errors.ERROR))
 
       await callChange(['10%', '20%', '30%', 'APRIL'])
 
       expect(logger.error.calledOnce).to.be.true
-      expect(logger.error.args[0][0]).to.equal('ERROR_MESSAGE')
+      expect(logger.error.args[0][0]).to.equal(errors.ERROR)
 
       changeService.execute.restore()
     })

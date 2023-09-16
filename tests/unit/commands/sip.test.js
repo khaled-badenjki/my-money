@@ -3,6 +3,7 @@ const {expect} = require('chai')
 const logger = require('../../../src/helpers/logger')
 const program = require('../../../src/commands')
 const {sipService} = require('../../../src/services')
+const {errors} = require('../../../config')
 
 const callSip = (args) =>
   program.parseAsync(['node', 'index.js', 'SIP', ...args])
@@ -56,7 +57,7 @@ describe('commands/sip', () => {
     beforeEach(() => {
       sipServiceStub = sinon
           .stub(sipService, 'execute')
-          .rejects(new Error('error'))
+          .rejects(new Error(errors.ERROR))
     })
 
     afterEach(() => {
@@ -66,7 +67,7 @@ describe('commands/sip', () => {
     it('should log error if it catches an error', async () => {
       await callSip(sampleArgs)
 
-      expect(logger.error.args[0][0]).to.include('error')
+      expect(logger.error.args[0][0]).to.include(errors.ERROR)
     })
   })
 })

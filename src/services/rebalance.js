@@ -1,7 +1,7 @@
 const {months} = require('../../config')
 const db = require('../dal/models')
 const balanceService = require('./balance')
-const {defaults} = require('../../config')
+const {defaults, errors} = require('../../config')
 
 const execute = async () => {
   const month = await getLatestOperationMonth()
@@ -20,7 +20,7 @@ const execute = async () => {
 const buildRebalanceOperations = (balance, rebalanceMonth) => {
   const totalBalance = balance.reduce((acc, curr) => acc + curr.balance, 0)
 
-  return balance.map((b, index) => {
+  return balance.map((b) => {
     const desiredBalance =
       Math.floor(totalBalance * b.desiredAllocationPercentage / 100)
 
@@ -38,7 +38,7 @@ const calculateRebalanceAmount = (actualBalance, desiredBalance) =>
 
 const decideRebalanceMonthOrFail = (month) => {
   if (parseInt(month) < parseInt(months.JUNE)) {
-    throw new Error('CANNOT_REBALANCE')
+    throw new Error(errors.CANNOT_REBALANCE)
   }
 
   return parseInt(month) === parseInt(months.DECEMBER) ?
@@ -54,7 +54,7 @@ const getLatestOperationMonth = async () => {
   })
 
   if (!operation.latestDate) {
-    throw new Error('CANNOT_REBALANCE')
+    throw new Error(errors.CANNOT_REBALANCE)
   }
 
   return new Date(operation.latestDate).getMonth() + 1

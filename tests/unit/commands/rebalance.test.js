@@ -3,6 +3,7 @@ const {expect} = require('chai')
 const logger = require('../../../src/helpers/logger')
 const program = require('../../../src/commands')
 const {rebalanceService} = require('../../../src/services')
+const {errors} = require('../../../config')
 
 const callRebalance = () =>
   program.parseAsync(['node', 'index.js', 'REBALANCE'])
@@ -36,7 +37,7 @@ describe('commands/rebalance', () => {
     beforeEach(() => {
       rebalanceServiceStub = sinon
           .stub(rebalanceService, 'execute')
-          .throws(new Error('error'))
+          .throws(new Error(errors.ERROR))
     })
 
     afterEach(() => {
@@ -46,7 +47,7 @@ describe('commands/rebalance', () => {
     it('should log the error caught from rebalance service', () => {
       callRebalance()
       expect(logger.error.calledOnce).to.be.true
-      expect(logger.error.args[0][0]).to.equal('error')
+      expect(logger.error.args[0][0]).to.equal(errors.ERROR)
     })
   })
 })

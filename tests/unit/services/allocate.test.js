@@ -5,6 +5,7 @@ chai.use(chaiAsPromised)
 const {expect} = chai
 const db = require('../../../src/dal/models')
 const {allocateService} = require('../../../src/services')
+const {errors} = require('../../../config')
 
 describe('allocate service', () => {
   const ALLOCATION_DATE = '2023-01-15'
@@ -92,9 +93,9 @@ describe('allocate service', () => {
   it('should fail if there are already accounts', async () => {
     accountBulkCreateStub.restore()
     accountBulkCreateStub = sinon.stub(db.Account, 'bulkCreate')
-        .rejects(new Error('Validation error'))
+        .rejects(new Error(errors.ALREADY_ALLOCATED))
 
     await expect(allocateService.execute(accounts))
-        .to.be.rejectedWith('Validation error')
+        .to.be.rejectedWith(errors.ALREADY_ALLOCATED)
   })
 })

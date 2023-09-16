@@ -3,6 +3,7 @@ const {expect} = require('chai')
 const program = require('../../../src/commands')
 const logger = require('../../../src/helpers/logger')
 const {allocateService} = require('../../../src/services')
+const {errors} = require('../../../config')
 
 const callAllocate = (args) =>
   program.parseAsync(['node', 'index.js', 'ALLOCATE', ...args])
@@ -67,7 +68,7 @@ describe('commands/allocate', () => {
     beforeEach(() => {
       allocateServiceStub = sinon
           .stub(allocateService, 'execute')
-          .rejects(new Error('ERROR_MESSAGE'))
+          .rejects(new Error(errors.ERROR))
     })
 
     afterEach(() => {
@@ -77,7 +78,7 @@ describe('commands/allocate', () => {
     it('should log any error it catches', async () => {
       await callAllocate(sampleArgs)
 
-      expect(logger.error.args[0][0]).to.include('ERROR_MESSAGE')
+      expect(logger.error.args[0][0]).to.include(errors.ERROR)
     })
   })
 })

@@ -3,7 +3,7 @@ const {expect} = require('chai')
 const logger = require('../../../src/helpers/logger')
 const program = require('../../../src/commands')
 const {balanceService} = require('../../../src/services')
-const {months} = require('../../../config')
+const {months, errors} = require('../../../config')
 
 
 const callBalance = (args) =>
@@ -58,7 +58,7 @@ describe('commands/balance', () => {
   describe('failure', () => {
     beforeEach(() => {
       balanceServiceStub = sinon.stub(balanceService, 'execute')
-          .rejects(new Error('ERROR_MESSAGE'))
+          .rejects(new Error(errors.ERROR))
     })
 
     afterEach(() => {
@@ -68,7 +68,7 @@ describe('commands/balance', () => {
     it('should catch error message from balanceService', async () => {
       await callBalance(['APRIL'])
 
-      expect(logger.error.args[0][0]).to.equal('ERROR_MESSAGE')
+      expect(logger.error.args[0][0]).to.equal(errors.ERROR)
     })
 
     it('should fail if month is not valid', async () => {
