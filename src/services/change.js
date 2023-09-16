@@ -1,35 +1,48 @@
-const {defaults, months} = require('../../config')
+const {defaults, months, constants} = require('../../config')
 const db = require('../dal/models')
 
-const execute = async (accountsChangePercentage, month) => {
+const execute = async (accountsAndPercentage, month) => {
   await validatePreviousMonth(month)
 
-  const sum = await db.Operation.findAll(_buildSumQuery())
+  const accountsBalance = await queryAccountWithBalance()
 
-  const accounts = await db.Account.findAll({
-    raw: true,
+  if (shouldApplySip(month)) applySip(accountsBalance)
+
+  calculateAmountAndAppend(accountsBalance, accountsAndPercentage)
+
+  const operations = prepareOperations(accountsBalance, month)
+
+  await db.Operation.bulkCreate(operations)
+}
+
+const prepareOperations = (accountsBalance, month) => {
+  const operations = []
+  accountsBalance.forEach((account) => {
+    operations.push(_buildChangeOperations(account, month))
   })
 
-  const operations = accounts.map((account, index) => {
-    let total = _getAccountTotal(sum, account)
-    const op = []
-    if (_sipIsApplicable(month)) {
-      total += account.monthlyInvestment
-      op.push(_buildSipOperations(account, month))
-    }
+  if (shouldApplySip(month)) {
+    accountsBalance.forEach((account) => {
+      operations.push(_buildSipOperations(account, month))
+    })
+  }
+  return operations
+}
 
-    const change =
-      _changePercentToAmount(total, accountsChangePercentage[index].percentage)
+const applySip = (accounts) => {
+  accounts.forEach((account) => {
+    account.balance = parseInt(account.balance) + account.monthlyInvestment
+  })
+}
 
-    op.push(_buildChangeOperations(account, change, month))
+const calculateAmountAndAppend = (acounts, accountsAndPercentage) => {
+  acounts.forEach((account) => {
+    const matchedAccount = accountsAndPercentage.find((aap) =>
+      aap.name === account.name)
 
-    return op
-  }).flat()
-
-
-  await db.Operation.bulkCreate(operations.flat())
-
-  return sum
+    account.percentage = matchedAccount.percentage
+    account.amount = percentToAmount(account.balance, matchedAccount.percentage)
+  })
 }
 
 const validatePreviousMonth = async (month) => {
@@ -37,35 +50,42 @@ const validatePreviousMonth = async (month) => {
 
   const previousMonth = `${parseInt(month) - 1}`.padStart(2, '0')
 
-  const operation = await db.Operation.findOne({
-    attributes: [
-      [db.sequelize.fn('max', db.sequelize.col('date')), 'latestDate'],
-    ],
-    raw: true,
-  })
+  const operation = await getLatestOperation()
 
-  const lastMonth = operation.latestDate.split('-')[1]
+  const lastExistingMonth = new Date(operation.latestDate).getMonth() + 1
 
-  if (lastMonth !== previousMonth) {
+  if (lastExistingMonth !== parseInt(previousMonth)) {
     throw new Error('PREVIOUS_MONTH_NOT_SET')
   }
 }
 
-const _buildSumQuery = () => {
-  return {
-    attributes: [
-      'accountId',
-      [db.sequelize.fn('sum', db.sequelize.col('amount')), 'total'],
-    ],
-    group: ['accountId'],
-    raw: true,
-  }
-}
+const getLatestOperation = () => db.Operation.findOne({
+  attributes: [
+    [db.sequelize.fn('max', db.sequelize.col('date')), 'latestDate'],
+  ],
+  raw: true,
+})
 
-const _buildChangeOperations = (account, change, month) => {
+const queryAccountWithBalance = () => db.Account.findAll({
+  attributes: [
+    'id',
+    'name',
+    'monthlyInvestment',
+    [db.sequelize.fn('sum', db.sequelize.col('amount')), 'balance'],
+  ],
+  include: [{
+    model: db.Operation,
+    attributes: [],
+    as: 'operations',
+  }],
+  raw: true,
+  group: ['Account.id'],
+})
+
+const _buildChangeOperations = (account, month) => {
   return {
-    type: 'change',
-    amount: Math.floor(change),
+    type: constants.CHANGE,
+    amount: Math.floor(account.amount),
     accountId: account.id,
     date: `${defaults.YEAR}-${month}-${defaults.DAY}`,
   }
@@ -73,21 +93,18 @@ const _buildChangeOperations = (account, change, month) => {
 
 const _buildSipOperations = (account, month) => {
   return {
-    type: 'sip',
+    type: constants.SIP,
     amount: account.monthlyInvestment,
     accountId: account.id,
     date: `${defaults.YEAR}-${month}-${defaults.DAY}`,
   }
 }
 
-const _sipIsApplicable = (month) =>
+const shouldApplySip = (month) =>
   month >= defaults.SIP_START_MONTH
 
-const _getAccountTotal = (sum, account) =>
-  parseInt(sum.find((s) => s.accountId === account.id).total)
-
-const _changePercentToAmount = (total, change) =>
-  total * (change / 100)
+const percentToAmount = (total, percentage) =>
+  total * (percentage / 100)
 
 module.exports = {
   execute,
