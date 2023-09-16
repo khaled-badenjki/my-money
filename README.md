@@ -1,5 +1,5 @@
 # MyMoney Challenge
-![example workflow](https://github.com/github/docs/actions/workflows/github-actions.yml/badge.svg)
+![example workflow](https://github.com/khaled-badenjki/my-money-challenge/actions/workflows/github-actions.yml/badge.svg)
 
 This is a challenge provided by [SadaPay](https://sadapay.pk/) during the hiring process for a senior software engineer position. You can read the requirements [Here](https://codu.ai/coding-problem/mymoney).
 
