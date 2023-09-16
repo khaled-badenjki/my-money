@@ -1,9 +1,9 @@
-const { expect } = require('chai')
+const {expect} = require('chai')
 const sinon = require('sinon')
 const program = require('../../src/commands')
 const db = require('../../src/dal/models')
 const logger = require('../../src/helpers/logger')
-const { defaults } = require('../../config')
+const {defaults} = require('../../config')
 
 const runCommand = (command, args) => program
     .parseAsync(['node', 'index.js', command, ...args])
@@ -14,7 +14,7 @@ describe('rebalance e2e', () => {
 
     expect(logger.error.calledOnceWith('CANNOT_REBALANCE')).to.be.true
   })
-  
+
   it('should log CANNOT_REBALANCE if 6 months data is unvailable', async () => {
     await runCommand('ALLOCATE', ['8000', '6000', '3500'])
 
@@ -77,7 +77,7 @@ describe('rebalance e2e', () => {
     expect(logger.info.getCall(0).args[0]).to.be.equal('21590 13664 4112')
 
     await runCommand('REBALANCE', [])
-    
+
     expect(logger.info.getCall(1).args[0]).to.be.equal('23619 11809 3936')
 
     await runCommand('BALANCE', ['JUNE'])
@@ -86,9 +86,9 @@ describe('rebalance e2e', () => {
 
     const rebalanceOperations = await db.Operation.findAll({
       where: {
-        type: 'rebalance'
+        type: 'rebalance',
       },
-      raw: true
+      raw: true,
     })
 
     expect(rebalanceOperations).to.have.lengthOf(3)

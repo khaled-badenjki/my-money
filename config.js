@@ -1,5 +1,6 @@
 module.exports = {
   errors: {
+    ALREADY_ALLOCATED: 'ALREADY_ALLOCATED',
     MISSING_INPUT: 'MISSING_INPUT',
     INPUT_NOT_NUMBER: 'INPUT_NOT_NUMBER',
     INPUT_NEGATIVE: 'INPUT_NEGATIVE',
@@ -22,6 +23,16 @@ module.exports = {
     DECEMBER: '12',
   },
 
+  constants: {
+    ALLOCATION: 'allocation',
+    SIP: 'sip',
+    REBALANCE: 'rebalance',
+    CHANGE: 'change',
+    EQUITY: 'equity',
+    DEBT: 'debt',
+    GOLD: 'gold',
+  },
+
   defaults: {
     SIP_START_MONTH: '02',
     ALLOCATION_DATE: '2023-01-15',
@@ -31,5 +42,5 @@ module.exports = {
     EQUITY: 'equity',
     DEBT: 'debt',
     GOLD: 'gold',
-  }
+  },
 }

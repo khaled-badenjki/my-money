@@ -1,26 +1,26 @@
 const sinon = require('sinon')
 const chai = require('chai')
-var chaiAsPromised = require('chai-as-promised')
+const chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
-const { expect } = chai
+const {expect} = chai
 const db = require('../../../src/dal/models')
-const { allocateService } = require('../../../src/services')
+const {allocateService} = require('../../../src/services')
 
 describe('allocate service', () => {
   const ALLOCATION_DATE = '2023-01-15'
   const accounts = [
     {
       name: 'equity',
-      amount: 6000
+      amount: 6000,
     },
     {
       name: 'debt',
-      amount: 2000
+      amount: 2000,
     },
     {
       name: 'gold',
-      amount: 2000
-    }
+      amount: 2000,
+    },
   ]
 
   let accountBulkCreateStub
@@ -29,14 +29,14 @@ describe('allocate service', () => {
 
   beforeEach(() => {
     accountBulkCreateStub = sinon.stub(db.Account, 'bulkCreate')
-      .resolves(accounts.map((account, index) => ({
-        id: index + 1,
-        name: account.name,
-        desiredAllocationPercentage: 0
-      })))
+        .resolves(accounts.map((account, index) => ({
+          id: index + 1,
+          name: account.name,
+          desiredAllocationPercentage: 0,
+        })))
     operationBulkCreateStub = sinon.stub(db.Operation, 'bulkCreate')
     transactionStub = sinon.stub(db.sequelize, 'transaction')
-      .resolves({ commit: () => {} })
+        .resolves({commit: () => {}})
   })
 
   afterEach(() => {
@@ -51,16 +51,16 @@ describe('allocate service', () => {
     expect(accountBulkCreateStub.args[0][0]).to.deep.equal([
       {
         name: 'equity',
-        desiredAllocationPercentage: 60
+        desiredAllocationPercentage: 60,
       },
       {
         name: 'debt',
-        desiredAllocationPercentage: 20
+        desiredAllocationPercentage: 20,
       },
       {
         name: 'gold',
-        desiredAllocationPercentage: 20
-      }
+        desiredAllocationPercentage: 20,
+      },
     ])
   })
 
@@ -72,29 +72,29 @@ describe('allocate service', () => {
         type: 'allocation',
         amount: 6000,
         accountId: 1,
-        date: ALLOCATION_DATE
+        date: ALLOCATION_DATE,
       },
       {
         type: 'allocation',
         amount: 2000,
         accountId: 2,
-        date: ALLOCATION_DATE
+        date: ALLOCATION_DATE,
       },
       {
         type: 'allocation',
         amount: 2000,
         accountId: 3,
-        date: ALLOCATION_DATE
-      }
+        date: ALLOCATION_DATE,
+      },
     ])
   })
 
   it('should fail if there are already accounts', async () => {
     accountBulkCreateStub.restore()
     accountBulkCreateStub = sinon.stub(db.Account, 'bulkCreate')
-      .rejects(new Error('Validation error'))
+        .rejects(new Error('Validation error'))
 
     await expect(allocateService.execute(accounts))
-      .to.be.rejectedWith('Validation error')
-    })
+        .to.be.rejectedWith('Validation error')
+  })
 })

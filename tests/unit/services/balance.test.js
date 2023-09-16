@@ -1,8 +1,8 @@
 const sinon = require('sinon')
-const { expect } = require('chai')
+const {expect} = require('chai')
 const db = require('../../../src/dal/models')
-const { balanceService } = require('../../../src/services')
-const { months, defaults } = require('../../../config')
+const {balanceService} = require('../../../src/services')
+const {months, defaults} = require('../../../config')
 
 describe('balance service', () => {
   const month = months.APRIL
@@ -11,38 +11,38 @@ describe('balance service', () => {
 
   beforeEach(() => {
     operationFindAllStub = sinon.stub(db.Operation, 'findAll')
-      .resolves(
-        [
-          {
-            accountId: 3,
-            total: '1000',
-          },
-          {
-            accountId: 2,
-            total: '3000',
-          },
-          {
-            accountId: 1,
-            total: '6000',
-          },
-        ]
-      )
+        .resolves(
+            [
+              {
+                accountId: 3,
+                total: '1000',
+              },
+              {
+                accountId: 2,
+                total: '3000',
+              },
+              {
+                accountId: 1,
+                total: '6000',
+              },
+            ],
+        )
 
     accountFindAllStub = sinon.stub(db.Account, 'findAll')
-      .resolves([
-        {
-          id: 1,
-          name: 'equity'
-        },
-        {
-          id: 2,
-          name: 'debt'
-        },
-        {
-          id: 3,
-          name: 'gold'
-        }
-      ])
+        .resolves([
+          {
+            id: 1,
+            name: 'equity',
+          },
+          {
+            id: 2,
+            name: 'debt',
+          },
+          {
+            id: 3,
+            name: 'gold',
+          },
+        ])
   })
 
   afterEach(() => {
@@ -56,16 +56,16 @@ describe('balance service', () => {
     expect(operationFindAllStub.args[0][0]).to.deep.equal({
       attributes: [
         'accountId',
-        [db.sequelize.fn('sum', db.sequelize.col('amount')), 'total']
+        [db.sequelize.fn('sum', db.sequelize.col('amount')), 'total'],
       ],
       group: ['accountId'],
       raw: true,
       where: {
         date: {
-          [db.Sequelize.Op.lte]:  
-            `${defaults.YEAR}-${month}-${parseInt(defaults.DAY)+1}`
-        }
-      }
+          [db.Sequelize.Op.lte]:
+            `${defaults.YEAR}-${month}-${parseInt(defaults.DAY)+1}`,
+        },
+      },
     })
   })
 
@@ -80,18 +80,18 @@ describe('balance service', () => {
       {
         id: 1,
         name: 'equity',
-        balance: '6000'
+        balance: '6000',
       },
       {
         id: 2,
         name: 'debt',
-        balance: '3000'
+        balance: '3000',
       },
       {
         id: 3,
         name: 'gold',
-        balance: '1000'
-      }
+        balance: '1000',
+      },
     ])
     operationFindAllStub.restore()
     accountFindAllStub.restore()

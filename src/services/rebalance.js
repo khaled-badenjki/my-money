@@ -1,7 +1,7 @@
-const { months } = require('../../config')
+const {months} = require('../../config')
 const db = require('../dal/models')
 const balanceService = require('./balance')
-const { defaults } = require('../../config')
+const {defaults} = require('../../config')
 
 const execute = async () => {
   const month = await getLatestOperationMonth()
@@ -10,52 +10,50 @@ const execute = async () => {
     throw new Error('CANNOT_REBALANCE')
   }
 
-  const rebalanceMonth = month === months.DECEMBER 
-    ? months.DECEMBER : months.JUNE
+  const rebalanceMonth = month === months.DECEMBER ?
+    months.DECEMBER : months.JUNE
 
   const balance = await balanceService.execute(rebalanceMonth)
   const desiredAllocationPercentages = await db.Account.findAll({
     attributes: ['desiredAllocationPercentage', 'name'],
-    raw: true
+    raw: true,
   })
 
   const totalBalance = balance.reduce((acc, curr) => acc + curr.balance, 0)
 
   const rebalanceAmount = balance.map((account, index) => {
-
     const desiredAllocationPercentage = desiredAllocationPercentages.find(
-      d => d.name === account.name
+        (d) => d.name === account.name,
     ).desiredAllocationPercentage
-    const desiredBalance = 
+    const desiredBalance =
       Math.floor(totalBalance * desiredAllocationPercentage / 100)
     return {
       id: account.id,
       name: account.name,
       amount: desiredBalance,
-      difference: desiredBalance - account.balance
+      difference: desiredBalance - account.balance,
     }
   })
 
   db.Operation.bulkCreate(
-    rebalanceAmount.map(account => {
-      return {
-        type: 'rebalance',
-        amount: account.difference,
-        accountId: account.id,
-        date: `${defaults.YEAR}-${month}-${defaults.DAY}`
-      }
-    })
+      rebalanceAmount.map((account) => {
+        return {
+          type: 'rebalance',
+          amount: account.difference,
+          accountId: account.id,
+          date: `${defaults.YEAR}-${month}-${defaults.DAY}`,
+        }
+      }),
   )
   return rebalanceAmount
-
 }
 
 const getLatestOperationMonth = async () => {
   const operation = await db.Operation.findOne({
     attributes: [
-      [db.sequelize.fn('max', db.sequelize.col('date')), 'latestDate']
+      [db.sequelize.fn('max', db.sequelize.col('date')), 'latestDate'],
     ],
-    raw: true
+    raw: true,
   })
 
   if (!operation.latestDate) {
@@ -66,5 +64,5 @@ const getLatestOperationMonth = async () => {
 }
 
 module.exports = {
-  execute
+  execute,
 }

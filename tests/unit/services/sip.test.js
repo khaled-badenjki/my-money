@@ -1,25 +1,25 @@
 const sinon = require('sinon')
 const chai = require('chai')
-var chaiAsPromised = require('chai-as-promised')
+const chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
-const { expect } = chai
+const {expect} = chai
 const db = require('../../../src/dal/models')
-const { sipService } = require('../../../src/services')
+const {sipService} = require('../../../src/services')
 
 describe('sip service', () => {
   const accountSip = [
     {
       name: 'equity',
-      sip: 6000
+      sip: 6000,
     },
     {
       name: 'debt',
-      sip: 2000
+      sip: 2000,
     },
     {
       name: 'gold',
-      sip: 2000
-    }
+      sip: 2000,
+    },
   ]
 
   let accountUpdateStub
@@ -27,11 +27,11 @@ describe('sip service', () => {
 
   beforeEach(() => {
     accountUpdateStub = sinon.stub(db.Account, 'update')
-      .resolves([1])
+        .resolves([1])
     accountFindOneStub = sinon.stub(db.Account, 'findAll').resolves([
       {
-        monthlyInvestment: null
-      }
+        monthlyInvestment: null,
+      },
     ])
   })
 
@@ -48,10 +48,9 @@ describe('sip service', () => {
 
   it('should fail if monthly investment is already set', async () => {
     accountFindOneStub.resolves({
-      monthlyInvestment: 1000
+      monthlyInvestment: 1000,
     })
     await expect(sipService.execute(accountSip))
-      .to.be.rejectedWith(Error)
-
+        .to.be.rejectedWith(Error)
   })
 })

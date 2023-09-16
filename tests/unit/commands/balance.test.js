@@ -1,26 +1,26 @@
 const sinon = require('sinon')
-const { expect } = require('chai')
+const {expect} = require('chai')
 const logger = require('../../../src/helpers/logger')
 const program = require('../../../src/commands')
-const { balanceService } = require('../../../src/services')
-const { months } = require('../../../config')
+const {balanceService} = require('../../../src/services')
+const {months} = require('../../../config')
 
 
-const callBalance = args => 
+const callBalance = (args) =>
   program.parseAsync(['node', 'index.js', 'BALANCE', ...args])
 
 describe('commands/balance', () => {
   let balanceServiceStub
-  
+
   describe('success', () => {
     beforeEach(() => {
       balanceServiceStub = sinon.stub(balanceService, 'execute').returns([
-        { name: 'equity', balance: 1000 },
-        { name: 'debt', balance: 5000 },
-        { name: 'gold', balance: 2000 },
+        {name: 'equity', balance: 1000},
+        {name: 'debt', balance: 5000},
+        {name: 'gold', balance: 2000},
       ])
     })
-  
+
     afterEach(() => {
       balanceServiceStub.restore()
     })
@@ -36,15 +36,14 @@ describe('commands/balance', () => {
 
       expect(logger.info.calledOnce).to.be.true
       expect(logger.info.args[0][0]).to.equal('1000 5000 2000')
-
     })
 
     it('should order the output as equity -> debt -> gold', async () => {
       balanceServiceStub.restore()
       balanceServiceStub = sinon.stub(balanceService, 'execute').returns([
-        { name: 'gold', balance: 2000 },
-        { name: 'equity', balance: 1000 },
-        { name: 'debt', balance: 5000 },
+        {name: 'gold', balance: 2000},
+        {name: 'equity', balance: 1000},
+        {name: 'debt', balance: 5000},
       ])
 
       await callBalance(['APRIL'])
@@ -57,12 +56,11 @@ describe('commands/balance', () => {
   })
 
   describe('failure', () => {
-  
     beforeEach(() => {
       balanceServiceStub = sinon.stub(balanceService, 'execute')
-        .rejects(new Error('ERROR_MESSAGE'))
+          .rejects(new Error('ERROR_MESSAGE'))
     })
-  
+
     afterEach(() => {
       balanceServiceStub.restore()
     })

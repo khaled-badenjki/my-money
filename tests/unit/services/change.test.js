@@ -1,8 +1,8 @@
 const sinon = require('sinon')
-const { expect } = require('chai')
+const {expect} = require('chai')
 const db = require('../../../src/dal/models')
-const { changeService } = require('../../../src/services')
-const { months, defaults } = require('../../../config')
+const {changeService} = require('../../../src/services')
+const {months, defaults} = require('../../../config')
 
 const testData = [
   {
@@ -13,7 +13,7 @@ const testData = [
     change: -10.00,
     expectedSip: 2000,
     expectedChangeBeforeSip: -624,
-    expectedChangeAfterSip: -824
+    expectedChangeAfterSip: -824,
   },
   {
     accountId: 2,
@@ -23,7 +23,7 @@ const testData = [
     change: 40.00,
     expectedSip: 1000,
     expectedChangeBeforeSip: 1320,
-    expectedChangeAfterSip: 1720
+    expectedChangeAfterSip: 1720,
   },
   {
     accountId: 3,
@@ -33,39 +33,39 @@ const testData = [
     change: 0.00,
     expectedSip: 500,
     expectedChangeBeforeSip: 0,
-    expectedChangeAfterSip: 0
-  }
+    expectedChangeAfterSip: 0,
+  },
 ]
 
 describe('change service', () => {
-  const changeInput = testData.map(data => ({
+  const changeInput = testData.map((data) => ({
     name: data.name,
-    change: data.change
+    change: data.change,
   }))
 
   let month = months.JANUARY
-  
+
   let operationFindAllStub
   let operationCreateStub
   let accountFindAllStub
 
   beforeEach(() => {
     operationFindAllStub = sinon.stub(db.Operation, 'findAll')
-      .resolves(
-        testData.map(data => ({
-          accountId: data.accountId,
-          total: data.total
-        }))
-      )
+        .resolves(
+            testData.map((data) => ({
+              accountId: data.accountId,
+              total: data.total,
+            })),
+        )
     operationCreateStub = sinon.stub(db.Operation, 'bulkCreate')
     accountFindAllStub = sinon.stub(db.Account, 'findAll')
-      .resolves(
-        testData.map(data => ({
-          id: data.accountId,
-          name: data.name,
-          monthlyInvestment: data.monthlyInvestment
-        }))
-      )
+        .resolves(
+            testData.map((data) => ({
+              id: data.accountId,
+              name: data.name,
+              monthlyInvestment: data.monthlyInvestment,
+            })),
+        )
   })
 
   afterEach(() => {
@@ -73,7 +73,7 @@ describe('change service', () => {
     operationCreateStub.restore()
     accountFindAllStub.restore()
   })
-  
+
   it('should call operation model to get sum of all accounts', async () => {
     await changeService.execute(changeInput, month)
     expect(operationFindAllStub.called).to.be.true
@@ -88,14 +88,14 @@ describe('change service', () => {
     month = months.JANUARY
     await changeService.execute(changeInput, month)
     expect(operationCreateStub.args[0][0]).to.deep.equal(
-      testData.map(data => [
-        {
-          type: 'change',
-          amount: data.expectedChangeBeforeSip,
-          accountId: data.accountId,
-          date: `${defaults.YEAR}-${month}-${defaults.DAY}`
-        }
-      ]).flat()
+        testData.map((data) => [
+          {
+            type: 'change',
+            amount: data.expectedChangeBeforeSip,
+            accountId: data.accountId,
+            date: `${defaults.YEAR}-${month}-${defaults.DAY}`,
+          },
+        ]).flat(),
     )
   })
 })

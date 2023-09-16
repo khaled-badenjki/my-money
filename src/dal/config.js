@@ -11,7 +11,7 @@ const defaultConfig = {
   pool: {
     idle: 1,
     evict: 1,
-  }
+  },
 }
 
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
     pool: {
       idle: 1000,
       evict: 1000,
-    }    
+    },
   },
-  production: defaultConfig
+  production: defaultConfig,
 }

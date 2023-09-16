@@ -9,5 +9,5 @@ module.exports = {
   balanceService: balance,
   sipService: sip,
   changeService: change,
-  rebalanceService: rebalance
+  rebalanceService: rebalance,
 }

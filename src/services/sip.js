@@ -1,13 +1,12 @@
 const db = require('../dal/models')
 
-const execute = async sipAccounts => {
-
+const execute = async (sipAccounts) => {
   const existingAccounts = await db.Account.findAll()
   if (!existingAccounts.length) {
     throw new Error('NO_ALLOCATION_SET')
   }
 
-  existingAccounts.some(account => {
+  existingAccounts.some((account) => {
     if (account.monthlyInvestment) {
       throw new Error('MONTHLY_INVESTMENT_ALREADY_SET')
     }
@@ -15,15 +14,15 @@ const execute = async sipAccounts => {
 
 
   const accounts = Promise.all(
-    sipAccounts.map(account => db.Account.update(
-      { monthlyInvestment: account.amount },
-      { where: { name: account.name } }
-    ))
+      sipAccounts.map((account) => db.Account.update(
+          {monthlyInvestment: account.amount},
+          {where: {name: account.name}},
+      )),
   )
 
   return accounts
 }
 
 module.exports = {
-  execute
+  execute,
 }

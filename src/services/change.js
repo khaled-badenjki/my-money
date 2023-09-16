@@ -1,4 +1,4 @@
-const { defaults, months } = require('../../config')
+const {defaults, months} = require('../../config')
 const db = require('../dal/models')
 
 const execute = async (accountsChangePercentage, month) => {
@@ -7,7 +7,7 @@ const execute = async (accountsChangePercentage, month) => {
   const sum = await db.Operation.findAll(_buildSumQuery())
 
   const accounts = await db.Account.findAll({
-    raw: true
+    raw: true,
   })
 
   const operations = accounts.map((account, index) => {
@@ -18,7 +18,7 @@ const execute = async (accountsChangePercentage, month) => {
       op.push(_buildSipOperations(account, month))
     }
 
-    const change = 
+    const change =
       _changePercentToAmount(total, accountsChangePercentage[index].change)
 
     op.push(_buildChangeOperations(account, change, month))
@@ -32,16 +32,16 @@ const execute = async (accountsChangePercentage, month) => {
   return sum
 }
 
-const validatePreviousMonth = async month => {
+const validatePreviousMonth = async (month) => {
   if (month === months.JANUARY) return
 
   const previousMonth = `${parseInt(month) - 1}`.padStart(2, '0')
 
   const operation = await db.Operation.findOne({
     attributes: [
-      [db.sequelize.fn('max', db.sequelize.col('date')), 'latestDate']
+      [db.sequelize.fn('max', db.sequelize.col('date')), 'latestDate'],
     ],
-    raw: true
+    raw: true,
   })
 
   const lastMonth = operation.latestDate.split('-')[1]
@@ -49,17 +49,16 @@ const validatePreviousMonth = async month => {
   if (lastMonth !== previousMonth) {
     throw new Error('PREVIOUS_MONTH_NOT_SET')
   }
-
 }
 
 const _buildSumQuery = () => {
   return {
     attributes: [
       'accountId',
-      [db.sequelize.fn('sum', db.sequelize.col('amount')), 'total']
+      [db.sequelize.fn('sum', db.sequelize.col('amount')), 'total'],
     ],
     group: ['accountId'],
-    raw: true
+    raw: true,
   }
 }
 
@@ -68,7 +67,7 @@ const _buildChangeOperations = (account, change, month) => {
     type: 'change',
     amount: Math.floor(change),
     accountId: account.id,
-    date: `${defaults.YEAR}-${month}-${defaults.DAY}`
+    date: `${defaults.YEAR}-${month}-${defaults.DAY}`,
   }
 }
 
@@ -77,19 +76,19 @@ const _buildSipOperations = (account, month) => {
     type: 'sip',
     amount: account.monthlyInvestment,
     accountId: account.id,
-    date: `${defaults.YEAR}-${month}-${defaults.DAY}`
+    date: `${defaults.YEAR}-${month}-${defaults.DAY}`,
   }
 }
 
-const _sipIsApplicable = month => 
+const _sipIsApplicable = (month) =>
   month >= defaults.SIP_START_MONTH
 
 const _getAccountTotal = (sum, account) =>
-  parseInt(sum.find(s => s.accountId === account.id).total)
+  parseInt(sum.find((s) => s.accountId === account.id).total)
 
 const _changePercentToAmount = (total, change) =>
   total * (change / 100)
 
 module.exports = {
-  execute
+  execute,
 }

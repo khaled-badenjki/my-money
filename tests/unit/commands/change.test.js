@@ -1,10 +1,10 @@
 const sinon = require('sinon')
-const { expect } = require('chai')
+const {expect} = require('chai')
 const logger = require('../../../src/helpers/logger')
 const program = require('../../../src/commands')
-const { changeService } = require('../../../src/services')
+const {changeService} = require('../../../src/services')
 
-const callChange = args => 
+const callChange = (args) =>
   program.parseAsync(['node', 'index.js', 'CHANGE', ...args])
 
 describe('commands/change', () => {
@@ -15,9 +15,9 @@ describe('commands/change', () => {
       callChange(['10%', '20%', '30%', 'APRIL'])
       expect(changeService.execute.calledOnce).to.be.true
       expect(changeService.execute.args[0][0]).to.deep.equal([
-        { name: 'equity', change: 10 },
-        { name: 'debt', change: 20 },
-        { name: 'gold', change: 30 }
+        {name: 'equity', change: 10},
+        {name: 'debt', change: 20},
+        {name: 'gold', change: 30},
       ], '04')
 
       changeService.execute.restore()

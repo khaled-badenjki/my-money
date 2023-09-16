@@ -3,20 +3,20 @@ module.exports = {
     'node': true,
     'commonjs': true,
     'es2021': true,
-    'mocha': true
+    'mocha': true,
 
   },
-  'extends': 'eslint:recommended',
+  'extends': 'google',
   'overrides': [
   ],
   'parserOptions': {
-    'ecmaVersion': 'latest'
+    'ecmaVersion': 'latest',
   },
   'rules': {
     'no-unused-vars': 'off',
     'semi': ['error', 'never'],
     'quotes': ['error', 'single'],
     'eol-last': ['error', 'always'],
-    'max-len': ['error', { 'code': 81 }],
-  }
+    'max-len': ['error', {'code': 81}],
+  },
 }

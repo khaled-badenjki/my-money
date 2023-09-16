@@ -1,21 +1,21 @@
-const { expect } = require('chai')
+const {expect} = require('chai')
 const sinon = require('sinon')
 const program = require('../../src/commands')
 const db = require('../../src/dal/models')
 const logger = require('../../src/helpers/logger')
-const { defaults } = require('../../config')
+const {defaults} = require('../../config')
 
 describe('allocate e2e', () => {
   it('should create operations with type "allocations"', async () => {
     await program
-      .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
+        .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
 
     const operations = await db.Operation.findAll({
       attributes: ['id', 'type', 'amount'],
       where: {
-        type: 'allocation'
+        type: 'allocation',
       },
-      raw: true
+      raw: true,
     })
 
     expect(operations.length).to.equal(3)
@@ -23,31 +23,31 @@ describe('allocate e2e', () => {
       {
         id: 1,
         type: 'allocation',
-        amount: 6000
+        amount: 6000,
       },
       {
         id: 2,
         type: 'allocation',
-        amount: 3000
+        amount: 3000,
       },
       {
         id: 3,
         type: 'allocation',
-        amount: 1000
-      }
+        amount: 1000,
+      },
     ])
   })
 
   it('should set operations date to default allocation date', async () => {
     await program
-      .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
+        .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
 
     const operations = await db.Operation.findAll({
       attributes: ['id', 'date'],
       where: {
-        type: 'allocation'
+        type: 'allocation',
       },
-      raw: true
+      raw: true,
     })
 
     expect(operations.length).to.equal(3)
@@ -58,11 +58,11 @@ describe('allocate e2e', () => {
 
   it('should create accounts with desired allocation percentage', async () => {
     await program
-      .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
+        .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
 
     const accounts = await db.Account.findAll({
       attributes: ['id', 'name', 'desiredAllocationPercentage'],
-      raw: true
+      raw: true,
     })
 
     expect(accounts.length).to.equal(3)
@@ -70,30 +70,30 @@ describe('allocate e2e', () => {
       {
         id: 1,
         name: 'equity',
-        desiredAllocationPercentage: 60
+        desiredAllocationPercentage: 60,
       },
       {
         id: 2,
         name: 'debt',
-        desiredAllocationPercentage: 30
+        desiredAllocationPercentage: 30,
       },
       {
         id: 3,
         name: 'gold',
-        desiredAllocationPercentage: 10
-      }
+        desiredAllocationPercentage: 10,
+      },
     ])
   })
 
   it('should fail if run more than once', async () => {
     await program
-      .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
+        .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
 
     await program
-      .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
+        .parseAsync(['node', 'index.js', 'ALLOCATE', '6000', '3000', '1000'])
 
     const operations = await db.Operation.findAll({
-      attributes: ['id']
+      attributes: ['id'],
     })
 
     expect(operations.length).to.equal(3)
