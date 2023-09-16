@@ -18,6 +18,6 @@ const _handleRebalance = async () => {
 }
 
 const _printRebalance = (rebalance) =>
-  logger.info(rebalance.map((r) => r.amount).join(' '))
+  logger.info(rebalance.map((r) => r.balance).join(' '))
 
 module.exports = rebalance

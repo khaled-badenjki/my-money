@@ -4,26 +4,28 @@ const {defaults} = require('../../config')
 const execute = async (month) => {
   const date = buildDefaultDate(month)
 
-  const balances = await queryBalanceGroupedByAccount(date)
+  const accountsWithBalance = await queryAccountsBalances(date)
 
-  return balances
+  return accountsWithBalance
 }
 
-const queryBalanceGroupedByAccount = async (date) => db.Operation.findAll({
+const queryAccountsBalances = async (date) => db.Account.findAll({
   attributes: [
-    'accountId',
+    'id',
+    'name',
+    'monthlyInvestment',
+    'desiredAllocationPercentage',
     [db.sequelize.fn('sum', db.sequelize.col('amount')), 'balance'],
-    [db.sequelize.literal('account.name'), 'accountName'],
   ],
   include: [{
-    model: db.Account,
+    model: db.Operation,
     attributes: [],
-    as: 'account',
+    as: 'operations',
   }],
-  group: ['accountId', 'account.name'],
   raw: true,
+  group: ['Account.id'],
   where: {
-    date: {
+    '$operations.date$': {
       [db.Sequelize.Op.lte]: date,
     },
   },
