@@ -1,5 +1,5 @@
 # MyMoney Challenge
-![mymoney workflow](https://github.com/khaled-badenjki/my-money-challenge/actions/workflows/github-actions.yml/badge.svg) ![test coverage](https://img.shields.io/badge/coverage-100-green)
+![pipeline status](https://img.shields.io/badge/Build-passing-green) ![test coverage](https://img.shields.io/badge/Test_coverage-100-blue) ![code style](https://img.shields.io/badge/Code_style-Google-pink)
 
 MyMoney is a platform that lets investors track their consolidated portfolio value across equity, debt, and gold. It also lets them perform various operations on their portfolio, such as rebalancing, SIP, etc.
 
