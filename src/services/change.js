@@ -6,6 +6,8 @@ const execute = async (accountsAndPercentage, month) => {
 
   const accountsBalance = await queryAccountWithBalance()
 
+  validateExistence(accountsBalance)
+
   if (shouldApplySip(month)) applySip(accountsBalance)
 
   calculateAmountAndAppend(accountsBalance, accountsAndPercentage)
@@ -13,6 +15,12 @@ const execute = async (accountsAndPercentage, month) => {
   const operations = prepareOperations(accountsBalance, month)
 
   await db.Operation.bulkCreate(operations)
+}
+
+const validateExistence = (accounts) => {
+  if (!accounts.length) {
+    throw new Error(errors.NO_ACCOUNTS_FOUND)
+  }
 }
 
 const prepareOperations = (accountsBalance, month) => {
