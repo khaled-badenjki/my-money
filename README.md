@@ -1,9 +1,26 @@
 
-# MyMoney Challenge
+# MyMoney
+
+```bash
+      ___                       ___           ___           ___           ___                 
+     /__/\          ___        /__/\         /  /\         /__/\         /  /\          ___   
+    |  |::\        /__/|      |  |::\       /  /::\        \  \:\       /  /:/_        /__/|  
+    |  |:|:\      |  |:|      |  |:|:\     /  /:/\:\        \  \:\     /  /:/ /\      |  |:|  
+  __|__|:|\:\     |  |:|    __|__|:|\:\   /  /:/  \:\   _____\__\:\   /  /:/ /:/_     |  |:|  
+ /__/::::| \:\  __|__|:|   /__/::::| \:\ /__/:/ \__\:\ /__/::::::::\ /__/:/ /:/ /\  __|__|:|  
+ \  \:\~~\__\/ /__/::::\   \  \:\~~\__\/ \  \:\ /  /:/ \  \:\~~\~~\/ \  \:\/:/ /:/ /__/::::\  
+  \  \:\          ~\~~\:\   \  \:\        \  \:\  /:/   \  \:\  ~~~   \  \::/ /:/     ~\~~\:\ 
+   \  \:\           \  \:\   \  \:\        \  \:\/:/     \  \:\        \  \:\/:/        \  \:\
+    \  \:\           \__\/    \  \:\        \  \::/       \  \:\        \  \::/          \__\/
+     \__\/                     \__\/         \__\/         \__\/         \__\/                
+
+```
 
 ![pipeline status](https://img.shields.io/badge/Build-passing-green) ![test coverage](https://img.shields.io/badge/Test_coverage-100-blue) ![code style](https://img.shields.io/badge/Code_style-Google-pink)
 
 MyMoney is a platform that lets investors track their consolidated portfolio value across equity, debt, and gold. It also lets them perform various operations on their portfolio, such as rebalancing, SIP, etc.
+
+[Trello board here](https://trello.com/invite/b/GhqNsRRr/ATTI4df5d7b4c425a8af17e2dcefd5619d2567D37B76/mymoney-challenge)
 
 # Setup 🚀
 
@@ -20,17 +37,10 @@ Then run docker compose with this command
 ```bash
 docker compose up --build -d
 ```
-  
-Once the build is done, you can start interacting with the tool. To see a list of available commands, do this:
+
+If this is the **first time** to run the app, you will need to run migrations (db is automatically created). Do the following:
 
 ```bash
-docker compose run app node index.js --help
-```
-
-If this is the **first time** to run the app, you will need to create the database and run migrations. Do the following:
-
-```bash
-docker compose run app npx sequelize-cli db:create
 docker compose run app npx sequelize-cli db:migrate
 ```
   
@@ -136,12 +146,6 @@ This part is not a layer per se, but it's a collection of helper functions that 
 
 I used `sequelize` ORM to define the database schema. I used `postgresql` as a database engine. I used `sequelize-cli` to create the database and run migrations.
 
-# Usage ⭐
-
-when passing a negative value (for example the `CHANGE` command), you need to pass double dash `--` to signify the end of options, so it would be like this
-
-node index.js CHANGE -- 10.00% 8.00% -5.00% JUNE
-
 # Database performance 📊
 
 ## Setup
@@ -185,6 +189,42 @@ and got the following results
 - **Execution Time**: The query execution time is **176.856 milliseconds**.
 
 These results are acceptable. However, we can improve the performance in the future by adding an index on the `date` column, but it's better to keep it as it is for now, as it needs to be tested with a larger dataset.
+
+# Usage ⭐
+
+- To clean the database for starting fresh, run this command
+
+```bash
+docker compose run app yarn restore
+```
+
+- To see a list of available commands, run this command
+
+```bash
+node index.js --help
+
+
+A CLI for investment fund management
+
+Options:
+  -V, --version                          output the version number
+  -h, --help                             display help for command
+
+Commands:
+  ALLOCATE <equity> <debt> <gold>        receives the initial investment amounts for each fund.
+  SIP <equity> <debt> <gold>             receives investment amount on a monthly basis for each fund.
+  CHANGE <equity> <debt> <gold> <month>  receives the monthly rate of change (growth or loss) for each fund type. A
+                                         negative value represents a loss.
+  BALANCE <month>                        receives a month name
+  REBALANCE                              receives receives no additional inputs
+  help [command]                         display help for command
+```
+
+- when passing a negative value (for example the `CHANGE` command), you need to pass double dash `--` to signify the end of options, so it would be like this
+
+```bash
+node index.js CHANGE -- 10.00% 8.00% -5.00% JUNE
+```
 
 # Limitations 🏋🏽
 

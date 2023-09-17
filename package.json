@@ -8,6 +8,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
+    "restore": "sequelize db:migrate:undo:all && sequelize db:migrate",
     "start": "node index.js --help",
     "dev": "nodemon index.js",
     "test": "NODE_ENV=test mocha --timeout 100000 --colors --recursive --exit 'tests/**/*.js'",
