@@ -1,5 +1,5 @@
 # Base on offical Node.js Alpine image
-FROM node:18.13.0-bullseye-slim
+FROM node:16.10.0-bullseye-slim
 
 # Set working directory
 WORKDIR /app
