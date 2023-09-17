@@ -26,22 +26,22 @@ const persistAsTransaction = async (accounts, percentages) => {
   const t = await db.sequelize.transaction()
 
   const dbAccounts = await db.Account.bulkCreate(
-      _buildAccounts(accounts, percentages), {transaction: t})
+      buildAccounts(accounts, percentages), {transaction: t})
 
   await db.Operation.bulkCreate(
-      _buildOperations(accounts, dbAccounts), {transaction: t})
+      buildOperations(accounts, dbAccounts), {transaction: t})
 
   await t.commit()
 }
 
-const _buildAccounts = (accounts, percentages) =>
+const buildAccounts = (accounts, percentages) =>
   accounts.map((account, index) => ({
     name: account.name,
     desiredAllocationPercentage: percentages[index],
   }),
   )
 
-const _buildOperations = (newAccounts, existingAccounts) =>
+const buildOperations = (newAccounts, existingAccounts) =>
   newAccounts.map((account, index) => ({
     type: constants.ALLOCATION,
     amount: account.amount,

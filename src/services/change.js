@@ -26,12 +26,12 @@ const validateExistence = (accounts) => {
 const prepareOperations = (accountsBalance, month) => {
   const operations = []
   accountsBalance.forEach((account) => {
-    operations.push(_buildChangeOperations(account, month))
+    operations.push(buildChangeOperations(account, month))
   })
 
   if (shouldApplySip(month)) {
     accountsBalance.forEach((account) => {
-      operations.push(_buildSipOperations(account, month))
+      operations.push(buildSipOperations(account, month))
     })
   }
   return operations
@@ -90,7 +90,7 @@ const queryAccountWithBalance = () => db.Account.findAll({
   group: ['Account.id'],
 })
 
-const _buildChangeOperations = (account, month) => {
+const buildChangeOperations = (account, month) => {
   return {
     type: constants.CHANGE,
     amount: Math.floor(account.amount),
@@ -99,7 +99,7 @@ const _buildChangeOperations = (account, month) => {
   }
 }
 
-const _buildSipOperations = (account, month) => {
+const buildSipOperations = (account, month) => {
   return {
     type: constants.SIP,
     amount: account.monthlyInvestment,

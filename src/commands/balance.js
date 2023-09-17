@@ -11,9 +11,9 @@ const balance = new Command('BALANCE')
     .description('receives a month name')
     .argument('<month>', 'month')
     .action((month) =>
-      _handleBalance(month))
+      handleBalance(month))
 
-const _handleBalance = async (month) => {
+const handleBalance = async (month) => {
   try {
     validateBalance(month)
 
@@ -23,13 +23,13 @@ const _handleBalance = async (month) => {
 
     serializeBalanceOutput(balance)
 
-    _printBalance(balance)
+    printBalance(balance)
   } catch (error) {
     logger.error(error.message)
   }
 }
 
-const _printBalance = (balance) =>
+const printBalance = (balance) =>
   logger.info(balance.map((b) => b.balance).join(' '))
 
 module.exports = balance

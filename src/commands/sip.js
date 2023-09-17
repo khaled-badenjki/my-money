@@ -11,10 +11,10 @@ const sip = new Command('SIP')
     .argument('<debt>', 'debt investment amount')
     .argument('<gold>', 'gold investment amount')
     .action((equity, debt, gold, options, command) =>
-      _handleSip([equity, debt, gold], command))
+      handleSip([equity, debt, gold], command))
 
 
-const _handleSip = async (amounts, command) => {
+const handleSip = async (amounts, command) => {
   try {
     validateSip(amounts)
 

@@ -10,9 +10,9 @@ const allocate = new Command('ALLOCATE')
     .argument('<debt>', 'debt investment amount')
     .argument('<gold>', 'gold investment amount')
     .action((equity, debt, gold, options, command) =>
-      _handleAllocate([equity, debt, gold], command))
+      handleAllocate([equity, debt, gold], command))
 
-const _handleAllocate = async (amounts, command) => {
+const handleAllocate = async (amounts, command) => {
   try {
     validateAllocate(amounts)
 

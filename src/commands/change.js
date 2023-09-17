@@ -13,10 +13,10 @@ const change = new Command('CHANGE')
     .argument('<gold>', 'gold change percentage')
     .argument('<month>', 'month')
     .action((equity, debt, gold, month, options, command) =>
-      _handleChange([equity, debt, gold], month, command))
+      handleChange([equity, debt, gold], month, command))
 
 
-const _handleChange = async (percentages, month, command) => {
+const handleChange = async (percentages, month, command) => {
   try {
     validateChange(percentages, month)
 
