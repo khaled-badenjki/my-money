@@ -45,7 +45,6 @@ describe('change service', () => {
 
   let month = months.JANUARY
 
-  let operationFindAllStub
   let operationCreateStub
   let accountFindAllStub
 

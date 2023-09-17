@@ -17,7 +17,7 @@ module.exports = {
     'ecmaVersion': 'latest',
   },
   'rules': {
-    'no-unused-vars': 'off',
+    'no-unused-vars': 'error',
     'semi': ['error', 'never'],
     'quotes': ['error', 'single'],
     'eol-last': ['error', 'always'],

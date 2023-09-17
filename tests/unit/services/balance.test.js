@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const {expect} = require('chai')
 const db = require('../../../src/dal/models')
 const {balanceService} = require('../../../src/services')
-const {months, defaults, errors} = require('../../../config')
+const {months, errors} = require('../../../config')
 
 describe('balance service', () => {
   const month = months.APRIL

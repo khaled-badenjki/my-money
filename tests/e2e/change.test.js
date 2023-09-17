@@ -1,9 +1,7 @@
 const {expect} = require('chai')
-const sinon = require('sinon')
 const program = require('../../src/commands')
 const db = require('../../src/dal/models')
 const logger = require('../../src/helpers/logger')
-const {defaults} = require('../../config')
 
 const runCommand = (command, args) => program
     .parseAsync(['node', 'index.js', command, ...args])

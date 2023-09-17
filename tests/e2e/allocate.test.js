@@ -1,5 +1,4 @@
 const {expect} = require('chai')
-const sinon = require('sinon')
 const program = require('../../src/commands')
 const db = require('../../src/dal/models')
 const logger = require('../../src/helpers/logger')
