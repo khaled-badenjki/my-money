@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const {expect} = require('chai')
 const db = require('../../../src/dal/models')
 const {balanceService} = require('../../../src/services')
-const {months, defaults} = require('../../../config')
+const {months, defaults, errors} = require('../../../config')
 
 describe('balance service', () => {
   const month = months.APRIL
@@ -71,6 +71,6 @@ describe('balance service', () => {
   it('should throw error if no accounts are found', async () => {
     accountFindAllStub.resolves([])
     await expect(balanceService.execute(month))
-        .to.be.rejectedWith(Error, defaults.NO_ALLOCATION_SET)
+        .to.be.rejectedWith(Error, errors.NO_ACCOUNTS_FOUND)
   })
 })

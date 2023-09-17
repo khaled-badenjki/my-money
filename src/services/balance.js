@@ -1,12 +1,18 @@
 const db = require('../dal/models')
-const {defaults} = require('../../config')
+const {defaults, errors} = require('../../config')
 
 const execute = async (month) => {
   const date = buildDefaultDate(month)
 
   const accountsWithBalance = await queryAccountsBalances(date)
 
+  validateExistence(accountsWithBalance)
+
   return accountsWithBalance
+}
+
+const validateExistence = (accountsWithBalance) => {
+  if (!accountsWithBalance.length) throw new Error(errors.NO_ACCOUNTS_FOUND)
 }
 
 const queryAccountsBalances = async (date) => db.Account.findAll({
