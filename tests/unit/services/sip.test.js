@@ -5,6 +5,7 @@ chai.use(chaiAsPromised)
 const {expect} = chai
 const db = require('../../../src/dal/models')
 const {sipService} = require('../../../src/services')
+const {errors} = require('../../../config')
 
 describe('sip service', () => {
   const accountSip = [
@@ -51,6 +52,6 @@ describe('sip service', () => {
       monthlyInvestment: 1000,
     })
     await expect(sipService.execute(accountSip))
-        .to.be.rejectedWith(Error)
+        .to.be.rejectedWith(Error, errors.NO_ALLOCATION_SET)
   })
 })

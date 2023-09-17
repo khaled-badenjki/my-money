@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const {expect} = require('chai')
 const db = require('../../../src/dal/models')
 const {changeService} = require('../../../src/services')
-const {months, defaults} = require('../../../config')
+const {months, defaults, errors} = require('../../../config')
 
 const testData = [
   {
@@ -75,7 +75,7 @@ describe('change service', () => {
   it('should throw error if no accounts found', async () => {
     accountFindAllStub.resolves([])
     await expect(changeService.execute(changeInput, month))
-        .to.be.rejectedWith(Error)
+        .to.be.rejectedWith(Error, errors.NO_ACCOUNTS_FOUND)
   })
 
   it('should not add SIP to balance if before SIP starting month', async () => {

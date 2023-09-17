@@ -67,4 +67,10 @@ describe('balance service', () => {
       },
     ])
   })
+
+  it('should throw error if no accounts are found', async () => {
+    accountFindAllStub.resolves([])
+    await expect(balanceService.execute(month))
+        .to.be.rejectedWith(Error, defaults.NO_ALLOCATION_SET)
+  })
 })
