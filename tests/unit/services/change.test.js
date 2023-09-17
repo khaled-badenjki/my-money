@@ -72,6 +72,12 @@ describe('change service', () => {
     expect(accountFindAllStub.called).to.be.true
   })
 
+  it('should throw error if no accounts found', async () => {
+    accountFindAllStub.resolves([])
+    await expect(changeService.execute(changeInput, month))
+        .to.be.rejectedWith(Error)
+  })
+
   it('should not add SIP to balance if before SIP starting month', async () => {
     month = months.JANUARY
     await changeService.execute(changeInput, month)
