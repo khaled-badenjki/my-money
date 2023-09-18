@@ -21,6 +21,8 @@ const serializeBalanceInput = serializeMonth
 const serializeBalanceOutput = (balance) => balance.sort((a, b) =>
   BALANCE_ORDER.indexOf(a.name) - BALANCE_ORDER.indexOf(b.name))
 
+const serializeRebalanceOutput = serializeBalanceOutput
+
 const serializeChange = (percentagesArray, month) => {
   const serializedPercentages = serializeChangePercentage(percentagesArray)
   const serializedMonth = serializeMonth(month)
@@ -48,4 +50,5 @@ module.exports = {
   serializeChange,
   serializeAllocate,
   serializeSip,
+  serializeRebalanceOutput,
 }

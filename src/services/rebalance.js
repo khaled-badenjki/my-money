@@ -18,7 +18,8 @@ const execute = async () => {
 }
 
 const buildRebalanceOperations = (balance, rebalanceMonth) => {
-  const totalBalance = balance.reduce((acc, curr) => acc + curr.balance, 0)
+  const totalBalance = balance.reduce((acc, curr) =>
+    acc + parseInt(curr.balance), 0)
 
   return balance.map((b) => {
     const desiredBalance =
