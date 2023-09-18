@@ -57,6 +57,16 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Read from file",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/geektrust.js",
+      "args": ["${workspaceFolder}/tests/e2e/input.txt"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Run Tests",
       "runtimeExecutable": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "skipFiles": [
