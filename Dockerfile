@@ -14,5 +14,5 @@ RUN yarn install --frozen-lockfile
 # Copy all files
 COPY ./ ./
 
-# Run yarn start script
-CMD ["yarn", "start"]
+# Run yarn hello script
+CMD ["yarn", "hello"]

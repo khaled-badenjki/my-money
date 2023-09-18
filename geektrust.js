@@ -3,6 +3,8 @@ const program = require('./src/commands')
 const db = require('./src/dal/models')
 
 const parseFile = async (filePath) => {
+  await db.sequelize.sync({force: true})
+
   const file = fs.readFileSync(filePath, 'utf8')
 
   const commands = file.split('\n')
@@ -18,8 +20,6 @@ const parseFile = async (filePath) => {
       await program.parseAsync(['node', 'index.js', name, ...args])
     }
   }
-
-  await db.sequelize.sync({force: true})
 }
 
 parseFile(process.argv[2])

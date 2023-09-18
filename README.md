@@ -26,62 +26,35 @@ MyMoney is a platform that lets investors track their consolidated portfolio val
 
 ## 1. Using Docker 🐳
 
-Copy the `.env.example` file to `.env` file
+build the docker image
 
 ```bash
-cp .env.example .env
+docker build . -t my-money
 ```
 
-Then run docker compose with this command
+once done, you can start interacting with the app
 
 ```bash
-docker compose up --build -d
+docker run my-money node index.js ALLOCATE 6000 3000 1000
 ```
 
-If this is the **first time** to run the app, you will need to run migrations (db is automatically created). Do the following:
+If this is the **first time** to run the app, you will need to run migrations:
 
 ```bash
-docker compose run app npx sequelize-cli db:migrate
+docker run my-money npx sequelize-cli db:migrate
 ```
   
 And you are ready to go 🚀
 
 ## 2. Without Docker ⚙️
 
-For the application, you will need `yarn` to be installed. Run this command to install dependencies
+For the application, you will need `node` version 16.10 or more, and `yarn` to be installed. Run this command to install dependencies
 
 ```bash
 yarn
 ```
 
-Once finished, copy `.env.example` to `.env`
-
 ```bash
-cp .env.example .env
-```
-
-You will need to update the environment variable `POSTGRES_HOST` inside `.env` to be `localhost` instead of `db`
-
-```bash
-# POSTGRES_HOST=db
-
-POSTGRES_HOST=localhost # new value
-```
-  
-At this stage, the application is ready to use. However, you still need a `postgresql` instance.
-
-If you don't want to install `postgresql` locally (which is a right decision), then you can use `Docker` to handle the database while keeping the application without `Docker` (this is my preferable approach while developing)
-
-It would look something like this:
-
-```bash
-docker run --name postgresql -e POSTGRES_USER=user -e POSTGRES_PASSWORD=pass -p 5432:5432 -v /data:/var/lib/postgresql/data -d postgres
-```
-
-Once the app and database are up and running, you will need to create the database and run the migrations:
-
-```bash
-npx sequelize-cli db:create
 npx sequelize-cli db:migrate
 ```
   
@@ -92,7 +65,13 @@ After that, you should be ready to go 🚀
 To run the test suite, run this command:
 
 ```bash
-docker compose run app yarn coverage
+yarn test
+```
+
+For coverage report, run this command:
+
+```bash
+yarn coverage
 ```
 
 ## Notes
@@ -103,7 +82,7 @@ docker compose run app yarn coverage
 
 - I have used [mocha](https://mochajs.org/) for testing, [chai](https://www.chaijs.com/) for assertion, [sinon](https://sinonjs.org/releases/latest/stubs/) for stubbing and [nyc](https://github.com/istanbuljs/nyc) for code coverage.
 
-- to implement e2e tests, I used `sqlite` to run tests quickly, in memory, without the need to setup a `postgresql` instance. `sequelize` ORM helped make the code working on both databases without the need for modification
+- To implement e2e tests, I use memory database, so I don't need to worry about cleaning the database after each test. I also use `sinon` to stub the `console.log` function, so I can assert on the output.
 
 ### Report
 
@@ -144,11 +123,11 @@ This part is not a layer per se, but it's a collection of helper functions that 
 
 ![Database Schema](./docs/images/db-schema.png)
 
-I used `sequelize` ORM to define the database schema. I used `postgresql` as a database engine. I used `sequelize-cli` to create the database and run migrations.
-
 # Database performance 📊
 
 ## Setup
+
+I setup a postgres to test the database performance. Although I'm using SQLite for development, I wanted to test the performance on a real database.
 
 To see the database performance, I inserted **3 million records** into the `Operations` table, one million for each account type (equity, debt, gold).
 
@@ -191,12 +170,6 @@ and got the following results
 These results are acceptable. However, we can improve the performance in the future by adding an index on the `date` column, but it's better to keep it as it is for now, as it needs to be tested with a larger dataset.
 
 # Usage ⭐
-
-- To clean the database for starting fresh, run this command
-
-```bash
-docker compose run app yarn restore
-```
 
 - To see a list of available commands, run this command
 
